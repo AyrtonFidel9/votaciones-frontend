@@ -1,0 +1,51 @@
+[
+    {
+        "id":1,
+        "imagen": "./avatar1.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":2,
+        "imagen": "./avatar2.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":3,
+        "imagen": "./avatar3.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":4,
+        "imagen": "./avatar1.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":5,
+        "imagen": "./avatar2.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":6,
+        "imagen": "./avatar3.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    },
+    {
+        "id":7,
+        "imagen": "./avatar1.jpg",
+        "Nombre": "Jose Luis",
+        "Apellido": "Paredes Diaz",
+        "Cedula": "0607823451"
+    }
+]

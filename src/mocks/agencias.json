@@ -1,0 +1,38 @@
+[
+    {
+        "id":1,
+        "nombre": "Agencia San Andres",
+        "ubicacion": "San Andres",
+        "identificacion": 312321
+    },
+    {
+        "id":2,
+        "nombre": "Agencia Quito",
+        "ubicacion": "Calle Y y Calle Z",
+        "identificacion": 3343333
+    },
+    {
+        "id":3,
+        "nombre": "Agencia Matriz",
+        "ubicacion": "Matriz",
+        "identificacion": 222321
+    },
+    {
+        "id":4,
+        "nombre": "Agencia Alausi",
+        "ubicacion": "Parque central de alausi",
+        "identificacion": 3992111
+    },
+    {
+        "id":5,
+        "nombre": "Agencia San Andres",
+        "ubicacion": "San Andres",
+        "identificacion": 312321
+    },
+    {
+        "id":6,
+        "nombre": "Agencia San Andres",
+        "ubicacion": "San Andres",
+        "identificacion": 312321
+    }
+]

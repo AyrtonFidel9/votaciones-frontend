@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "en curso",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    },
+    {
+        "id": 2,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "en curso",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    },
+    {
+        "id": 3,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "exitoso",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    },
+    {
+        "id": 4,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "nulidad",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    },
+    {
+        "id": 5,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "exitoso",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    },
+    {
+        "id": 6,
+        "agencia": "Riobamba",
+        "nombre": "Elecciones Agencia Riobamba",
+        "fecha": "2022-09-09",
+        "horaInicio": "08:00",
+        "horaFin": "15:00",
+        "estado": "impugnado",
+        "duracion": 8,
+        "listas": 12,
+        "sufragantes": 210
+    }
+]
