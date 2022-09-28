@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -14,6 +14,8 @@ import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Divider from '@mui/material/Divider';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import Collapse from '@mui/material/Collapse';
 
 
 const opciones = [
@@ -30,24 +32,57 @@ const opciones = [
 
 
 export default function NavBar (){
+
+    const [ openNav, setOpenNav ] = useState(true);
+
+
+    const clickMenu = () => {
+        setOpenNav( openNav ? false : true);
+    }
+
+    const navWidth = openNav ? 238 : 72;
+
     return (
+    <Collapse in={openNav} orientation="horizontal" collapsedSize={72}>
         <Box sx={{
-            width: 238,
+            width: `${navWidth}px`,
             height: '100vh',
         }}>
             <Paper 
                 variant="outlined" 
                 elevation={1}
                 sx={{
-                    bgcolor: '#363740'
+                    bgcolor: '#363740',
+                    borderRadius: 4
                 }}
             >
                 <Stack>
-                    <HowToVoteIcon fontSize='100px'/>
-                    <Divider variant='middle'/>
+                    <Stack direction='row' sx={{
+                        padding: 1,
+                        justifyContent: 'space-between'
+                    }}>
+                        {openNav && 
+                        <HowToVoteIcon sx={{
+                            width: 50,
+                            color: '#ffffff',
+                            height: 50
+                        }}/>}
+                        <IconButton onClick={clickMenu}>
+                            <MenuRoundedIcon sx={{
+                            width: 40,
+                            color: '#ffffff',
+                            height: 40
+                        }}/>
+                        </IconButton>
+                    </Stack>
+                    <Divider sx={{
+                        borderColor: 'rgba(255, 255, 255, 0.20)'
+                    }}/>
                     {opciones.map((op, index) => (
                         <>
-                            {index === (opciones.length - 1) && <Divider />}
+                            {index === (opciones.length - 1) && <Divider sx={{
+                                borderColor: 'rgba(255, 255, 255, 0.20)'
+                            }}/>}
                             <Button
                                 key={op.opcion}
                                 sx={{
@@ -58,18 +93,19 @@ export default function NavBar (){
                                     justifyContent: 'left',
                                     height: 60
                                 }}
-                                variant="text"
+                                
                                 startIcon={<op.icon sx={{
                                     width: 60,
                                     height: 25
                                 }}/>}
                             >
-                                {op.opcion}
+                                {openNav && op.opcion}
                             </Button>
                         </>
                     ))}
                 </Stack>
             </Paper>
         </Box>
+    </Collapse>
     );
 }
