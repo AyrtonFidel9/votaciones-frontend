@@ -9,7 +9,7 @@ export default {
     component: DataGridTable
 };
 
-const jsonData = require('../mocks/agencias.json');
+const jsonData = require('../__mocks__/agencias.json');
 
 const columnsAgencias = [
     { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 70 },
@@ -82,7 +82,7 @@ const columnsElecciones = [
     { field: 'sufragantes', headerClassName: 'header-theme', headerName: 'Sufragantes', width: 100 },
 ]
 
-const jsonDataElecciones = require('../mocks/elecciones.json');
+const jsonDataElecciones = require('../__mocks__/elecciones.json');
 
 export const DataGridTabStates = TemplateDGTable.bind({});
 DataGridTabStates.args={
@@ -91,7 +91,7 @@ DataGridTabStates.args={
     activeCheck: false
 }
 
-const jsonDataSocios = require('../mocks/socios.json');
+const jsonDataSocios = require('../__mocks__/socios.json');
 
 const columnsSocios = [
     { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 70 },

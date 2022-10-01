@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { IconButton, Stack } from "@mui/material";
@@ -31,81 +31,77 @@ const opciones = [
 ];
 
 
-export default function NavBar (){
+export default function NavBar (props){
 
-    const [ openNav, setOpenNav ] = useState(true);
+    const { ancho, clickMenu, openNav, anchoHeader, setAnchoHeader } = props;
 
-
-    const clickMenu = () => {
-        setOpenNav( openNav ? false : true);
-    }
-
-    const navWidth = openNav ? 238 : 72;
+    const navWidth = openNav ? ancho : ancho/2;
 
     return (
-    <Collapse in={openNav} orientation="horizontal" collapsedSize={72}>
-        <Box sx={{
-            width: `${navWidth}px`,
-            height: '100vh',
-        }}>
-            <Paper 
-                variant="outlined" 
-                elevation={1}
-                sx={{
-                    bgcolor: '#363740',
-                    borderRadius: 4
-                }}
-            >
-                <Stack>
-                    <Stack direction='row' sx={{
-                        padding: 1,
-                        justifyContent: 'space-between'
-                    }}>
-                        {openNav && 
-                        <HowToVoteIcon sx={{
-                            width: 50,
-                            color: '#ffffff',
-                            height: 50
-                        }}/>}
-                        <IconButton onClick={clickMenu}>
-                            <MenuRoundedIcon sx={{
-                            width: 40,
-                            color: '#ffffff',
-                            height: 40
-                        }}/>
-                        </IconButton>
-                    </Stack>
-                    <Divider sx={{
-                        borderColor: 'rgba(255, 255, 255, 0.20)'
+    <Collapse in={openNav} orientation="horizontal" collapsedSize={72} sx={{
+        borderRadius: 4,
+        borderBottomRightRadius: 14,
+    }}>
+        <Paper 
+            variant="outlined" 
+            elevation={1}
+            sx={{
+                bgcolor: '#363740',
+                borderRadius: 4,
+                width: `${navWidth}vw`,
+            }}
+        >
+            <Stack sx={{
+                borderRadius: 4,
+            }}>
+                <Stack direction='row' sx={{
+                    padding: 1,
+                    justifyContent: 'space-between'
+                }}>
+                    {openNav && 
+                    <HowToVoteIcon sx={{
+                        width: 50,
+                        color: '#ffffff',
+                        height: 50
+                    }}/>}
+                    <IconButton onClick={clickMenu}>
+                        <MenuRoundedIcon sx={{
+                        width: 40,
+                        color: '#ffffff',
+                        height: 40
                     }}/>
-                    {opciones.map((op, index) => (
-                        <>
-                            {index === (opciones.length - 1) && <Divider sx={{
-                                borderColor: 'rgba(255, 255, 255, 0.20)'
-                            }}/>}
-                            <Button
-                                key={op.opcion}
-                                sx={{
-                                    color: '#ffffff',
-                                    textTransform: 'capitalize',
-                                    textAlign: 'left',
-                                    fontWeight: 'bold',
-                                    justifyContent: 'left',
-                                    height: 60
-                                }}
-                                
-                                startIcon={<op.icon sx={{
-                                    width: 60,
-                                    height: 25
-                                }}/>}
-                            >
-                                {openNav && op.opcion}
-                            </Button>
-                        </>
-                    ))}
+                    </IconButton>
                 </Stack>
-            </Paper>
-        </Box>
+                <Divider sx={{
+                    borderColor: 'rgba(255, 255, 255, 0.20)'
+                }}/>
+                {opciones.map((op, index) => (
+                    <>
+                        {index === (opciones.length - 1) && <Divider sx={{
+                            borderColor: 'rgba(255, 255, 255, 0.20)'
+                        }}/>}
+                        <Button
+                            key={op.opcion}
+                            sx={{
+                                color: '#ffffff',
+                                textTransform: 'capitalize',
+                                textAlign: 'left',
+                                fontWeight: 'bold',
+                                justifyContent: 'left',
+                                height: 60
+                            }}
+                            
+                            startIcon={<op.icon sx={{
+                                width: 60,
+                                height: 25
+                            }}/>}
+                        >
+                            {openNav && op.opcion}
+                        </Button>
+                    </>
+                ))}
+            </Stack>
+        </Paper>
     </Collapse>
     );
 }

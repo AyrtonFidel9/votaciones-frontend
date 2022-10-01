@@ -10,3 +10,6 @@ const Template = (args) => <NavBar{...args}/>
 
 export const NavBarUI = Template.bind({});
 
+NavBarUI.args={
+    ancho: 22
+}

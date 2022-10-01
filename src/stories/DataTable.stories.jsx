@@ -6,7 +6,7 @@ export default {
     component: DataTable,
 }
 
-const jsonData = require('../mocks/agencias.json');
+const jsonData = require('../__mocks__/agencias.json');
 
 const Template = (args) => <DataTable {...args} />;
 

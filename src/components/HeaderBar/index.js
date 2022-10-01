@@ -13,25 +13,25 @@ export default function HeaderBar(props){
     const { paginaActual }  = props;
 
     return (
-        <AppBar color='transparent' elevation={0}>
-            <Container sx={{
-                display: 'flex',
-                justifyContent: 'space-between'
-            }}>
-                <Toolbar>
-                    <Typography sx={{
-                        fontWeight: 'bold',
-                    }}>
-                        {paginaActual.toUpperCase()}
-                    </Typography>
-                </Toolbar>
-                <Stack direction="row" spacing={2} sx={{
-                    display: '-webkit-box'
+        <AppBar color='transparent' elevation={0} sx={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        }}>
+            <Toolbar>
+                <Typography sx={{
+                    fontWeight: 'bold',
                 }}>
-                    <NotificationsBtn/>
-                    <AvatarAppBar/>
-                </Stack>
-            </Container>
+                    {paginaActual.toUpperCase()}
+                </Typography>
+            </Toolbar>
+            <Stack direction="row" spacing={2} sx={{
+                display: '-webkit-box'
+            }}>
+                <NotificationsBtn/>
+                <AvatarAppBar/>
+            </Stack>
         </AppBar>
     );
 }
