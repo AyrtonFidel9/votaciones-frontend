@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { HeaderBar, NavBar } from ".";
 
@@ -20,7 +20,9 @@ export default function Plantilla ( {Contenido} ){
     },[openNav]);
 
     return (
-        <Grid container>
+        <Grid container spacing={2} sx={{
+            width: '100vw'
+        }}>
             <Grid item xs="auto">
                 <NavBar ancho={18} 
                     clickMenu={clickMenu} 
