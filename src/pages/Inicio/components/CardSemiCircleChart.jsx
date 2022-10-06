@@ -1,4 +1,4 @@
-import { Card, CardContent, responsiveFontSizes, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import CircleIcon from '@mui/icons-material/Circle';
@@ -54,12 +54,15 @@ export default function CardSemiCircleChart ({ porcentaje, titulo, ancho, estado
                 >
                     <b>Agencia: </b>{titulo}
                 </Typography>
-                <SemiCircleProgressBar 
-                    percentage={porcentaje}
-                    showPercentValue
-                    strokeWidth={30}
-                    stroke='#4B9BFF'
-                />
+                <div style={{ fontSize: '25px', fontFamily: 'Arial'}}>
+                    <SemiCircleProgressBar 
+                        percentage={porcentaje}
+                        showPercentValue
+                        strokeWidth={30}
+                        stroke='#4B9BFF'
+                        
+                    />
+                </div>
                 <Estado/>
             </CardContent>
         </Card>

@@ -11,7 +11,7 @@ export default function CardCounter ({ cantidad, titulo, cantidadMaxima, altura 
             <CardContent>
                 <Stack spacing={3}>
                     <Typography 
-                        sx={{ fontSize: 18 }} 
+                        sx={{ fontSize: 18, fontWeight: 'bold' }} 
                         color="text.primary" 
                         align='center'
                     >

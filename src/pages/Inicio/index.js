@@ -3,6 +3,7 @@ import React from "react";
 import { Plantilla } from "../../components";
 import { CardCounter, CardPastelChart } from "./components";
 import { CardBarChart } from "./components";
+import { Layout } from "../../styled-components";
 
 const data = [
     {
@@ -43,7 +44,9 @@ const data2 = [
 export default function Inicio(){
 
     const Contenido = () => (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{
+            height: '180vh'
+        }}>
             <Grid item xs={3}>
                 <CardCounter 
                     cantidad={12}

@@ -16,18 +16,18 @@ export default function CardBarChart ({ data, titulo, ancho, alto }){
             <CardContent>
                 <Stack spacing={3}>
                     <Typography
-                        sx={{ fontSize: 18 }} 
+                        sx={{ fontSize: 18, fontWeight: 'bold' }} 
                         color="text.primary" 
                         align='center'
                     >
                         {titulo}
                     </Typography>
                     <BarChart width={ancho} height={alto} data={data}
-                        style={{ placeSelf: 'center' }}
+                        style={{ placeSelf: 'center',fontFamily: 'Roboto' }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                        <XAxis dataKey="name"/>
+                        <YAxis/>
                         <Tooltip />
                         <Legend />
                         <Bar dataKey="candidatos" fill="#5F34E0" />

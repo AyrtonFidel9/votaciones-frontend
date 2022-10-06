@@ -26,7 +26,7 @@ export default function CardPastelChart({ data, titulo, fecha, nombre, agencia, 
         <Card elevation={4}>
             <CardContent>
                 <Typography
-                    sx={{ fontSize: 18 }} 
+                    sx={{ fontSize: 18, fontWeight: 'bold' }} 
                     color="text.primary" 
                     align='center'
                 >

@@ -1,6 +1,7 @@
 import { Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { HeaderBar, NavBar } from ".";
+import { ContentLayout, ContentNav, ContentSystem, Layout } from "../styled-components";
 
 
 export default function Plantilla ( {Contenido} ){
@@ -20,7 +21,25 @@ export default function Plantilla ( {Contenido} ){
     },[openNav]);
 
     return (
-        <Grid container spacing={2} sx={{
+        <Layout>
+            <ContentNav>
+                <NavBar ancho={18} 
+                    clickMenu={clickMenu} 
+                    openNav={openNav} 
+                />
+            </ContentNav>
+            <ContentLayout>
+                <HeaderBar paginaActual='Inicio'/>
+                <ContentSystem>
+                    <Contenido/>
+                </ContentSystem>
+            </ContentLayout>
+        </Layout>
+    );
+}
+
+/*
+<Grid container spacing={2} sx={{
             width: '100vw'
         }}>
             <Grid item xs="auto">
@@ -35,6 +54,4 @@ export default function Plantilla ( {Contenido} ){
                 <HeaderBar paginaActual='Inicio'/>
                 <Contenido/>
             </Grid>
-        </Grid>
-    );
-}
+        </Grid>*/

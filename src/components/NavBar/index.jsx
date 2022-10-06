@@ -33,7 +33,7 @@ const opciones = [
 
 export default function NavBar (props){
 
-    const { ancho, clickMenu, openNav, anchoHeader, setAnchoHeader } = props;
+    const { ancho, clickMenu, openNav } = props;
 
     const navWidth = openNav ? ancho : ancho/2;
 
@@ -49,6 +49,8 @@ export default function NavBar (props){
                 bgcolor: '#363740',
                 borderRadius: 4,
                 width: `${navWidth}vw`,
+                height: '97vh',
+                overflow: 'auto'
             }}
         >
             <Stack sx={{

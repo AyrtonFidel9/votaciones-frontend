@@ -6,7 +6,7 @@ export default {
     component: NavBar,
 }
 
-const Template = (args) => <NavBar{...args}/>
+const Template = (args) => <NavBar {...args}/>
 
 export const NavBarUI = Template.bind({});
 
