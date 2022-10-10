@@ -5,7 +5,7 @@ const Layout = styled.div`
     height: 100vh;
     background: #F7F8FC;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 2fr;
     overflow: hidden;
 `;
 

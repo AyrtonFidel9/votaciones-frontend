@@ -1,7 +1,8 @@
 import React from 'react';
-import DataGridTable from '../components/DataGridTable';
+import { DataGridTable } from '../components';
 import ChipTable from '../components/DataGridTable/ChipTable';
 import Avatar from '@mui/material/Avatar';
+import jsonDataSocios from '../__mocks__/socios.json';
 
 
 export default {
@@ -91,7 +92,6 @@ DataGridTabStates.args={
     activeCheck: false
 }
 
-const jsonDataSocios = require('../__mocks__/socios.json');
 
 const columnsSocios = [
     { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 70 },

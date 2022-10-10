@@ -18,16 +18,19 @@ export default function HeaderBar(props){
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
+            paddingLeft: '46px',
+            paddingTop: '10px',
         }}>
-            <Toolbar>
-                <Typography sx={{
-                    fontWeight: 'bold',
-                }}>
-                    {paginaActual.toUpperCase()}
-                </Typography>
-            </Toolbar>
+            <Typography sx={{
+                fontWeight: 'bold',
+                display: 'flex',
+                placeSelf: 'center',
+            }}>
+                {paginaActual.toUpperCase()}
+            </Typography>
             <Stack direction="row" spacing={2} sx={{
-                display: '-webkit-box'
+                display: '-webkit-box',
+                paddingRight: '36px',
             }}>
                 <NotificationsBtn/>
                 <AvatarAppBar/>

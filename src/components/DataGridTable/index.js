@@ -44,11 +44,6 @@ export default function DataGridTable(props) {
         ];
     }
     });
-    
-    /*(evt)=>{
-                        setRowsTable(rowsTable.filter((it)=>
-                            it.id != params.row.id));
-                    }*/
 
     const [search, setSearch] = useState('');
     const [searchRows, setSearchRows] = useState([]);
@@ -89,7 +84,7 @@ export default function DataGridTable(props) {
         setActiveClear(false);
         document.querySelector('#outlined-search-table').value='';
     }
-
+    
     return (
         <TableContainer component={Paper} elevation={3}>
             <Container sx={{
@@ -128,7 +123,7 @@ export default function DataGridTable(props) {
                     onChange={onChangeSearch}
                 />
             </Container>
-            <div style={{ height: 400, width: '100%' }}>
+            <div style={{ height: '400px', width: '100%' }}>
                 <ThemeProvider theme={theme}>
                     <DataGrid
                         rows={!searchRows.length ? rowsTable : searchRows}
@@ -149,3 +144,9 @@ export default function DataGridTable(props) {
         </TableContainer>
     );
 }
+
+    
+    /*(evt)=>{
+                        setRowsTable(rowsTable.filter((it)=>
+                            it.id != params.row.id));
+                    }*/

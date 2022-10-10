@@ -92,6 +92,6 @@ export default function Inicio(){
     );
 
     return (
-        <Plantilla Contenido={Contenido}/>
+        <Plantilla Contenido={Contenido} pagina='Inicio'/>
     );
 }
