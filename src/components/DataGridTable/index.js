@@ -86,7 +86,9 @@ export default function DataGridTable(props) {
     }
     
     return (
-        <TableContainer component={Paper} elevation={3}>
+        <TableContainer component={Paper} elevation={3} sx={{
+            marginBottom: '15%',
+        }}>
             <Container sx={{
                 margin: 0
             }}>

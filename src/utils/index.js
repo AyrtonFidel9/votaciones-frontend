@@ -1,0 +1,1 @@
+export { renderNewCellValue } from './renderChipsForTables';

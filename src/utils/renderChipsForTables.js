@@ -1,6 +1,10 @@
+import React from "react";
+import ChipTable from "../components/DataGridTable/ChipTable";
+
 const renderNewCellValue = (params) => {
+    
     const newKey = params.row.id+params.row.agencia+Math.random(12);
-    console.log(newKey);
+
     switch(params.row.estado){
         case "en curso":
             return (<ChipTable
