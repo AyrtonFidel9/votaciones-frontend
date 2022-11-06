@@ -3,7 +3,7 @@ import { HeaderBar, NavBar } from ".";
 import { ContentLayout, ContentNav, ContentSystem, Layout } from "../styled-components";
 
 
-export default function Plantilla ( { Contenido, pagina  } ){
+export default function Plantilla ( { Contenido, pagina, children  } ){
 
     const [ openNav, setOpenNav ] = useState(true);
     //const [ anchoHeader, setAnchoHeader ] = useState(79); 
@@ -30,7 +30,7 @@ export default function Plantilla ( { Contenido, pagina  } ){
             <ContentLayout>
                 <HeaderBar paginaActual={pagina}/>
                 <ContentSystem>
-                    <Contenido/>
+                    { children || <Contenido/>}
                 </ContentSystem>
             </ContentLayout>
         </Layout>

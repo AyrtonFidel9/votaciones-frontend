@@ -19,7 +19,9 @@ export default function DataTable(props) {
   });
 
   return (
-    <TableContainer component={Paper} elevation={4}>
+    <TableContainer component={Paper} elevation={4} sx={{
+      marginBottom: 7,
+    }}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
