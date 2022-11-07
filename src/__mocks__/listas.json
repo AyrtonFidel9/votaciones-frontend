@@ -1,0 +1,65 @@
+[
+    {
+        "id":1,
+        "imagen": "../../__mocks__/avatar1.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":2,
+        "imagen": "../__mocks__/avatar2.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":3,
+        "imagen": "../__mocks__/avatar3.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":4,
+        "imagen": "../__mocks__/avatar1.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":5,
+        "imagen": "../__mocks__/avatar2.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":6,
+        "imagen": "../__mocks__/avatar3.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    },
+    {
+        "id":7,
+        "imagen": "../__mocks__/avatar1.jpg",
+        "representante": "Jose Luis",
+        "nombre": "Lista A",
+        "Psuplente": "Paredes Diaz",
+        "Ssuplente": "Alberto Manuel",
+        "eleccion": "Eleccion Agencia Matriz"
+    }
+]
