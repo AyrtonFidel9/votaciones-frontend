@@ -5,3 +5,4 @@ export { default as Agencias } from './Agencias';
 export { default as Votaciones } from './Votaciones';
 export { default as Sufragar } from './Votaciones/Sufragar';
 export { default as Reportes } from './Reportes';
+export { default as Inscripciones } from './Inscripciones';
