@@ -1,0 +1,1 @@
+export { default as NotificacionPerfil } from './NotificacionPerfil';
