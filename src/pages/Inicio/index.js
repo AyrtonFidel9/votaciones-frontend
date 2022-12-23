@@ -1,9 +1,8 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Plantilla } from "../../components";
 import { CardCounter, CardPastelChart } from "./components";
 import { CardBarChart } from "./components";
-import { Layout } from "../../styled-components";
 
 const data = [
     {
@@ -42,7 +41,9 @@ const data2 = [
 
 
 export default function Inicio(){
-
+    useEffect(()=>{
+        console.log("render Inicio");
+    }, []);
     const Contenido = () => (
         <Grid container spacing={2} sx={{
             height: '180vh'

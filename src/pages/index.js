@@ -8,3 +8,4 @@ export { default as Reportes } from './Reportes';
 export { default as Inscripciones } from './Inscripciones';
 export { default as Listas } from './Listas';
 export { default as Perfil } from './Perfil';
+export { default as Login } from './Login';

@@ -90,7 +90,7 @@ export default function DataGridTable(props) {
             marginBottom: '15%',
         }}>
             <Container sx={{
-                margin: 0
+                margin: 0, display: 'flex',
             }}>
                 <TextField
                     id="outlined-search-table"

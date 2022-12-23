@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Stack, Avatar, Grid } from "@mui/material";
 import { Plantilla } from "../../components";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -7,6 +7,9 @@ import { DataGridTable } from "../../components";
 import jsonDataSocios from '../../__mocks__/socios.json';
 
 export default function Socios () {
+    useEffect(()=>{
+        console.log("render Socios");
+    }, []);
 
     const columnsSocios = [
         { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 70 },
@@ -27,6 +30,8 @@ export default function Socios () {
 
 
     const Contenido = () => {
+        
+
         return(
             <Grid container>
                 <Stack direction='row' justifyContent='space-between' sx={{
