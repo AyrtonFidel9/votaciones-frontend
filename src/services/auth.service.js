@@ -1,7 +1,6 @@
 const baseUrl = 'http://localhost:8080/api/v1/iniciar-sesion';
 
 const authentication = (cuenta) => {
-    console.log(cuenta);
     return fetch(baseUrl, {
         method: 'POST',
         headers: {

@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as PhoneCall} from '../assets/PhoneCall.svg';
 import styled from "styled-components";
 import Stack from '@mui/material/Stack';
-import { PrivateRoutes, PublicRoutes } from '../../../models';
-import { existSocioByPhone } from '../../../services';
+import { PrivateRoutes, PublicRoutes } from '../../../routes';
+import { existUsuarioByPhone } from '../../../services';
 import { AlertaCustom } from '../../../components';
 import { useDispatch } from "react-redux";
 import { createRecovery } from "../../../redux/states/recovery";
@@ -48,7 +48,7 @@ export default function IngresarNumero () {
     const dispatch = useDispatch();
 
     const next = async (data) => {
-        const search = await existSocioByPhone(data.numero);
+        const search = await existUsuarioByPhone(data.numero);
         const resp = await search.json();
         if(search.ok){
             if(resp.message){
@@ -58,7 +58,7 @@ export default function IngresarNumero () {
                 dispatch(createRecovery({
                     habilitado: resp.message.existe,
                     numero: data.numero,
-                    idSocio: resp.message.idSocio
+                    idUsuario: resp.message.idUsuario
                 }));
             }
         }

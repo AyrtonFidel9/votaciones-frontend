@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as MessageSend} from '../assets/message-send.svg';
 import styled from "styled-components";
 import Stack from '@mui/material/Stack';
-import { PrivateRoutes, PublicRoutes } from "../../../models";
-import { actualizarEstadoCodigo, existSocioByPhone } from '../../../services';
+import { PrivateRoutes, PublicRoutes } from "../../../routes";
+import { actualizarEstadoCodigo } from '../../../services';
 import { AlertaCustom } from '../../../components';
 
 const schema = yup.object({

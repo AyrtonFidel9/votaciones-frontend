@@ -18,10 +18,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as RebootPass } from '../assets/rebootPass.svg';
 import styled from "styled-components";
-import { PublicRoutes } from '../../../models';
+import { PublicRoutes } from '../../../routes';
 import { AlertaCustom } from '../../../components';
-import { useDispatch, useSelector } from "react-redux";
-import { updateCuentaSocio } from "../../../services";
+import { useSelector } from "react-redux";
+import { updateCuentaUsuario } from "../../../services";
 
 const schema = yup.object({
     newPass: yup.string().required('Campo obligatorio'),
@@ -57,14 +57,13 @@ export default function ReestablecerPass () {
     const [showPassword, setShowPassword] = useState(true);
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const idSocio = useSelector((store)=>store.recovery.idSocio);
+    const idUsuario = useSelector((store)=>store.recovery.idUsuario);
 
 
     const next = async (data) => {
         if(data.newPass === data.repeatNewPass)
         {
-            const procUpdate = await updateCuentaSocio(idSocio, data.newPass);
+            const procUpdate = await updateCuentaUsuario(idUsuario, data.newPass);
 
             if(procUpdate.ok){
                 const response = await procUpdate.json();

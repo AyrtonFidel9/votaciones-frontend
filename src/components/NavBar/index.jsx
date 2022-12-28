@@ -17,7 +17,7 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Collapse from '@mui/material/Collapse';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { PrivateRoutes } from "../../models";
+import { PrivateRoutes } from "../../routes";
 
 
 /*const opciones = [
@@ -36,7 +36,7 @@ const opcionesAdmin = [
     {opcion: 'Inicio',icon: HomeIcon, navegar: (evt)=>{
         console.log(evt);
     }},
-    {opcion: 'Socios', icon: PeopleAltIcon},
+    {opcion: 'Usuarios', icon: PeopleAltIcon},
     {opcion: 'Agencias', icon: ApartmentIcon},
     {opcion: 'Reportes', icon: AssessmentIcon},
     {opcion: 'Perfil', icon: SettingsIcon}
@@ -96,8 +96,8 @@ function NavBar(props){
             case 'Inicio':
                 navigate(PrivateRoutes.INICIO);
                 break;
-            case 'Socios':
-                navigate(PrivateRoutes.SOCIOS);
+            case 'Usuarios':
+                navigate(PrivateRoutes.USUARIOS);
                 break;
             case 'Agencias':
                 navigate(PrivateRoutes.AGENCIAS);

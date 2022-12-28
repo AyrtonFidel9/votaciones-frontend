@@ -4,12 +4,18 @@ import { IconButton, Typography } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-const settings = ['Perfil', 'Inicio', 'Salir'];
+import { useNavigate } from "react-router-dom";
+import { PrivateRoutes } from "../../routes";
+import { useCookies } from 'react-cookie';
+import { useDispatch } from "react-redux";
+import { resetAccount } from "../../redux/states/cuenta";
 
 export default function AvatarAppBar({ src, nombreCompleto }) {
 
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [ , , removeCookie ] = useCookies(['access-token']);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -18,6 +24,21 @@ export default function AvatarAppBar({ src, nombreCompleto }) {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const settings = [
+        {name: 'Perfil', action: ()=>{
+            navigate(PrivateRoutes.PERFIL);
+        }}, 
+        {name: 'Inicio', action: ()=>{
+            navigate(PrivateRoutes.INICIO)
+        }}, 
+        {name: 'Salir', action: ()=>{   
+            removeCookie('access-token', {
+                path: '/',
+            });
+            dispatch(resetAccount());
+        }}
+    ];
 
     return (
         <>
@@ -35,10 +56,10 @@ export default function AvatarAppBar({ src, nombreCompleto }) {
                 onClose={handleCloseUserMenu}
             >
                 {settings.map(op => (
-                    <MenuItem key={op} sx={{
+                    <MenuItem key={op.name} sx={{
                         minWidth: 150
-                    }}>
-                        <Typography>{op}</Typography>
+                    }} onClick={op.action}>
+                        <Typography>{op.name}</Typography>
                     </MenuItem>
                 ))}
             </Menu>

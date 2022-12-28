@@ -42,7 +42,7 @@ const data2 = [
 
 export default function Inicio(){
     useEffect(()=>{
-        console.log("render Inicio");
+        //console.log("render Inicio");
     }, []);
     const Contenido = () => (
         <Grid container spacing={2} sx={{

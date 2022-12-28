@@ -10,6 +10,9 @@ import { esES as coreES } from '@mui/material/locale';
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteBtn from './DeleteBtn';
 import EditBtn from './EditBtn';
+import ConfirmDelete from '../ConfirmDelete';
+import { useDispatch } from 'react-redux';
+import { createConfirmDeleted } from '../../redux/states/confirmDelete';
 
 const theme = createTheme(
     esES, // x-data-grid translations
@@ -20,11 +23,22 @@ export default function DataGridTable(props) {
     const {
         columns,
         rows,
-        pagesPerSize,
-        numberRows,
-        activeCheck 
+//        pagesPerSize,
+//        numberRows,
+        activeCheck,
+        eliminarDato,
+        mensaje,
+        dialogRef,
+        handleOpen,
+        updateProcRoute
     } = props;
-        
+
+    const [search, setSearch] = useState('');
+    const [searchRows, setSearchRows] = useState([]);
+    const [activeClear, setActiveClear] = useState(false);
+    const [rowsTable, setRowsTable] = useState(rows);
+    const dispatch = useDispatch();
+
     columns.some(col => col.field === 'opciones') || columns.push({
         field: 'opciones',
         type: 'actions',
@@ -33,22 +47,26 @@ export default function DataGridTable(props) {
         width: 200,
         renderCell: (params) => {
             return [
-                <DeleteBtn
+            <DeleteBtn
                 key={params.row.id*(Math.floor(Math.random() * (49-1)+1))}
-                
+                onClick={() =>{
+                    handleOpen();
+                    dispatch(createConfirmDeleted({idDelete: params.row.id}));
+                }}
             />,
             <EditBtn
                 key={params.row.id*(Math.floor(Math.random() * (223-50)+50))}
                 row={params.row}
+                ruta={updateProcRoute}
             />
         ];
     }
     });
-
-    const [search, setSearch] = useState('');
-    const [searchRows, setSearchRows] = useState([]);
-    const [activeClear, setActiveClear] = useState(false);
-    const [rowsTable, setRowsTable] = useState(rows);
+    
+    useEffect(()=>{
+        //something
+    },[rows]);
+    
     useEffect(()=>{
         setRowsTable(rows);
     },[rows]);
@@ -62,18 +80,22 @@ export default function DataGridTable(props) {
         }
     }
 
+
+    // PENDIENTE: probar funcionamiento con react-hook-form
+    
     useEffect(() => {
         setSearchRows(rows.filter(item => {
             return Object.values(item).some(value => {
-                return value.toString().toLowerCase()
-                    .includes(search.toLowerCase())
+                if(value !== null)
+                    return value.toString().toLowerCase()
+                        .includes(search.toLowerCase());
             });
-        }));
+    }));
     },[search]);
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         // se ejecuta cuando hay cambios en la tablas 
-    },[rowsTable]);
+    },[rowsTable]);*/
 
     const hoverClear = (event) => {
         event.preventDefault();
@@ -84,8 +106,11 @@ export default function DataGridTable(props) {
         setActiveClear(false);
         document.querySelector('#outlined-search-table').value='';
     }
+
     
+
     return (
+        <>
         <TableContainer component={Paper} elevation={3} sx={{
             marginBottom: '15%',
         }}>
@@ -140,10 +165,17 @@ export default function DataGridTable(props) {
                             },
                             paddingLeft:1.5,
                         }}
+                        loading={rowsTable.length === 0}
                     />
                 </ThemeProvider>
             </div>
         </TableContainer>
+        <ConfirmDelete 
+            mensaje={mensaje}
+            ref={dialogRef}
+            eliminar={eliminarDato}
+        />
+        </>
     );
 }
 

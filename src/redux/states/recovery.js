@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const EmptyRecoveryState = {
     habilitado: false,
     numero: '',
-    idSocio: 0,
+    idUsuario: 0,
 }
 
 export const recoverySlice = createSlice({

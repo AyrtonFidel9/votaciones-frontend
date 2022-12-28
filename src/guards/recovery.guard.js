@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { PublicRoutes } from "../models";
+import { PublicRoutes } from "../routes";
 
 // se ejecuta cada vez que se llamen a las rutas privadas
 export const RecoveryGuard = () => {

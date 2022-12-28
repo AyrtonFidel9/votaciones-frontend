@@ -1,2 +1,2 @@
 export { default as Cuenta } from './cuenta.model.js';
-export * from './routes';
+export { default as Usuario } from './usuario.model.js';

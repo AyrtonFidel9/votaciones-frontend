@@ -3,8 +3,8 @@ import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store, { persistor } from './redux/store';
-import { PublicRoutes } from './models';
-import { PrivateRoutes } from './models/routes';
+import { PublicRoutes } from './routes';
+import { PrivateRoutes } from './routes';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Suspense, lazy } from 'react';
 import { Loading } from './components';
@@ -15,16 +15,19 @@ const Inicio = lazy(() => import('./pages/Inicio'));
 const IngresarNumero = lazy(()=>import('./pages/Login/pages/IngresarNumero'));
 const IngresarCodigo = lazy(()=>import('./pages/Login/pages/IngresarCodigo'));
 const ReestablecerPass = lazy(()=>import('./pages/Login/pages/ReestablecerPass'));
-const Socios = lazy(()=>import('./pages/Socios'));
+const Usuarios = lazy(()=>import('./pages/Usuarios'));
+const UsuariosForm = lazy(()=>import('./pages/Usuarios/Pages/UsuariosForm'));
 const Agencias = lazy(()=>import('./pages/Agencias'));
 const Reportes = lazy(()=>import('./pages/Reportes'));
 const Perfil = lazy(()=>import('./pages/Perfil'));
-
 const Elecciones = lazy(()=>import('./pages/Elecciones'));
 const Inscripciones = lazy(()=>import('./pages/Inscripciones'));
 const Listas = lazy(()=>import('./pages/Listas'));
 const Votaciones = lazy(()=>import('./pages/Votaciones'));
-
+const NoDisponible = lazy(()=>import('./pages/NoDisponible'));
+const LoadUsuarios = lazy(()=>import('./pages/Usuarios/Pages/LoadUsuarios'));
+const CuentaForm = lazy(()=>import('./pages/Usuarios/Pages/CuentaForm'));
+const AgenciaForm = lazy(()=>import('./pages/Agencias/pages/AgenciaForm'));
 
 function App() {
   return (
@@ -36,15 +39,22 @@ function App() {
               <Routes>
                 <Route path="/" element={<Navigate to={PrivateRoutes.INICIO} />}/>
                 <Route path="*" element={<>NOT FOUND</>}/>
+                <Route path={PublicRoutes.NO_DISPONIBLE} element={<NoDisponible/>}/>
                 <Route path={PublicRoutes.LOGIN} element={<Login/>}/>
                 <Route path={PublicRoutes.INGRESAR_NUMERO} element={<IngresarNumero/>}/>
                 <Route element={<AuthGuard/>}>
                   <Route path={PrivateRoutes.INICIO} element={<Inicio/>}/>
                   <Route path={PrivateRoutes.PERFIL} element={<Perfil/>}/>
                   <Route element={<AdminGuard/>}>
-                    <Route path={PrivateRoutes.SOCIOS} element={<Socios/>}/>
                     <Route path={PrivateRoutes.AGENCIAS} element={<Agencias/>}/>
+                    <Route path={PrivateRoutes.AGENCIA_INGRESAR} element={<AgenciaForm/>}/>
+                    <Route path={PrivateRoutes.AGENCIA_MODIFICAR} element={<AgenciaForm/>}/>
                     <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>
+                    <Route path={PrivateRoutes.USUARIOS} element={<Usuarios/>}/>
+                    <Route path={PrivateRoutes.INGRESAR_USUARIOS} element={<UsuariosForm/>}/>
+                    <Route path={PrivateRoutes.MODIFICAR_USUARIOS} element={<UsuariosForm/>}/>
+                    <Route path={PrivateRoutes.USUARIOS_CARGAR_SOCIOS} element={<LoadUsuarios/>}/>
+                    <Route path={PrivateRoutes.MODIFICAR_CUENTA} element={<CuentaForm/>}/>
                   </Route>
                   <Route element={<JGEGuard/>}>
                     <Route path={PrivateRoutes.ELECCIONES} element={<Elecciones/>}/>

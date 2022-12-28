@@ -9,3 +9,5 @@ export { default as Inscripciones } from './Inscripciones';
 export { default as Listas } from './Listas';
 export { default as Perfil } from './Perfil';
 export { default as Login } from './Login';
+export { default as NoDisponible } from './NoDisponible';
+export { default as SociosForm } from './Socios/Pages';

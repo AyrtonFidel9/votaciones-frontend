@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import { Toolbar } from '@mui/material';
 import NotificationsBtn from './NotificationsBtn';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import AvatarAppBar from './AvatarAppBar';
 import Stack from '@mui/material/Stack';
+import { useSelector } from 'react-redux';
+
 
 export default function HeaderBar(props){
 
     const { paginaActual }  = props;
+    const usuario = useSelector( store => store.usuario);
+    const [ img, setImg] =  useState('');
+    useEffect(()=>{
+        if(usuario){
+            if(usuario.imagen === null){
+                setImg('imagen');
+            }
+            else{
+                const img = usuario.imagen.toString().includes('/') ? usuario.imagen.split('/')[4] : usuario.imagen;
+                setImg(img);
+            }
+        }
+    },[usuario]);
 
     return (
         <AppBar color='transparent' elevation={0} sx={{
@@ -33,7 +45,7 @@ export default function HeaderBar(props){
                 paddingRight: '36px',
             }}>
                 <NotificationsBtn/>
-                <AvatarAppBar/>
+                <AvatarAppBar src={usuario.imagen ? `http://localhost:8080/images/${img}` : require("../../assets/user.png")}/>
             </Stack>
         </AppBar>
     );

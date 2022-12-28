@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authentication } from '../../services';
+import { authentication, getAllAgencias, getCuenta, getUsuarioById } from '../../services';
 import { useForm } from 'react-hook-form';
 import {
     Box,
@@ -23,7 +23,9 @@ import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
 import { createAccount } from '../../redux/states/cuenta';
 import { useNavigate } from "react-router-dom";
-import { PrivateRoutes, PublicRoutes } from '../../models';
+import { PrivateRoutes, PublicRoutes } from '../../routes';
+import { createUsuario } from '../../redux/states/usuario';
+import { createListas } from '../../redux/states/listas';
 
 const schema = yup.object({
     usuario: yup.string().required('Campo obligatorio'),
@@ -34,9 +36,7 @@ export default function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [errorDesc, setErrorDesc] = useState('');
-
-    const [cookies, setCookies] = useCookies(['token-cookies']);
-
+    const [ , setCookies] = useCookies(['token-cookies']);
     const navigate = useNavigate();
 
     const {
@@ -49,20 +49,82 @@ export default function Login() {
 
     const dispatch = useDispatch();
 
+    const cargarListas = async (token) => {
+        const agencias = await getAllAgencias(token);
+        if(agencias.ok){
+            const data = await agencias.json();
+            dispatch(createListas({agencias: data.message}));
+        }
+    }
+
+    const procDispatchUsuario = async (decoded, token) =>{
+        const cuentaUsuario = await getCuenta(decoded.id, token);
+        if(cuentaUsuario.ok){
+            const result = await cuentaUsuario.json();
+            const idUsuario = result.message.idSocio;
+            const usuario = await getUsuarioById(idUsuario, token);
+            if(usuario.ok){
+                const data = await usuario.json();
+                dispatch(createUsuario(data.message));
+                cargarListas(token);
+                navigate(PrivateRoutes.INICIO);
+            }
+        }else{
+            const datos = await cuentaUsuario.json();
+            setErrorDesc(datos.message);
+        }
+    }
+
+    const procAdmin = async (decoded, token) => {
+        const cuentaUsuario = await getCuenta(decoded.id, token);
+        if(cuentaUsuario.ok){
+            const result = await cuentaUsuario.json();
+            const idUsuario = result.message.idSocio;
+            const usuario = await getUsuarioById(idUsuario, token);
+            if(usuario.ok){
+                const data = await usuario.json();
+                dispatch(createUsuario(data.message));
+                cargarListas(token);
+                navigate(PrivateRoutes.INICIO);
+            }
+        }else{
+            const datos = await cuentaUsuario.json();
+            setErrorDesc(datos.message);
+        }
+    }
+
+    const procSocio = () => {
+        navigate(PrivateRoutes.INICIO);
+    }
+
+    const redireccionar = (cuenta, token) => {
+        switch(cuenta.rol){
+            case "ROLE_ADMIN":
+                procAdmin(cuenta, token);
+                break;
+            case "ROLE_SOCIO":
+                procSocio();
+                break;
+            default:
+                navigate(PrivateRoutes.INICIO);
+                break;
+        }
+    }
+
     const login = async (data) => {
         try {
             const result = await authentication(data);
-            console.log(result);
             if (result.ok) {
                 const datos = await result.json();
-                const token = datos.token;
+                const token = datos.token;  
                 const decoded = jwtDecode(token);
                 dispatch(createAccount(decoded));
                 setCookies('access-token', token, {
                     path: '/',
                     expires: new Date(decoded.exp * 1000),
                 });
-                navigate(PrivateRoutes.INICIO);
+                redireccionar(decoded, token);
+
             } else {
                 const datos = await result.json();
                 setErrorDesc(datos.message);
