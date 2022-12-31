@@ -8,7 +8,7 @@ import { PrivateRoutes } from './routes';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Suspense, lazy } from 'react';
 import { Loading } from './components';
-import { AuthGuard, RecoveryGuard, AdminGuard, JGEGuard, SocioGuard } from './guards';
+import { AuthGuard, RecoveryGuard, AdminGuard, JGEGuard, SocioGuard, AdminJgeGuard } from './guards';
 
 const Login = lazy(() => import('./pages/Login'));
 const Inicio = lazy(() => import('./pages/Inicio'));
@@ -21,8 +21,11 @@ const Agencias = lazy(()=>import('./pages/Agencias'));
 const Reportes = lazy(()=>import('./pages/Reportes'));
 const Perfil = lazy(()=>import('./pages/Perfil'));
 const Elecciones = lazy(()=>import('./pages/Elecciones'));
-const Inscripciones = lazy(()=>import('./pages/Inscripciones'));
-const Listas = lazy(()=>import('./pages/Listas'));
+const EleccionForm = lazy(()=>import('./pages/Elecciones/pages/EleccionForm'));
+const InscripcionesReview = lazy(()=>import('./pages/Inscripciones/Review'));
+const InscripcionesList = lazy(()=>import('./pages/Inscripciones/List'));
+const Representantes = lazy(()=>import('./pages/Representantes'));
+const RepresentantesForm = lazy(()=>import('./pages/Representantes/pages/RepresentantesForm'));
 const Votaciones = lazy(()=>import('./pages/Votaciones'));
 const NoDisponible = lazy(()=>import('./pages/NoDisponible'));
 const LoadUsuarios = lazy(()=>import('./pages/Usuarios/Pages/LoadUsuarios'));
@@ -49,7 +52,6 @@ function App() {
                     <Route path={PrivateRoutes.AGENCIAS} element={<Agencias/>}/>
                     <Route path={PrivateRoutes.AGENCIA_INGRESAR} element={<AgenciaForm/>}/>
                     <Route path={PrivateRoutes.AGENCIA_MODIFICAR} element={<AgenciaForm/>}/>
-                    <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>
                     <Route path={PrivateRoutes.USUARIOS} element={<Usuarios/>}/>
                     <Route path={PrivateRoutes.INGRESAR_USUARIOS} element={<UsuariosForm/>}/>
                     <Route path={PrivateRoutes.MODIFICAR_USUARIOS} element={<UsuariosForm/>}/>
@@ -58,13 +60,19 @@ function App() {
                   </Route>
                   <Route element={<JGEGuard/>}>
                     <Route path={PrivateRoutes.ELECCIONES} element={<Elecciones/>}/>
-                    <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>
-                    <Route path={PrivateRoutes.INSCRIPCIONES} element={<Inscripciones/>}/>
-                    <Route path={PrivateRoutes.LISTAS} element={<Listas/>}/>
+                    <Route path={PrivateRoutes.ELECCIONES_INGRESAR} element={<EleccionForm/>}/>
+                    <Route path={PrivateRoutes.ELECCIONES_MODIFICAR} element={<EleccionForm/>}/>
+                    <Route path={PrivateRoutes.INSCRIPCIONES} element={<InscripcionesReview/>}/>
+                    <Route path={PrivateRoutes.REPRESENTANTES} element={<Representantes/>}/>
+                    <Route path={PrivateRoutes.REPRESENTANTES_INGRESAR} element={<RepresentantesForm/>}/>
+                    <Route path={PrivateRoutes.REPRESENTANTES_MODIFICAR} element={<RepresentantesForm/>}/>
                   </Route>  
                   <Route element={<SocioGuard/>}>
                     <Route path={PrivateRoutes.VOTACIONES} element={<Votaciones/>}/>
-                    <Route path={PrivateRoutes.INSCRIPCIONES} element={<Inscripciones/>}/>
+                    <Route path={PrivateRoutes.INSCRIPCIONES} element={<InscripcionesList/>}/>
+                  </Route>
+                  <Route element={<AdminJgeGuard/>}>
+                    <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>
                   </Route>
                 </Route>
                 <Route element={<RecoveryGuard/>}>

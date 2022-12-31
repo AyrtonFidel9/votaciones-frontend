@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { authentication, getAllAgencias, getCuenta, getUsuarioById } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { authentication, getAllAgencias, getAllEleccciones, getCuenta, getUsuarioById } from '../../services';
 import { useForm } from 'react-hook-form';
 import {
     Box,
@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { PrivateRoutes, PublicRoutes } from '../../routes';
 import { createUsuario } from '../../redux/states/usuario';
 import { createListas } from '../../redux/states/listas';
+import { actionGetAllElecciones } from '../../redux/states/elecciones';
 
 const schema = yup.object({
     usuario: yup.string().required('Campo obligatorio'),
@@ -39,6 +40,7 @@ export default function Login() {
     const [ , setCookies] = useCookies(['token-cookies']);
     const navigate = useNavigate();
 
+
     const {
         register,
         formState: { errors },
@@ -49,11 +51,38 @@ export default function Login() {
 
     const dispatch = useDispatch();
 
-    const cargarListas = async (token) => {
-        const agencias = await getAllAgencias(token);
-        if(agencias.ok){
-            const data = await agencias.json();
+    const cargarListaAdmin = async (token) => {
+        const agenciasList = await getAllAgencias(token);
+        if(agenciasList.ok){
+            const data = await agenciasList.json();
             dispatch(createListas({agencias: data.message}));
+        }
+    }
+
+    const cargarListaJGE= async (token) => {
+        const agencias = await getAllAgencias(token);
+        let resp;
+        if(agencias.ok){
+            resp = await agencias.json();
+        }
+        const elecciones = await getAllEleccciones(token);
+        if(elecciones.ok){
+            const data = await elecciones.json();
+            dispatch(createListas({
+                agencias: resp.message,
+//                elecciones: data.message
+            }));
+        }
+    }
+
+    const cargarListas = (rol, token) => {
+        switch(rol){
+            case "ROLE_ADMIN":
+                cargarListaAdmin(token);
+                break;
+            case "ROLE_JGE":
+                cargarListaJGE(token);
+                break;
         }
     }
 
@@ -66,8 +95,6 @@ export default function Login() {
             if(usuario.ok){
                 const data = await usuario.json();
                 dispatch(createUsuario(data.message));
-                cargarListas(token);
-                navigate(PrivateRoutes.INICIO);
             }
         }else{
             const datos = await cuentaUsuario.json();
@@ -75,25 +102,21 @@ export default function Login() {
         }
     }
 
-    const procAdmin = async (decoded, token) => {
-        const cuentaUsuario = await getCuenta(decoded.id, token);
-        if(cuentaUsuario.ok){
-            const result = await cuentaUsuario.json();
-            const idUsuario = result.message.idSocio;
-            const usuario = await getUsuarioById(idUsuario, token);
-            if(usuario.ok){
-                const data = await usuario.json();
-                dispatch(createUsuario(data.message));
-                cargarListas(token);
-                navigate(PrivateRoutes.INICIO);
-            }
-        }else{
-            const datos = await cuentaUsuario.json();
-            setErrorDesc(datos.message);
-        }
+    const procAdmin = (decoded, token) => {
+        procDispatchUsuario(decoded, token);
+        cargarListas(decoded.rol, token);
+        navigate(PrivateRoutes.INICIO);
     }
 
-    const procSocio = () => {
+    const procSocio = (decoded, token) => {
+        procDispatchUsuario(decoded, token);
+        cargarListas(decoded.rol, token);
+        navigate(PrivateRoutes.INICIO);
+    }
+
+    const procJGE = (decoded, token) => {
+        procDispatchUsuario(decoded, token);
+        cargarListas(decoded.rol, token);
         navigate(PrivateRoutes.INICIO);
     }
 
@@ -103,7 +126,10 @@ export default function Login() {
                 procAdmin(cuenta, token);
                 break;
             case "ROLE_SOCIO":
-                procSocio();
+                procSocio(cuenta, token);
+                break;
+            case "ROLE_JGE":
+                procJGE(cuenta, token);
                 break;
             default:
                 navigate(PrivateRoutes.INICIO);

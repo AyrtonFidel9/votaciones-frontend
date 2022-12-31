@@ -8,36 +8,28 @@ import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { esES as coreES } from '@mui/material/locale';
 import ClearIcon from '@mui/icons-material/Clear';
-import DeleteBtn from './DeleteBtn';
-import EditBtn from './EditBtn';
-import ConfirmDelete from '../ConfirmDelete';
-import { useDispatch } from 'react-redux';
-import { createConfirmDeleted } from '../../redux/states/confirmDelete';
+import ViewBtn from './ViewBtn';
 
 const theme = createTheme(
     esES, // x-data-grid translations
     coreES, // core translations
 );
 
-export default function DataGridTable(props) {
+export default function TableInscriptions(props) {
     const {
         columns,
         rows,
 //        pagesPerSize,
 //        numberRows,
         activeCheck,
-        eliminarDato,
-        mensaje,
-        dialogRef,
-        handleOpen,
-        updateProcRoute
+        reviewInscription,
+        rutaReview
     } = props;
 
     const [search, setSearch] = useState('');
     const [searchRows, setSearchRows] = useState([]);
     const [activeClear, setActiveClear] = useState(false);
     const [rowsTable, setRowsTable] = useState(rows);
-    const dispatch = useDispatch();
 
     columns.some(col => col.field === 'opciones') || columns.push({
         field: 'opciones',
@@ -47,25 +39,15 @@ export default function DataGridTable(props) {
         width: 200,
         renderCell: (params) => {
             return [
-            <DeleteBtn
-                key={params.row.id*(Math.floor(Math.random() * (49-1)+1))}
-                onClick={() =>{
-                    handleOpen();
-                    dispatch(createConfirmDeleted({idDelete: params.row.id}));
-                }}
-            />,
-            <EditBtn
+            <ViewBtn
                 key={params.row.id*(Math.floor(Math.random() * (223-50)+50))}
                 row={params.row}
-                ruta={updateProcRoute}
+                ruta={rutaReview}
             />
         ];
     }
     });
-    
-    useEffect(()=>{
-        //something
-    },[rows]);
+
     
     useEffect(()=>{
         setRowsTable(rows);
@@ -93,9 +75,6 @@ export default function DataGridTable(props) {
     }));
     },[search]);
 
-    /*useEffect(()=>{
-        // se ejecuta cuando hay cambios en la tablas 
-    },[rowsTable]);*/
 
     const hoverClear = (event) => {
         event.preventDefault();
@@ -107,7 +86,6 @@ export default function DataGridTable(props) {
         document.querySelector('#outlined-search-table').value='';
     }
 
-    
 
     return (
         <>
@@ -166,16 +144,11 @@ export default function DataGridTable(props) {
                             paddingLeft:1.5,
                         }}
                         loading={rowsTable.length === 0}
-                        
                     />
                 </ThemeProvider>
             </div>
         </TableContainer>
-        <ConfirmDelete 
-            mensaje={mensaje}
-            ref={dialogRef}
-            eliminar={eliminarDato}
-        />
         </>
     );
 }
+

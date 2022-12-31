@@ -1,8 +1,18 @@
 const baseUrl = 'http://localhost:8080/api/v1/agencia';
 
-
 const getAllAgencias = (token) => {
     return fetch(`${baseUrl}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    });
+}
+
+const getAgencia = (id, token) => {
+    return fetch(`${baseUrl}/${id}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -35,9 +45,22 @@ const eliminarAgencia = (idAgencia, token) => {
     });
 }
 
+const actualizarAgencia = (idAgencia, body, token) => {
+    return fetch(`${baseUrl}/update/${idAgencia}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(body)
+    });
+}
 
 export { 
     getAllAgencias,
     ingresarAgencia,
     eliminarAgencia,
+    actualizarAgencia,
+    getAgencia
 };

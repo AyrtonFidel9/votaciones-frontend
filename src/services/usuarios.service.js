@@ -43,6 +43,17 @@ const getUsuarioById = (id, token) => {
     });
 }
 
+const getUsuariosCuenta = (token) => {
+    return fetch(`${baseUrl}/innerjoin/cuentas`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    });
+}
+
 const ingresarUsuario = (body, token) => {
     const formData = new FormData();
 
@@ -82,4 +93,5 @@ export {
     getUsuarioById,
     ingresarUsuario,
     actualizarUsuario,
+    getUsuariosCuenta,
 };

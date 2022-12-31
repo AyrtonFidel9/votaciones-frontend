@@ -9,6 +9,13 @@ import { PrivateRoutes } from "../../routes";
 import { useCookies } from 'react-cookie';
 import { useDispatch } from "react-redux";
 import { resetAccount } from "../../redux/states/cuenta";
+import { resetListas } from "../../redux/states/listas";
+import { resetUsuario } from "../../redux/states/usuario";
+import { resetRepresentantes } from "../../redux/states/representantes";
+import { resetElecciones } from "../../redux/states/elecciones";
+import { resetUsuariosCuenta } from "../../redux/states/usuariosCuenta";
+import { resetUsuariosList } from "../../redux/states/usuariosList";
+import { persistor } from "../../redux/store";
 
 export default function AvatarAppBar({ src, nombreCompleto }) {
 
@@ -37,6 +44,13 @@ export default function AvatarAppBar({ src, nombreCompleto }) {
                 path: '/',
             });
             dispatch(resetAccount());
+            dispatch(resetListas());
+            dispatch(resetUsuario());
+            dispatch(resetRepresentantes());
+            dispatch(resetElecciones());
+            dispatch(resetUsuariosCuenta());
+            dispatch(resetUsuariosList());
+            persistor.purge();
         }}
     ];
 

@@ -6,9 +6,8 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocation, useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
-import { ingresarAgencia } from "../../../services";
+import { actualizarAgencia, getAgencia, ingresarAgencia } from "../../../services";
 import { useCookies } from 'react-cookie';
-import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { updateListas } from "../../../redux/states/listas";
 import { useSelector, useDispatch } from "react-redux";
@@ -59,7 +58,6 @@ export default function AgenciaForm (){
         const agencia = await ingresarAgencia(data, cookies['access-token']);
         if(agencia.ok){
             const resp = await agencia.json();
-            console.log(resp);
             setAlertMessage({isView: true, 
                 titulo:"Proceso completado satisfactoriamente",
                 content: "Agencia ingresado con exito",
@@ -71,6 +69,39 @@ export default function AgenciaForm (){
             dispatch(updateListas({agencias: agencias.concat(resp.datos)}));
         }else{
             const resp = await agencia.json();
+            setAlertMessage({isView: true, 
+                titulo:"Error",
+                content: resp.message,
+                count: ++alertMessage.count,
+                tipo: 'error',
+                variante: 'filled',
+            });
+        }
+    }
+
+    const updateAgencia = async (bodyAgencia) => {
+        const updated = await actualizarAgencia(
+            data.state.id,
+            bodyAgencia,
+            cookies['access-token']    
+        );
+        if(updated.ok){
+            const resp = await updated.json();
+            setAlertMessage({isView: true, 
+                titulo: resp.message[0] === 1 ? "Tarea completada exitosamente" : 'Error',
+                content: resp.message[0] === 1 ? `Datos de la agencia actualizados` : 'Error al actualizar los datos',
+                count: ++alertMessage.count,
+                tipo: resp.message[0] === 1 ? 'success' : 'error',
+                variante: 'filled',
+            });
+            const agencia = await getAgencia(data.state.id, cookies['access-token']);
+            const datoAgencia = await agencia.json();
+            let newAgencia = agencias.map( obj => obj.id === data.state.id);
+            newAgencia = { ...datoAgencia.message };
+            const pushAgencia = agencias.filter(obj => obj.id !== data.state.id);
+            dispatch(updateListas({agencias: pushAgencia.concat(newAgencia)}));
+        }else{
+            const resp = await updated.json();
             setAlertMessage({isView: true, 
                 titulo:"Error",
                 content: resp.message,
@@ -96,7 +127,7 @@ export default function AgenciaForm (){
                 noValidate={false}
                 autoComplete="off"
                 gap={2}
-                onSubmit={handleSubmit(saveAgencia)}
+                onSubmit={handleSubmit(data.state ? updateAgencia : saveAgencia)}
             >
                 <Box sx={{
                     display: 'flex',

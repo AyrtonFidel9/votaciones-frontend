@@ -6,7 +6,7 @@ export { default as Votaciones } from './Votaciones';
 export { default as Sufragar } from './Votaciones/Sufragar';
 export { default as Reportes } from './Reportes';
 export { default as Inscripciones } from './Inscripciones';
-export { default as Listas } from './Listas';
+export { default as Listas } from './Representantes';
 export { default as Perfil } from './Perfil';
 export { default as Login } from './Login';
 export { default as NoDisponible } from './NoDisponible';

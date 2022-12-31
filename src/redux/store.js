@@ -6,6 +6,10 @@ import recoverySliceReducer from './states/recovery';
 import usuarioSliceReducer from './states/usuario';
 import confirmDeleteSliceReducer from './states/confirmDelete';
 import listasSliceReducer from './states/listas';
+import eleccionSliceReducer from './states/elecciones';
+import representanteSliceReducer from './states/representantes';
+import usuariosListSliceReducer from './states/usuariosList';
+import usuariosCuentaSliceReducer from './states/usuariosCuenta';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
@@ -18,7 +22,11 @@ const persistConfig = {
     whitelist: [
         'account',
         'usuario',
-        'listas'
+        'listas',
+        'elecciones',
+        'representantes',
+        'usuariosList',
+        'usuariosCuenta',
     ],
     blacklist: [
         'recovery',
@@ -32,6 +40,10 @@ const rootReducer = combineReducers({
     usuario: usuarioSliceReducer,
     confirmDeleted: confirmDeleteSliceReducer,
     listas: listasSliceReducer,
+    elecciones: eleccionSliceReducer,
+    representantes: representanteSliceReducer,
+    usuariosList: usuariosListSliceReducer,
+    usuariosCuenta: usuariosCuentaSliceReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -49,7 +61,11 @@ export const AppStore = PropTypes.shape({
     listas: {
         agencias: [],
         usuario: [],
-    }
+    },
+    elecciones: [],
+    representantes: [],
+    usuariosList: [],
+    usuariosCuenta: []
 });
 
 export const store = configureStore({
@@ -60,11 +76,3 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 export default store;
-
-
-/*export default configureStore({
-    reducer: {
-        account: cuentaSliceReducer,
-    },
-    middleware: [thunk]
-});*/

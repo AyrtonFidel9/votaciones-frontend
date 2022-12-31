@@ -24,7 +24,7 @@ const AlertaCustom = (props) => {
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert severity={tipo} onClose={handleClose} variant={variante} >
                 <AlertTitle sx={{textAlign: 'left'}}>{titulo}</AlertTitle>
-                {content}
+                {typeof content === 'object' ? JSON.stringify(content) : content}
             </Alert>
         </Snackbar>
     );

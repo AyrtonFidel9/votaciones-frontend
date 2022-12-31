@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const EmptyListasState = {
     agencias: [],
     socios: [],
+    elecciones: [],
 }
 
 export const listasSlice = createSlice({

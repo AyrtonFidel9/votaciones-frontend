@@ -47,7 +47,7 @@ const opcionesJGE = [
     {opcion: 'Elecciones', icon: DashboardIcon},
     {opcion: 'Reportes', icon: AssessmentIcon},
     {opcion: 'Inscripciones', icon: UploadFileIcon},
-    {opcion: 'Listas', icon: RecentActorsIcon},
+    {opcion: 'Representantes', icon: RecentActorsIcon},
     {opcion: 'Perfil', icon: SettingsIcon}
 ];
 
@@ -114,8 +114,8 @@ function NavBar(props){
             case 'Inscripciones':
                 navigate(PrivateRoutes.INSCRIPCIONES);
                 break;
-            case 'Listas':
-                navigate(PrivateRoutes.LISTAS);
+            case 'Representantes':
+                navigate(PrivateRoutes.REPRESENTANTES);
                 break;
             case 'Perfil':
                 navigate(PrivateRoutes.PERFIL);
