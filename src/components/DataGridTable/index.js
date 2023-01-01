@@ -64,10 +64,6 @@ export default function DataGridTable(props) {
     });
     
     useEffect(()=>{
-        //something
-    },[rows]);
-    
-    useEffect(()=>{
         setRowsTable(rows);
     },[rows]);
 
@@ -79,7 +75,6 @@ export default function DataGridTable(props) {
             setActiveClear(false);
         }
     }
-
 
     // PENDIENTE: probar funcionamiento con react-hook-form
     
@@ -93,9 +88,9 @@ export default function DataGridTable(props) {
     }));
     },[search]);
 
-    /*useEffect(()=>{
+    useEffect(()=>{
         // se ejecuta cuando hay cambios en la tablas 
-    },[rowsTable]);*/
+    },[rowsTable]);
 
     const hoverClear = (event) => {
         event.preventDefault();
@@ -153,7 +148,7 @@ export default function DataGridTable(props) {
             <div style={{ height: '400px', width: '100%' }}>
                 <ThemeProvider theme={theme}>
                     <DataGrid
-                        rows={!searchRows.length ? rowsTable : searchRows}
+                        rows={search.length === 0 ? rowsTable : searchRows}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}

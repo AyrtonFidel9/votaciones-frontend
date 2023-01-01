@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, Stack } from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import React, { useRef, useState, useEffect } from "react";
 import { DataGridTable, Plantilla, AlertaCustom } from "../../components";
 import AddIcon from '@mui/icons-material/Add';
@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { PrivateRoutes } from "../../routes";
 import { actionDeleteRepresentante, actionGetAllRepresentantes } from "../../redux/states/representantes";
 import { actionGetAllElecciones } from "../../redux/states/elecciones";
+import { actionGetAllUsuariosCuenta } from "../../redux/states/usuariosCuenta";
 
 
 export default function Representantes (){
@@ -26,17 +27,18 @@ export default function Representantes (){
         variante: '',
     });
 
-    useEffect(()=>{
-        dispatch(actionGetAllElecciones(cookies['access-token']));
-        dispatch(actionGetAllRepresentantes(cookies['access-token']));
-    },[dispatch]);
-
     const handleOpen = () => {
         dialogRef.current.openDialog();
     };
 
+    useEffect(()=>{
+        dispatch(actionGetAllElecciones(cookies['access-token']));
+        dispatch(actionGetAllRepresentantes(cookies['access-token']));
+        dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
+    },[cookies]);
+
     const eliminarRepresentante = (idRepresentante, token = cookies['access-token']) => {
-        const resp= dispatch(actionDeleteRepresentante(idRepresentante, token));
+        const resp = dispatch(actionDeleteRepresentante(idRepresentante, token));
         resp.then( msg => {
             if(msg===true){
                 setAlertMessage( prev => ({
@@ -48,7 +50,7 @@ export default function Representantes (){
                     variante: 'filled',
                 }));
             }else{
-                setAlertMessage && setAlertMessage(prev => ({
+                setAlertMessage(prev => ({
                     isView: true,
                     titulo: "Error",
                     content: msg,
@@ -59,6 +61,8 @@ export default function Representantes (){
             }
         });
     }
+    
+
 
     const columnsRepresentantes = [
         { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 30 },

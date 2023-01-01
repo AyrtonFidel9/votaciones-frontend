@@ -16,29 +16,15 @@ export const representanteSlice = createSlice({
 
 export const { createRepresentante, addRepresentante, resetRepresentantes, removeRepresentante } = representanteSlice.actions;
 
-export const actionIngresarRepresentante = (body, token, setAlertMessage) => async (dispatch) => {
+export const actionIngresarRepresentante = (body, token) => async (dispatch) => {
    const request = await ingresarRepresentante(body, token);
    if(request.ok){
       const newRepresentante = await request.json();
-      setAlertMessage && setAlertMessage( prev => ({
-         isView: true,
-         titulo: "Proceso terminado satisfactoriamente",
-         content: newRepresentante.message,
-         count: ++prev.count,
-         tipo: 'success',
-         variante: 'filled',
-      }));
       dispatch(addRepresentante(newRepresentante.datos));
+      return true;
    }else{
       const resp = await request.json();
-      setAlertMessage && setAlertMessage(prev => ({
-         isView: true,
-         titulo: "Error",
-         content: resp.message,
-         count: ++prev.count,
-         tipo: 'error',
-         variante: 'filled',
-      }));
+      return resp.message;
    }
 }
 
@@ -58,28 +44,16 @@ export const actionDeleteRepresentante = (id, token) => async (dispatch) => {
    }
 }
 
-export const actionUpdateRepresentante = (id, body, token, setAlertMessage) => async (dispatch) => {
+export const actionUpdateRepresentante = (id, body, token) => async (dispatch) => {
    const updated = await updateRepresentante(id, body, token);
    if(updated.ok){
-      setAlertMessage && setAlertMessage( prev => ({
-         isView: true,
-         titulo: "Proceso terminado satisfactoriamente",
-         content: "Representante actualizado con exito",
-         count: ++prev.count,
-         tipo: 'success',
-         variante: 'filled',
-      }));
-      
+      dispatch(removeRepresentante(id));
+      const dataUpdated = { ...body, id: id};
+      dispatch(addRepresentante(dataUpdated));
+      return true;
    }else{
       const resp = await updated.json();
-      setAlertMessage && setAlertMessage(prev => ({
-         isView: true,
-         titulo: "Error",
-         content: resp.message,
-         count: ++prev.count,
-         tipo: 'error',
-         variante: 'filled',
-      }));
+      return resp.message;
    }
 }
 

@@ -82,13 +82,34 @@ export default function EleccionesForm() {
 
    const cambiarAgencia = (evt) => {
       setAgencia(evt.target.value);
-
    }
 
    const saveEleccion = async (form) => {
       form.idAgencia = form.agencia;
       form.hora = form.hora.toLocaleTimeString();
-      dispatch(actionIngresarEleccion(form, cookies['access-token'], setAlertMessage));
+      const resp = dispatch(actionIngresarEleccion(form, cookies['access-token']));
+      resp.then( msg => {
+         if(msg === true){
+            setAlertMessage( prev => ({
+               isView: true,
+               titulo: "Proceso terminado satisfactoriamente",
+               content: "Eleccion creada con exito",
+               count: ++prev.count,
+               tipo: 'success',
+               variante: 'filled',
+            }));
+         }else{
+            setAlertMessage && setAlertMessage(prev => ({
+               isView: true,
+               titulo: "Error",
+               content: msg,
+               count: ++prev.count,
+               tipo: 'error',
+               variante: 'filled',
+            }));
+         }
+      });
+      
    }
 
    const actualizarEleccion = async (form) => {
@@ -102,14 +123,36 @@ export default function EleccionesForm() {
          idAgencia
       };
 
-      dispatch(actionUpdateElecciones(
+      const resp = dispatch(actionUpdateElecciones(
          data.state.id, 
          body, 
-         cookies['access-token'],
-         setAlertMessage,
+         cookies['access-token']
       ));
 
-      dispatch(actionGetAllElecciones(cookies['access-token']));
+      resp.then( msg => {
+         if(msg === true){
+            dispatch(actionGetAllElecciones(cookies['access-token']));
+            setAlertMessage( prev => ({
+               isView: true,
+               titulo: "Proceso terminado satisfactoriamente",
+               content: "Elección actualizada con exito",
+               count: ++prev.count,
+               tipo: 'success',
+               variante: 'filled',
+            }));
+         }
+         else{
+            setAlertMessage(prev => ({
+               isView: true,
+               titulo: "Error",
+               content: msg,
+               count: ++prev.count,
+               tipo: 'error',
+               variante: 'filled',
+            }));
+         }
+      });
+
    }
 
    return (

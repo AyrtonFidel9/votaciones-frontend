@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Grid, Stack } from "@mui/material";
 import { DataGridTable, Plantilla, AlertaCustom } from "../../components";
 import AddIcon from '@mui/icons-material/Add';
@@ -9,14 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { addHours } from "./utils";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../routes";
-import { deleteEleccion } from "../../services";
-import { updateListas } from "../../redux/states/listas";
 import { actionDeleteElecciones, actionGetAllElecciones } from "../../redux/states/elecciones";
 
 
 const renderNewCellValue = (params) => {
-
-
     switch (params.row.estado) {
         case "EN-CURSO":
             return (<ChipTable
@@ -56,10 +52,7 @@ const renderNewCellValue = (params) => {
     };
 }
 
-
-
 export default function Elecciones() {
-
     const eleccionesLista = useSelector(store => store.elecciones);
     const agencias = useSelector(store => store.listas.agencias);
     const dialogRef = useRef();
@@ -112,7 +105,28 @@ export default function Elecciones() {
     ];
 
     const eliminarEleccion = (idEleccion, token = cookies['access-token']) => {
-        dispatch(actionDeleteElecciones(idEleccion, token, setAlertMessage));
+        const resp = dispatch(actionDeleteElecciones(idEleccion, token));
+        resp.then(msg => {
+            if (msg === true) {
+                setAlertMessage(prev => ({
+                    isView: true,
+                    titulo: "Proceso terminado satisfactoriamente",
+                    content: "Elección eliminada con exito",
+                    count: ++prev.count,
+                    tipo: 'success',
+                    variante: 'filled',
+                }));
+            }else{
+                setAlertMessage(prev => ({
+                    isView: true,
+                    titulo: "Error",
+                    content: msg,
+                    count: ++prev.count,
+                    tipo: 'error',
+                    variante: 'filled',
+                }));
+            }
+        });
     }
 
     return (

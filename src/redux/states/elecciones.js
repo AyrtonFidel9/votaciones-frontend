@@ -16,29 +16,15 @@ export const eleccionesSlice = createSlice({
 
 export const { createElecciones, addElecciones, resetElecciones, removeElecciones } = eleccionesSlice.actions;
 
-export const actionIngresarEleccion = (body, token, setAlertMessage) => async (dispatch) => {
+export const actionIngresarEleccion = (body, token) => async (dispatch) => {
    const request = await ingresarElecccion(body, token);
    if(request.ok){
       const newEleccion = await request.json();
-      setAlertMessage( prev => ({
-         isView: true,
-         titulo: "Proceso terminado satisfactoriamente",
-         content: "Eleccion creada con exito",
-         count: ++prev.count,
-         tipo: 'success',
-         variante: 'filled',
-      }));
       dispatch(addElecciones(newEleccion.message));
+      return true;
    }else{
       const resp = await request.json();
-      setAlertMessage && setAlertMessage(prev => ({
-         isView: true,
-         titulo: "Error",
-         content: resp.message,
-         count: ++prev.count,
-         tipo: 'error',
-         variante: 'filled',
-      }));
+      return resp.message;
    }
 }
 
@@ -47,53 +33,27 @@ export const actionGetAllElecciones = (token) => async (dispatch) => {
    dispatch(createElecciones(elecciones.message));
 }
 
-export const actionDeleteElecciones = (id, token, setAlertMessage) => async (dispatch) => {
+export const actionDeleteElecciones = (id, token) => async (dispatch) => {
    const eliminar = await deleteEleccion(id, token);
    if(eliminar.ok){
-      setAlertMessage && setAlertMessage( prev => ({
-         isView: true,
-         titulo: "Proceso terminado satisfactoriamente",
-         content: "Elección eliminada con exito",
-         count: ++prev.count,
-         tipo: 'success',
-         variante: 'filled',
-      }));
       dispatch(removeElecciones(id));
+      return true;
    }else{
       const resp = await eliminar.json();
-      setAlertMessage && setAlertMessage(prev => ({
-         isView: true,
-         titulo: "Error",
-         content: resp.message,
-         count: ++prev.count,
-         tipo: 'error',
-         variante: 'filled',
-      }));
+      return resp.message;
    }
 }
 
-export const actionUpdateElecciones = (id, body, token, setAlertMessage) => async (dispatch) => {
+export const actionUpdateElecciones = (id, body, token) => async (dispatch) => {
    const updated = await updateEleccion(id, body, token);
    if(updated.ok){
-      setAlertMessage && setAlertMessage( prev => ({
-         isView: true,
-         titulo: "Proceso terminado satisfactoriamente",
-         content: "Elección actualizada con exito",
-         count: ++prev.count,
-         tipo: 'success',
-         variante: 'filled',
-      }));
-
+      dispatch(removeElecciones(id));
+      const dataUpdated = { ...body, id: id };
+      dispatch(addElecciones(dataUpdated));
+      return true;
    }else{
       const resp = await updated.json();
-      setAlertMessage && setAlertMessage(prev => ({
-         isView: true,
-         titulo: "Error",
-         content: resp.message,
-         count: ++prev.count,
-         tipo: 'error',
-         variante: 'filled',
-      }));
+      return resp.message;
    }
 }
 

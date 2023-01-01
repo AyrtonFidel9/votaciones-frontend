@@ -8,15 +8,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
 import { useCookies } from 'react-cookie';
 import SaveIcon from '@mui/icons-material/Save';
-import { updateListas } from "../../../redux/states/listas";
 import { useSelector, useDispatch } from "react-redux";
-import { actionGetAllUsuariosList } from "../../../redux/states/usuariosList";
 import Autocomplete from '@mui/material/Autocomplete';
-import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { actionGetAllUsuariosCuenta } from "../../../redux/states/usuariosCuenta";
-import { actionIngresarRepresentante } from "../../../redux/states/representantes";
+import { actionIngresarRepresentante, actionUpdateRepresentante } from "../../../redux/states/representantes";
+import { PermPhoneMsgSharp } from "@material-ui/icons";
 
 const schema = yup.object({
    principal: yup.object().typeError("Seleccione al Principal").required('Campo obligatorio'),
@@ -66,7 +63,6 @@ export default function RepresentantesForm() {
          codigo: tmpSocio[0].codigo,
          id: tmpSocio[0].id
       };
-      //setValue(tipo, soc);
       return soc;
    }
    const getEleccion = (id) => {
@@ -86,14 +82,9 @@ export default function RepresentantesForm() {
       }
    }
 
-//{ nombre: 'Sonia Maria Guaman Diaz - 0104292461', codigo: 1232, id: 5}
    const {
-      register,
-      formState: { errors },
       handleSubmit,
       control,
-      watch,
-      getValues,
       setValue,
    } = useForm({
       resolver: yupResolver(schema),
@@ -106,17 +97,7 @@ export default function RepresentantesForm() {
       }
    });
 
-
-   const saveRepresentante = async (data) => {
-
-      const representante = {
-         principal: data.principal.codigo,
-         psuplente: data.psuplente.codigo,
-         ssuplente: data.ssuplente.codigo,
-         idElecciones: data.idElecciones.id,
-         idInscripcion: 1,
-      }
-
+   const validarRepresentantes = (representante) => {
       if (
          representante.principal === representante.psuplente ||
          representante.principal === representante.ssuplente
@@ -129,6 +110,7 @@ export default function RepresentantesForm() {
             tipo: 'warning',
             variante: 'filled',
          }));
+         return true;
       } else if (
          representante.psuplente === representante.ssuplente
       ) {
@@ -140,17 +122,85 @@ export default function RepresentantesForm() {
             tipo: 'warning',
             variante: 'filled',
          }));
+         return false;
       }
+      return true;
+   }
 
-      dispatch(actionIngresarRepresentante(
-         representante,
-         cookies['access-token'],
-         setAlertMessage
-      ));
+
+   const saveRepresentante = async (data) => {
+      const representante = {
+         principal: data.principal.codigo,
+         psuplente: data.psuplente.codigo,
+         ssuplente: data.ssuplente.codigo,
+         idElecciones: data.idElecciones.id,
+         idInscripcion: 1,
+      }
+      if(validarRepresentantes(representante)){
+         const resp = dispatch(actionIngresarRepresentante(
+            representante,
+            cookies['access-token'],
+         ));
+         resp.then(msg=>{
+            if(msg === true)
+               setAlertMessage( prev => ({
+                  isView: true,
+                  titulo: "Proceso terminado satisfactoriamente",
+                  content: "Representante ingresado con con éxito",
+                  count: ++prev.count,
+                  tipo: 'success',
+                  variante: 'filled',
+               }));
+            else{
+               setAlertMessage(prev => ({
+                  isView: true,
+                  titulo: "Error",
+                  content: PermPhoneMsgSharp,
+                  count: ++prev.count,
+                  tipo: 'error',
+                  variante: 'filled',
+               }));
+            }
+         })
+      }      
    }
 
    const updateRepresentante = async (bodyRep) => {
-      console.log(bodyRep);
+      const representante = {
+         principal: bodyRep.principal.codigo,
+         psuplente: bodyRep.psuplente.codigo,
+         ssuplente: bodyRep.ssuplente.codigo,
+         idElecciones: bodyRep.idElecciones.id,
+         idInscripcion: 1,
+      }
+      if(validarRepresentantes(representante)){
+         const resp = dispatch(actionUpdateRepresentante(
+            data.state.id,
+            representante,
+            cookies['access-token']
+         ));
+         resp.then(msg=>{
+            if(msg === true)
+               setAlertMessage( prev => ({
+                  isView: true,
+                  titulo: "Proceso terminado satisfactoriamente",
+                  content: "Representante actualizado con exito",
+                  count: ++prev.count,
+                  tipo: 'success',
+                  variante: 'filled',
+               }));
+            else{
+               setAlertMessage(prev => ({
+                  isView: true,
+                  titulo: "Error",
+                  content: PermPhoneMsgSharp,
+                  count: ++prev.count,
+                  tipo: 'error',
+                  variante: 'filled',
+               }));
+            }
+         })
+      }
    }
 
    const cargarSocios = (idAg) => {
@@ -178,12 +228,10 @@ export default function RepresentantesForm() {
    }
 
    useEffect(() => {
-      dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
       setTitlePage(data.state ? 'Modificar' : 'Ingresar');
       setAgencia(data.state ? getAgencia(data.state.idElecciones) : 0);
       data.state && cargarSocios(getAgencia(data.state.idElecciones));
       data.state && cargarElecciones(getAgencia(data.state.idElecciones));
-
    }, []);
 
 
