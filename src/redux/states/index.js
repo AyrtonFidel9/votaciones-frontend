@@ -7,3 +7,4 @@ export { default as representantes } from './representantes';
 export { default as usuario } from './usuario';
 export { default as usuariosCuenta } from './usuariosCuenta';
 export { default as usuariosList } from './usuariosList';
+export { default as agencia } from './agencia';

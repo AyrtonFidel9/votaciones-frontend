@@ -20,6 +20,7 @@ export const PrivateRoutes = {
     PERFIL: '/perfil',
     REPORTES: '/reportes',
     VOTACIONES: '/votaciones',
+    VOTACIONES_SUFRAGAR: '/votaciones/sufragar',
     ELECCIONES: '/elecciones',
     ELECCIONES_MODIFICAR: '/elecciones/modificar',
     ELECCIONES_INGRESAR: '/elecciones/ingresar',

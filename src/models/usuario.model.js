@@ -10,4 +10,5 @@ export default PropTypes.shape({
     imagen: PropTypes.string.isRequired,
     codigo: PropTypes.number.isRequired,
     idAgencia: PropTypes.number.isRequired,
+    billeteraAddress: PropTypes.string.isRequired,
 });

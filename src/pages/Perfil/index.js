@@ -54,12 +54,11 @@ export default function Perfil (){
             }
             else{
                 const img =  usuario.imagen.toString().includes('/') ? usuario.imagen.toString().split('/')[4] : usuario.imagen;
+                console.log(img);
                 setImg(img);
                 setWatchImg(img);
             }
         }
-
-
     },[usuario]);
 
 
@@ -91,8 +90,13 @@ export default function Perfil (){
     }
 
     useEffect(()=>{
-        setWatchImg(getValues('imagen') ?? '');
-    }, [watch()])
+        const subscription = watch((data) => {
+            setWatchImg( data.imagen[0].name ?? '');
+        });
+
+        return () => subscription.unsubscribe();
+
+    }, [watch])
 
     const saveUsuario = async (data) => {
 
@@ -222,7 +226,6 @@ export default function Perfil (){
                         </Button>
                         <FormHelperText error={errors.imagen?.message && true} id="imagen">
                             {errors.imagen?.message || 
-                            watchImg[0]?.name ||
                             watchImg || 
                             "Seleccionar imagen"
                         }</FormHelperText>

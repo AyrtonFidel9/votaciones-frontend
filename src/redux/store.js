@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { PropTypes } from 'prop-types';
-import { Cuenta, Usuario } from '../models';
+import { Agencia, Cuenta, Usuario } from '../models';
 import cuentaSliceReducer from './states/cuenta';
 import recoverySliceReducer from './states/recovery';
 import usuarioSliceReducer from './states/usuario';
@@ -10,6 +10,7 @@ import eleccionSliceReducer from './states/elecciones';
 import representanteSliceReducer from './states/representantes';
 import usuariosListSliceReducer from './states/usuariosList';
 import usuariosCuentaSliceReducer from './states/usuariosCuenta';
+import agenciaSliceReducer from './states/agencia';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
@@ -27,6 +28,7 @@ const persistConfig = {
         'representantes',
         'usuariosList',
         'usuariosCuenta',
+        'agencia',
     ],
     blacklist: [
         'recovery',
@@ -44,6 +46,7 @@ const rootReducer = combineReducers({
     representantes: representanteSliceReducer,
     usuariosList: usuariosListSliceReducer,
     usuariosCuenta: usuariosCuentaSliceReducer,
+    agencia: agenciaSliceReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -65,7 +68,8 @@ export const AppStore = PropTypes.shape({
     elecciones: [],
     representantes: [],
     usuariosList: [],
-    usuariosCuenta: []
+    usuariosCuenta: [],
+    agencia: Agencia,
 });
 
 export const store = configureStore({

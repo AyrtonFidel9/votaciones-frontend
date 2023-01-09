@@ -27,10 +27,12 @@ const InscripcionesList = lazy(()=>import('./pages/Inscripciones/List'));
 const Representantes = lazy(()=>import('./pages/Representantes'));
 const RepresentantesForm = lazy(()=>import('./pages/Representantes/pages/RepresentantesForm'));
 const Votaciones = lazy(()=>import('./pages/Votaciones'));
+const Sufragar = lazy(()=>import('./pages/Votaciones/Sufragar'));
 const NoDisponible = lazy(()=>import('./pages/NoDisponible'));
 const LoadUsuarios = lazy(()=>import('./pages/Usuarios/Pages/LoadUsuarios'));
 const CuentaForm = lazy(()=>import('./pages/Usuarios/Pages/CuentaForm'));
 const AgenciaForm = lazy(()=>import('./pages/Agencias/pages/AgenciaForm'));
+
 
 function App() {
   return (
@@ -70,6 +72,7 @@ function App() {
                   <Route element={<SocioGuard/>}>
                     <Route path={PrivateRoutes.VOTACIONES} element={<Votaciones/>}/>
                     <Route path={PrivateRoutes.INSCRIPCIONES} element={<InscripcionesList/>}/>
+                    <Route path={PrivateRoutes.VOTACIONES_SUFRAGAR} element={<Sufragar/>}/>
                   </Route>
                   <Route element={<AdminJgeGuard/>}>
                     <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>

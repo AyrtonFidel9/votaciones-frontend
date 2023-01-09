@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 export default function ButtonRightWithIcon ({onClick}){
     return (
         <ButtonsCarrusel style={{right: 0,}}
+            type='button'
             onClick={onClick}
         >
             <ArrowForwardIosIcon/>

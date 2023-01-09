@@ -6,10 +6,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useNavigate } from "react-router-dom";
+import { PrivateRoutes } from "../../../routes";
 
 export default function VotePendiente({agencia}){
+
+    const navigate = useNavigate();
+
     return(
-        <Card sx={{ minWidth: 320, position: 'relative', marginRight: 5 }}>
+        <Card sx={{ maxWidth: 330, position: 'relative', marginRight: 5, }}>
             <CardContent sx={{
                 position: 'absolute',
                 color: '#ffffff',
@@ -46,6 +51,8 @@ export default function VotePendiente({agencia}){
                     sx={{
                         width: 160
                     }}
+                    type='button'
+                    onClick={()=>navigate(PrivateRoutes.VOTACIONES_SUFRAGAR)}
                     >
                     Sufragar
                 </Button>

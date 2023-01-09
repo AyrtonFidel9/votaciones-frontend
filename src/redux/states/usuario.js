@@ -11,6 +11,7 @@ export const EmptyUsuarioState = {
     imagen: '',
     codigo: 0,
     idAgencia: 0,
+    billeteraAddress: '',
 }
 
 EmptyUsuarioState.propTypes = { ...Usuario };
