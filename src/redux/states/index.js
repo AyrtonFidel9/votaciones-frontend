@@ -8,3 +8,4 @@ export { default as usuario } from './usuario';
 export { default as usuariosCuenta } from './usuariosCuenta';
 export { default as usuariosList } from './usuariosList';
 export { default as agencia } from './agencia';
+export { default as inscripciones } from './inscripciones';

@@ -11,6 +11,7 @@ import representanteSliceReducer from './states/representantes';
 import usuariosListSliceReducer from './states/usuariosList';
 import usuariosCuentaSliceReducer from './states/usuariosCuenta';
 import agenciaSliceReducer from './states/agencia';
+import inscripcionesSliceReducer from './states/inscripciones';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
@@ -29,6 +30,7 @@ const persistConfig = {
         'usuariosList',
         'usuariosCuenta',
         'agencia',
+        'inscripciones',
     ],
     blacklist: [
         'recovery',
@@ -47,6 +49,7 @@ const rootReducer = combineReducers({
     usuariosList: usuariosListSliceReducer,
     usuariosCuenta: usuariosCuentaSliceReducer,
     agencia: agenciaSliceReducer,
+    inscripciones: inscripcionesSliceReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
