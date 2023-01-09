@@ -20,17 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../routes";
 
 
-/*const opciones = [
-    {opcion: 'Inicio',icon: HomeIcon},
-    {opcion: 'Socios', icon: PeopleAltIcon},
-    {opcion: 'Agencias', icon: ApartmentIcon},
-    {opcion: 'Elecciones', icon: DashboardIcon},
-    {opcion: 'Votaciones', icon: DraftsIcon},
-    {opcion: 'Reportes', icon: AssessmentIcon},
-    {opcion: 'Inscripciones', icon: UploadFileIcon},
-    {opcion: 'Listas', icon: RecentActorsIcon},
-    {opcion: 'Perfil', icon: SettingsIcon}
-];*/
 
 const opcionesAdmin = [
     {opcion: 'Inicio',icon: HomeIcon, navegar: (evt)=>{
@@ -54,7 +43,7 @@ const opcionesJGE = [
 const opcionesVotante = [
     {opcion: 'Inicio',icon: HomeIcon},
     {opcion: 'Votaciones', icon: DraftsIcon},
-    {opcion: 'Inscripciones', icon: UploadFileIcon},
+    {opcion: 'Inscripcion', icon: UploadFileIcon},
     {opcion: 'Perfil', icon: SettingsIcon}
 ];
 
@@ -113,6 +102,9 @@ function NavBar(props){
                 break;
             case 'Inscripciones':
                 navigate(PrivateRoutes.INSCRIPCIONES);
+                break;
+            case 'Inscripcion':
+                navigate(PrivateRoutes.INSCRIPCIONES_VISTA_SOCIO);
                 break;
             case 'Representantes':
                 navigate(PrivateRoutes.REPRESENTANTES);

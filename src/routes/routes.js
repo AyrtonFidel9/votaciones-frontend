@@ -14,6 +14,7 @@ export const PrivateRoutes = {
     AGENCIAS: '/agencias',
     INSCRIPCIONES: '/inscripciones',
     INSCRIPCIONES_REVIEW: '/inscripciones/review',
+    INSCRIPCIONES_VISTA_SOCIO: '/inscripciones/lista',
     REPRESENTANTES: '/representantes',
     REPRESENTANTES_INGRESAR: '/representantes/ingresar',
     REPRESENTANTES_MODIFICAR: '/representantes/modificar',
