@@ -33,10 +33,10 @@ export default function DataTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {content.map(row => {
+          {content.map((row, index) => {
             return (
               <TableRow
-                key={row[0]}
+                key={index}
               >
                 {Object.values(row).map(val =>
                   <TableCell align='left'>{val}</TableCell>

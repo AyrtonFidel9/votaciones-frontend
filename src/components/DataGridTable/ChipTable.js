@@ -5,6 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CancelIcon from '@mui/icons-material/Cancel';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 
 export default function ChipTable (props){
     const {
@@ -20,7 +21,8 @@ export default function ChipTable (props){
         {name: 'error', value: ErrorIcon},
         {name: 'live', value: RadioButtonCheckedIcon},
         {name: 'cancel', value: CancelIcon},
-        {name: 'stop', value: StopCircleIcon}
+        {name: 'stop', value: StopCircleIcon},
+        {name: 'pendiente', value: HourglassTopIcon}
     ];
 
     const RealIcon = icons.find(ic=>ic.name===icon).value;

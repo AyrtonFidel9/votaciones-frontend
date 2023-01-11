@@ -1,59 +1,58 @@
-import { Button, Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
+import { Grid } from '@mui/material';
+import React, { useEffect } from 'react';
 import { Plantilla } from '../../components';
 import { TableInscriptions } from './components';
 import AddIcon from '@mui/icons-material/Add';
-import ChipTable from "../../components/DataGridTable/ChipTable";
 import usuariosData from '../../__mocks__/socios.json';
 import { PrivateRoutes } from '../../routes';
-
-
-const renderStateInscripcion = (params) => {
-   const size = 'small';
-   if (params.row.estado) {
-      return (<ChipTable
-         text="Habilitado"
-         size={size}
-         icon="check"
-         color="success"
-      />);
-   } else {
-      return (<ChipTable
-         text="Deshabilitado"
-         size={size}
-         icon="cancel"
-         color="error"
-      />);
-   }
-}
+import { renderStateInscripcion } from './utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionGetAllInscripciones } from '../../redux/states/inscripciones';
+import { useCookies } from 'react-cookie';
+import { actionGetAllUsuariosCuenta } from '../../redux/states/usuariosCuenta';
 
 export default function Inscripciones() {
 
+   const usuarios = useSelector( store => store.usuariosCuenta );
+   const inscripciones = useSelector( store => store.inscripciones);
+   const dispatch = useDispatch();
+   const [cookies] = useCookies(['access-token']);
+
+
    const columnsInscripciones = [
       { field: 'id', headerClassName: 'header-theme', headerName: 'Id', width: 70 },
-      { field: 'nombres', headerClassName: 'header-theme', headerName: 'Nombres', width: 200 },
-      { field: 'apellidos', headerClassName: 'header-theme', headerName: 'Apellidos', width: 200 },
-      { field: 'cedula', headerClassName: 'header-theme', headerName: 'Cedula', width: 150 },
-      { field: 'celular', headerClassName: 'header-theme', headerName: 'Celular', width: 150 },
-      { field: 'codigo', headerClassName: 'header-theme', headerName: 'Código', width: 100 },
-      { field: 'email', headerClassName: 'header-theme', headerName: 'E-Mail', width: 150 },
+      { field: 'nombre', headerClassName: 'header-theme', headerName: 'Nombre', width: 200 },
+      { field: 'formulario', headerClassName: 'header-theme', headerName: 'Formulario', width: 200 },
+      { field: 'declaracion', headerClassName: 'header-theme', headerName: 'Declaración', width: 150 },
       {
          field: 'estado', headerClassName: 'header-theme', headerName: 'Estado', width: 140,
-         renderCell: renderStateInscripcion
+         renderCell: (params)=>{
+            return renderStateInscripcion(params.row.estado);
+         }
       },
-      { field: 'agencia', headerClassName: 'header-theme', headerName: 'Agencia', width: 150 },
+      { field: 'socio', headerClassName: 'header-theme', headerName: 'Socio', width: 230,
+         renderCell: (params)=>{
+            const user = usuarios.filter( item => params.row.idSocio === item.id)[0];
+            return `${user.nombres} ${user.apellidos}`;
+         }
+      },
    ]
 
    const reviewInscription = () => {
 
    }
 
+   useEffect(()=>{
+      dispatch(actionGetAllInscripciones(cookies['access-token']));
+      dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
+   },[dispatch]);
+
    return (
       <Plantilla pagina="Inscripciones">
          <Grid container>
             <TableInscriptions
                columns={columnsInscripciones}
-               rows={usuariosData}
+               rows={inscripciones}
                activeCheck={false}
                reviewInscription={reviewInscription}
                reviewProcRoute={PrivateRoutes.INSCRIPCIONES_REVIEW}

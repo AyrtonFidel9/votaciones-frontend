@@ -1,119 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { AlertaCustom, Plantilla } from "../../../components";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { Plantilla } from "../../../components";
+import { Box, Button, Stack, FormControl,  FormLabel } from "@mui/material";
 import { useForm } from 'react-hook-form';
-import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import FormHelperText from '@mui/material/FormHelperText';
+import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
-import { actualizarAgencia, getAgencia, ingresarAgencia } from "../../../services";
-import { useCookies } from 'react-cookie';
+import { FileUploader } from "react-drag-drop-files";
 import SaveIcon from '@mui/icons-material/Save';
-import { updateListas } from "../../../redux/states/listas";
-import { useSelector, useDispatch } from "react-redux";
 
-const schema = yup.object({
-   nombre: yup.string().required('Campo obligatorio'),
-   ubicacion: yup.string().required('Campo obligatorio'),
-   numRepresentantes: yup.number("Solo se admiten números").typeError("Seleccione la cantidad de representantes").required('Campo obligatorio'),
-   numGanadores: yup.number().typeError("Solo se admiten números").required('Campo obligatorio'),
-}).required();
+const fileTypes = ["PDF"];
 
-export default function AgenciaForm (){
-
-   const navigate = useNavigate();
-   const data = useLocation();
-   const [ agencias, setAgencias ] = 
-      useState(useSelector( store => store.listas.agencias));
-   const dispatch = useDispatch();
-   const [ cookies ] = useCookies(['access-token']);
-   const [alertMessage, setAlertMessage] = useState({
-      isView: false,
-      titulo: '',
-      content: '',
-      count: 0,
-      tipo: 'error',
-      variante: '',
-   });
+export default function LoadUsuarios(){
 
    const {
-      register,
-      formState: { errors },
       handleSubmit,
-      watch,
-      getValues,
-      setValue,
-   } = useForm({
-      resolver: yupResolver(schema),
-      defaultValues: {
-         nombre: data.state?.nombre || '',
-         ubicacion: data.state?.ubicacion || '',
-         numRepresentantes: data.state?.numRepresentantes || 0,
-         numGanadores: data.state?.numGanadores || 0
-      }
-   });
+   } = useForm();
 
-   const saveAgencia = async (data) => {
-      console.log(data);
-      const agencia = await ingresarAgencia(data, cookies['access-token']);
-      if(agencia.ok){
-         const resp = await agencia.json();
-         setAlertMessage({isView: true, 
-               titulo:"Proceso completado satisfactoriamente",
-               content: "Agencia ingresado con exito",
-               count: ++alertMessage.count,
-               tipo: 'success',
-               variante: 'filled',
-         });
-         
-         dispatch(updateListas({agencias: agencias.concat(resp.datos)}));
-      }else{
-         const resp = await agencia.json();
-         setAlertMessage({isView: true, 
-               titulo:"Error",
-               content: resp.message,
-               count: ++alertMessage.count,
-               tipo: 'error',
-               variante: 'filled',
-         });
-      }
-   }
+   const usuario = useSelector( store => store.usuario );
 
-   const updateAgencia = async (bodyAgencia) => {
-      const updated = await actualizarAgencia(
-         data.state.id,
-         bodyAgencia,
-         cookies['access-token']    
-      );
-      if(updated.ok){
-         const resp = await updated.json();
-         setAlertMessage({isView: true, 
-               titulo: resp.message[0] === 1 ? "Tarea completada exitosamente" : 'Error',
-               content: resp.message[0] === 1 ? `Datos de la agencia actualizados` : 'Error al actualizar los datos',
-               count: ++alertMessage.count,
-               tipo: resp.message[0] === 1 ? 'success' : 'error',
-               variante: 'filled',
-         });
-         const agencia = await getAgencia(data.state.id, cookies['access-token']);
-         const datoAgencia = await agencia.json();
-         let newAgencia = agencias.map( obj => obj.id === data.state.id);
-         newAgencia = { ...datoAgencia.message };
-         const pushAgencia = agencias.filter(obj => obj.id !== data.state.id);
-         dispatch(updateListas({agencias: pushAgencia.concat(newAgencia)}));
-      }else{
-         const resp = await updated.json();
-         setAlertMessage({isView: true, 
-               titulo:"Error",
-               content: resp.message,
-               count: ++alertMessage.count,
-               tipo: 'error',
-               variante: 'filled',
-         });
+   const navigate = useNavigate();
+   const [ formulario, setFormulario ] = useState(null);
+   const [ declaracion, setDeclaracion ] = useState(null);
+   
+   const subirDatos = (data) => {
+      if(formulario && declaracion){
+         data.formulario = formulario;
+         data.declaracion = declaracion;
+         data.idSocio = usuario.id;
+         console.log(data);
       }
    }
 
    return (
-      <Plantilla pagina={`Agencias / Ingresar`}>
+      <Plantilla pagina="Inscripciones / Crear">
          <Box
                component='form'
                sx={{
@@ -121,13 +41,13 @@ export default function AgenciaForm (){
                   display: 'flex',
                   flexDirection: 'column',
                   marginBottom: 10,
-                  width: '40vw',
-                  paddingTop: 3,
+                  width: '65vw',
+                  paddingTop: 2,
                }}
                noValidate={false}
                autoComplete="off"
                gap={2}
-               onSubmit={handleSubmit(data.state ? updateAgencia : saveAgencia)}
+               onSubmit={handleSubmit(subirDatos)}
          >
                <Box sx={{
                   display: 'flex',
@@ -137,36 +57,68 @@ export default function AgenciaForm (){
                   padding: 4,
                   boxShadow: 3
                }} gap={4}>
-                  <TextField {...register('nombre', { required: true })}
-                     id="nombre"
-                     error={errors.nombre && true}
-                     label='Nombre'
-                     variant='outlined'
-                     helperText={errors.nombre?.message}
-                  />
-                  <TextField {...register('ubicacion', { required: true })}
-                     id="ubicacion"
-                     error={errors.ubicacion && true}
-                     label='Ubicación'
-                     variant='outlined'
-                     helperText={errors.ubicacion?.message}
-                  />
-                  <TextField {...register('numRepresentantes', { required: true })}
-                     id="numRepresentantes"
-                     error={errors.numRepresentantes && true}
-                     label='Número de representantes'
-                     variant='outlined'
-                     type='number'
-                     helperText={errors.numRepresentantes?.message}
-                  />
-                  <TextField {...register('numGanadores', { required: true })}
-                     id="nunGanadores"
-                     error={errors.numGanadores && true}
-                     label='Númerto de ganadores'
-                     variant='outlined'
-                     type='number'
-                     helperText={errors.numGanadores?.message}
-                  />
+                  <FormControl id="formulario"
+                     error={formulario === null}
+                     sx={{
+                           margin: '0 auto'
+                     }}
+                  >
+                     <FormLabel error={formulario === null} sx={{
+                        marginBottom: 1
+                     }}> Ingrese el formulario de inscripción</FormLabel>
+                     <FileUploader
+                           multiple={false}
+                           handleChange={(formulario)=>{
+                              console.log(formulario);
+                              setFormulario(formulario);
+                           }}
+                           onTypeError={
+                              (err)=>{
+                                 setFormulario(null);
+                              }
+                           }
+                           name="formulario"
+                           label="Seleccionar archivo o arrastrar y soltar"
+                           hoverTitle="Soltar el archivo"
+                           types={fileTypes}
+                           id="formulario"
+                     />
+                     <FormHelperText error={formulario === null} id="formulario"
+                           >
+                           {formulario === null ? 'Campo obligatorio' : formulario.name}
+                     </FormHelperText>
+                  </FormControl>
+                  <FormControl id="declaracion"
+                     error={declaracion === null}
+                     sx={{
+                           margin: '0 auto'
+                     }}
+                  >
+                     <FormLabel error={declaracion === null} sx={{
+                        marginBottom: 1
+                     }}> Ingrese la declaración</FormLabel>
+                     <FileUploader
+                           multiple={false}
+                           handleChange={(declaracion)=>{
+                              console.log(declaracion);
+                              setDeclaracion(declaracion);
+                           }}
+                           onTypeError={
+                              (err)=>{
+                                 setDeclaracion(null);
+                              }
+                           }
+                           name="declaracion"
+                           label="Seleccionar archivo o arrastrar y soltar"
+                           hoverTitle="Soltar el archivo"
+                           types={fileTypes}
+                           id="declaracion"
+                     />
+                     <FormHelperText error={declaracion === null} id="declaracion"
+                           >
+                           {declaracion === null ? 'Campo obligatorio' : declaracion.name}
+                     </FormHelperText>
+                  </FormControl>
                </Box>
                <Stack
                   direction="row"
@@ -179,11 +131,10 @@ export default function AgenciaForm (){
                      endIcon={<SaveIcon/>}
                   >Guardar</Button>
                   <Button variant="text" 
-                     onClick={()=>navigate(PrivateRoutes.AGENCIAS)}
+                     onClick={()=>navigate(PrivateRoutes.INSCRIPCIONES_VISTA_SOCIO)}
                   >Regresar</Button>
                </Stack>
          </Box>
-         <AlertaCustom alerta={alertMessage}/>
       </Plantilla>
-   );
+   )
 }

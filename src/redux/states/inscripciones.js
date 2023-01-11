@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getAllInscripciones } from "../../services";
 
 export const EmptyInscripcionesState = [];
 
@@ -16,8 +17,8 @@ export const { createInscripciones, updateInscripciones, resetInscripciones } = 
 
 
 export const actionGetAllInscripciones = (token) => async (dispatch) => {
-   // const inscripciones = await getAllEleccciones(token).then(res => res.json());
-   // dispatch(createInscripciones(inscripciones.message));
+   const inscripciones = await getAllInscripciones(token).then( resp => resp.json());
+   dispatch(createInscripciones(inscripciones.message));
 }
 
 
