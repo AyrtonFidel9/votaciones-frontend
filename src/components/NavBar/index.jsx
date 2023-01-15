@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import Collapse from '@mui/material/Collapse';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../routes";
@@ -28,7 +29,8 @@ const opcionesAdmin = [
     {opcion: 'Usuarios', icon: PeopleAltIcon},
     {opcion: 'Agencias', icon: ApartmentIcon},
     {opcion: 'Reportes', icon: AssessmentIcon},
-    {opcion: 'Perfil', icon: SettingsIcon}
+    {opcion: 'Billetera', icon: AccountBalanceWalletIcon},
+    {opcion: 'Perfil', icon: SettingsIcon},
 ];
 
 const opcionesJGE = [
@@ -37,14 +39,15 @@ const opcionesJGE = [
     {opcion: 'Reportes', icon: AssessmentIcon},
     {opcion: 'Inscripciones', icon: UploadFileIcon},
     {opcion: 'Representantes', icon: RecentActorsIcon},
-    {opcion: 'Perfil', icon: SettingsIcon}
+    {opcion: 'Billetera', icon: AccountBalanceWalletIcon},
+    {opcion: 'Perfil', icon: SettingsIcon},
 ];
 
 const opcionesVotante = [
-    {opcion: 'Inicio',icon: HomeIcon},
+    {opcion: 'Billetera', icon: AccountBalanceWalletIcon},
     {opcion: 'Votaciones', icon: DraftsIcon},
     {opcion: 'Inscripcion', icon: UploadFileIcon},
-    {opcion: 'Perfil', icon: SettingsIcon}
+    {opcion: 'Perfil', icon: SettingsIcon},
 ];
 
 function NavBar(props){
@@ -111,6 +114,9 @@ function NavBar(props){
                 break;
             case 'Perfil':
                 navigate(PrivateRoutes.PERFIL);
+                break;
+            case 'Billetera':
+                navigate(PrivateRoutes.WALLET);
                 break;
             default:
                 break;

@@ -23,6 +23,7 @@ const Perfil = lazy(()=>import('./pages/Perfil'));
 const Elecciones = lazy(()=>import('./pages/Elecciones'));
 const EleccionForm = lazy(()=>import('./pages/Elecciones/pages/EleccionForm'));
 const InscripcionesReview = lazy(()=>import('./pages/Inscripciones/Review'));
+const InscripcionesReviewForm = lazy(()=>import('./pages/Inscripciones/pages/ReviewInscripcion'));
 const InscripcionesList = lazy(()=>import('./pages/Inscripciones/List'));
 const InscripcionesSocioLista = lazy(()=>import('./pages/Inscripciones/pages/ViewSocio'));
 const IncripcionesFormCrear = lazy(()=>import('./pages/Inscripciones/pages/InscripcionForm'));
@@ -34,6 +35,7 @@ const NoDisponible = lazy(()=>import('./pages/NoDisponible'));
 const LoadUsuarios = lazy(()=>import('./pages/Usuarios/Pages/LoadUsuarios'));
 const CuentaForm = lazy(()=>import('./pages/Usuarios/Pages/CuentaForm'));
 const AgenciaForm = lazy(()=>import('./pages/Agencias/pages/AgenciaForm'));
+const Wallet = lazy(()=>import('./pages/Wallet'));
 
 
 function App() {
@@ -50,8 +52,8 @@ function App() {
                 <Route path={PublicRoutes.LOGIN} element={<Login/>}/>
                 <Route path={PublicRoutes.INGRESAR_NUMERO} element={<IngresarNumero/>}/>
                 <Route element={<AuthGuard/>}>
-                  <Route path={PrivateRoutes.INICIO} element={<Inicio/>}/>
                   <Route path={PrivateRoutes.PERFIL} element={<Perfil/>}/>
+                  <Route path={PrivateRoutes.WALLET} element={<Wallet/>}/>
                   <Route element={<AdminGuard/>}>
                     <Route path={PrivateRoutes.AGENCIAS} element={<Agencias/>}/>
                     <Route path={PrivateRoutes.AGENCIA_INGRESAR} element={<AgenciaForm/>}/>
@@ -67,6 +69,7 @@ function App() {
                     <Route path={PrivateRoutes.ELECCIONES_INGRESAR} element={<EleccionForm/>}/>
                     <Route path={PrivateRoutes.ELECCIONES_MODIFICAR} element={<EleccionForm/>}/>
                     <Route path={PrivateRoutes.INSCRIPCIONES} element={<InscripcionesReview/>}/>
+                    <Route path={PrivateRoutes.INSCRIPCIONES_REVIEW} element={<InscripcionesReviewForm/>}/>
                     <Route path={PrivateRoutes.REPRESENTANTES} element={<Representantes/>}/>
                     <Route path={PrivateRoutes.REPRESENTANTES_INGRESAR} element={<RepresentantesForm/>}/>
                     <Route path={PrivateRoutes.REPRESENTANTES_MODIFICAR} element={<RepresentantesForm/>}/>
@@ -79,6 +82,7 @@ function App() {
                     <Route path={PrivateRoutes.VOTACIONES_SUFRAGAR} element={<Sufragar/>}/>
                   </Route>
                   <Route element={<AdminJgeGuard/>}>
+                    <Route path={PrivateRoutes.INICIO} element={<Inicio/>}/>
                     <Route path={PrivateRoutes.REPORTES} element={<Reportes/>}/>
                   </Route>
                 </Route>

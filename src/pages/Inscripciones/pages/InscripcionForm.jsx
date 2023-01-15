@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Plantilla } from "../../../components";
+import { AlertaCustom, Plantilla } from "../../../components";
 import { Box, Button, Stack, FormControl,  FormLabel } from "@mui/material";
 import { useForm } from 'react-hook-form';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormHelperText from '@mui/material/FormHelperText';
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
 import { FileUploader } from "react-drag-drop-files";
 import SaveIcon from '@mui/icons-material/Save';
+import { useCookies } from 'react-cookie';
+import { actionSetInscripcion } from "../../../redux/states/inscripciones";
 
 const fileTypes = ["PDF"];
 
@@ -22,18 +24,50 @@ export default function LoadUsuarios(){
    const navigate = useNavigate();
    const [ formulario, setFormulario ] = useState(null);
    const [ declaracion, setDeclaracion ] = useState(null);
+   const dispatch = useDispatch();
+   const [cookies] = useCookies(['access-token']);
+   const [alertMessage, setAlertMessage] = useState({
+      isView: false,
+      titulo: '',
+      content: '',
+      count: 0,
+      tipo: 'error',
+      variante: '',
+   });
    
    const subirDatos = (data) => {
       if(formulario && declaracion){
          data.formulario = formulario;
          data.declaracion = declaracion;
          data.idSocio = usuario.id;
-         console.log(data);
+         const resp = dispatch(actionSetInscripcion(data, cookies['access-token']));
+         resp.then( msg => {
+            if(msg === true){
+               console.log("INGRESADDDO");
+               setAlertMessage( prev => ({
+                  isView: true,
+                  titulo: "Proceso terminado satisfactoriamente",
+                  content: "Inscripción creada con exito",
+                  count: ++prev.count,
+                  tipo: 'success',
+                  variante: 'filled',
+               }));
+            }else{
+               setAlertMessage && setAlertMessage(prev => ({
+                  isView: true,
+                  titulo: "Error",
+                  content: msg,
+                  count: ++prev.count,
+                  tipo: 'error',
+                  variante: 'filled',
+               }));
+            }});
       }
    }
 
    return (
       <Plantilla pagina="Inscripciones / Crear">
+         <AlertaCustom alerta={alertMessage}/>
          <Box
                component='form'
                sx={{

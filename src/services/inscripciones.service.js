@@ -29,6 +29,8 @@ const ingresarInscripcion = (body, token) => {
     for(const name in body) {
         formData.append(name, body[name]);
     }
+    console.log(body);
+    console.log(formData);
     
     return fetch(`${baseUrl}/registrar`, {
         method: 'POST',

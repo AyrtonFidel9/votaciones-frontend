@@ -9,6 +9,7 @@ import { PrivateRoutes } from "../../routes";
 import { actionDeleteRepresentante, actionGetAllRepresentantes } from "../../redux/states/representantes";
 import { actionGetAllElecciones } from "../../redux/states/elecciones";
 import { actionGetAllUsuariosCuenta } from "../../redux/states/usuariosCuenta";
+import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
 
 
 export default function Representantes (){
@@ -35,7 +36,8 @@ export default function Representantes (){
         dispatch(actionGetAllElecciones(cookies['access-token']));
         dispatch(actionGetAllRepresentantes(cookies['access-token']));
         dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
-    },[cookies]);
+        dispatch(actionGetAllInscripciones(cookies['access-token']));
+    },[dispatch, cookies]);
 
     const eliminarRepresentante = (idRepresentante, token = cookies['access-token']) => {
         const resp = dispatch(actionDeleteRepresentante(idRepresentante, token));

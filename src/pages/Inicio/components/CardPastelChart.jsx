@@ -20,11 +20,14 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     );
 };
 
-export default function CardPastelChart({ data, titulo, fecha, nombre, agencia, altura }) {
-
+export default function CardPastelChart({ data, titulo, fecha, nombre, agencia, altura, innerRef}) {
     return (
-        <Card elevation={4}>
-            <CardContent>
+        <Card  elevation={4}>
+            <CardContent ref={el => {
+                if(innerRef){
+                    innerRef.current = el;
+                }
+            }}>
                 <Typography
                     sx={{ fontSize: 18, fontWeight: 'bold' }} 
                     color="text.primary" 

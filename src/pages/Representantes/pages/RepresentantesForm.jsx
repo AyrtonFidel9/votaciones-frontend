@@ -19,8 +19,8 @@ const schema = yup.object({
    principal: yup.object().typeError("Seleccione al Principal").required('Campo obligatorio'),
    psuplente: yup.object().typeError("Seleccione al Primer Suplente").required('Campo obligatorio'),
    ssuplente: yup.object().typeError("Seleccione al Segundo Suplente").required('Campo obligatorio'),
-   idInscripcion: yup.number().typeError('Seleccione una inscripcion').required('Campo obligatorio'),
-   idElecciones: yup.object().typeError("Seleccione una eleccion").typeError('Seleccione una agencia').required('Campo obligatorio')
+   idInscripcion: yup.object().typeError("Seleccione una inscripción").required('Campo obligatorio'),
+   idElecciones: yup.object().typeError("Seleccione una eleccion").required('Campo obligatorio')
 }).required();
 
 export default function RepresentantesForm() {
@@ -29,8 +29,10 @@ export default function RepresentantesForm() {
    const data = useLocation();
    const agencias = useSelector(store => store.listas.agencias);
    const usuarios = useSelector(store => store.usuariosCuenta);
+   const inscripcionesStore = useSelector(store => store.inscripciones);
    const eleccionesStore = useSelector(store => store.elecciones);
    const [socios, setSocios] = useState([]);
+   const [inscripciones, setInscripciones] = useState([]);
    const [agencia, setAgencia] = useState(0);
    const [elecciones, setElecciones] = useState([]);
    const dispatch = useDispatch();
@@ -55,6 +57,10 @@ export default function RepresentantesForm() {
       label: '',
       id: 0
    }
+   const defInscripcion = {
+      label: '',
+      id: 0
+   };
 
    const getSocio = (codigo) => {
       const tmpSocio = usuarios.filter(r => r.codigo === codigo);
@@ -73,6 +79,14 @@ export default function RepresentantesForm() {
       });
    }
 
+   const getInscripciones = (id) => {
+      const tmpIns = inscripciones.filter(r => r.id === id);
+      return ({
+         label: tmpIns[0].nombre,
+         id: tmpIns[0].id,
+      });
+   }
+
    const getAgencia = (idEleccion) => {
       if (idEleccion) {
          const tmpEleccion = eleccionesStore.filter(r => r.id === idEleccion);
@@ -86,14 +100,15 @@ export default function RepresentantesForm() {
       handleSubmit,
       control,
       setValue,
+      watch,
    } = useForm({
       resolver: yupResolver(schema),
       defaultValues: {
          principal: data.state ? getSocio(data.state.principal) : defSocio,
          psuplente: data.state ? getSocio(data.state.psuplente) : defSocio,
          ssuplente: data.state ? getSocio(data.state.ssuplente) : defSocio,
-         idInscripcion: data.state?.idInscripcion || 0,
-         idElecciones: data.state ? getEleccion(data.state.idElecciones) : defEleccion,
+         idInscripcion: data.state && getInscripciones(data.state.idInscripcion),
+         idElecciones: data.state && getEleccion(data.state.idElecciones),
       }
    });
 
@@ -129,12 +144,13 @@ export default function RepresentantesForm() {
 
 
    const saveRepresentante = async (data) => {
+      console.log(data);
       const representante = {
          principal: data.principal.codigo,
          psuplente: data.psuplente.codigo,
          ssuplente: data.ssuplente.codigo,
          idElecciones: data.idElecciones.id,
-         idInscripcion: 1,
+         idInscripcion: data.idInscripcion.id,
       }
       if(validarRepresentantes(representante)){
          const resp = dispatch(actionIngresarRepresentante(
@@ -155,7 +171,7 @@ export default function RepresentantesForm() {
                setAlertMessage(prev => ({
                   isView: true,
                   titulo: "Error",
-                  content: PermPhoneMsgSharp,
+                  content: msg,
                   count: ++prev.count,
                   tipo: 'error',
                   variante: 'filled',
@@ -166,6 +182,7 @@ export default function RepresentantesForm() {
    }
 
    const updateRepresentante = async (bodyRep) => {
+      console.log(bodyRep);
       const representante = {
          principal: bodyRep.principal.codigo,
          psuplente: bodyRep.psuplente.codigo,
@@ -217,6 +234,14 @@ export default function RepresentantesForm() {
       setElecciones(tmpElecciones);
    }
 
+   const cargarInscripciones = () => {
+      const tmpIns = inscripcionesStore.filter(f => f.estado === 'aprobado').map(r => ({
+         label: r.nombre,
+         id: r.id,
+      }));
+      setInscripciones(tmpIns);
+   }
+
    const cambiarAgencia = (evt) => {
       setAgencia(evt.target.value);
       const idAg = evt.target.value;
@@ -225,6 +250,7 @@ export default function RepresentantesForm() {
       setValue('principal', '');
       cargarSocios(idAg);
       cargarElecciones(idAg);
+      cargarInscripciones();
    }
 
    useEffect(() => {
@@ -232,8 +258,31 @@ export default function RepresentantesForm() {
       setAgencia(data.state ? getAgencia(data.state.idElecciones) : 0);
       data.state && cargarSocios(getAgencia(data.state.idElecciones));
       data.state && cargarElecciones(getAgencia(data.state.idElecciones));
+      data.state && cargarInscripciones();
    }, []);
 
+   useEffect(()=>{
+      const subscription = watch((data) => {
+         if(data.principal){
+            console.log(data);
+            if(data.principal.codigo !== 0){
+               const principal = usuarios.filter(item => 
+                  item.codigo === data.principal.codigo)[0];
+               //filtrar en una eleccion especifica
+               const ins = inscripcionesStore.filter(item=>
+                  item.idSocio === principal.id && item.estado === 'aprobado'
+                  ).map(r => ({
+                     label: r.nombre,
+                     id: r.id,
+                  }));
+               setInscripciones(ins);
+            }
+         }
+      });
+
+      return () => subscription.unsubscribe();
+
+   }, [watch])
 
    return (
       <Plantilla pagina={`Representantes / ${titlePage}`}>
@@ -366,7 +415,30 @@ export default function RepresentantesForm() {
                            />
                         </Stack>
                         <Stack spacing={3} alignItems="stretch" sx={{ width: '50%' }}>
-                           <TextField label="Inscripcion" />
+                           <Controller
+                              name="idInscripcion"
+                              control={control}
+                              render={({
+                                 field: { ref, ...field },
+                                 fieldState: { error, invalid }
+                              }) => (
+                                 <Autocomplete
+                                    {...field}
+                                    disablePortal
+                                    id="id-inscripcion"
+                                    options={inscripciones}
+                                    getOptionLabel={option => {return option?.label || ''}}
+                                    renderInput={(params) => <TextField
+                                       {...params}
+                                       label="Inscripcion"
+                                       inputRef={ref}
+                                       error={invalid}
+                                       helperText={error?.message}
+                                    />}
+                                    onChange={(e, value) => field.onChange(value)}
+                                 />
+                              )}
+                           />
                            <Controller
                               name="idElecciones"
                               control={control}

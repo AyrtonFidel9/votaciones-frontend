@@ -2,8 +2,6 @@ import { Grid } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Plantilla } from '../../components';
 import { TableInscriptions } from './components';
-import AddIcon from '@mui/icons-material/Add';
-import usuariosData from '../../__mocks__/socios.json';
 import { PrivateRoutes } from '../../routes';
 import { renderStateInscripcion } from './utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +30,7 @@ export default function Inscripciones() {
       },
       { field: 'socio', headerClassName: 'header-theme', headerName: 'Socio', width: 230,
          renderCell: (params)=>{
-            const user = usuarios.filter( item => params.row.idSocio === item.id)[0];
+            const user = usuarios.filter( item => params.row.idSocio == item.id)[0];
             return `${user.nombres} ${user.apellidos}`;
          }
       },
@@ -45,7 +43,11 @@ export default function Inscripciones() {
    useEffect(()=>{
       dispatch(actionGetAllInscripciones(cookies['access-token']));
       dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
-   },[dispatch]);
+   },[dispatch, cookies]);
+
+   useEffect(()=>{
+      dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
+   },[]);
 
    return (
       <Plantilla pagina="Inscripciones">

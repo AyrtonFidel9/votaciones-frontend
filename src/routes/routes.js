@@ -6,6 +6,7 @@ export const PublicRoutes = {
 
 export const PrivateRoutes = {
     INICIO: '/inicio',
+    WALLET: '/billetera',
     INGRESAR_CODIGO: '/login/codigo',
     REESTABLECER_PASS: '/login/new-password',
     USUARIOS: '/usuarios',

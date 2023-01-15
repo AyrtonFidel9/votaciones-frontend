@@ -20,6 +20,7 @@ export default function ViewSocio() {
 			return inscripcionesBySocio.map(item=>
 				({
 					id: item.id,
+					nombre: item.nombre,
 					formulario: item.formulario,
 					declaracion: item.declaracion,
 					estado: renderStateInscripcion(item.estado),

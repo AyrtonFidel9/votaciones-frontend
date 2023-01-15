@@ -23,7 +23,7 @@ export default function TableInscriptions(props) {
 //        numberRows,
         activeCheck,
         reviewInscription,
-        rutaReview
+        reviewProcRoute
     } = props;
 
     const [search, setSearch] = useState('');
@@ -42,7 +42,7 @@ export default function TableInscriptions(props) {
             <ViewBtn
                 key={params.row.id*(Math.floor(Math.random() * (223-50)+50))}
                 row={params.row}
-                ruta={rutaReview}
+                ruta={reviewProcRoute}
             />
         ];
     }

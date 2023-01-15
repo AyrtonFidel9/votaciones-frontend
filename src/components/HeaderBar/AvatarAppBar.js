@@ -16,6 +16,8 @@ import { resetElecciones } from "../../redux/states/elecciones";
 import { resetUsuariosCuenta } from "../../redux/states/usuariosCuenta";
 import { resetUsuariosList } from "../../redux/states/usuariosList";
 import { persistor } from "../../redux/store";
+import { resetInscripciones } from "../../redux/states/inscripciones";
+import { resetAgencia } from "../../redux/states/agencia";
 
 export default function AvatarAppBar({ src, nombreCompleto }) {
 
@@ -50,6 +52,8 @@ export default function AvatarAppBar({ src, nombreCompleto }) {
             dispatch(resetElecciones());
             dispatch(resetUsuariosCuenta());
             dispatch(resetUsuariosList());
+            dispatch(resetInscripciones());
+            dispatch(resetAgencia());
             persistor.purge();
         }}
     ];

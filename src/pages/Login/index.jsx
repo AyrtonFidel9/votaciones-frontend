@@ -111,7 +111,7 @@ export default function Login() {
     const procSocio = (decoded, token) => {
         procDispatchUsuario(decoded, token);
         cargarListas(decoded.rol, token);
-        navigate(PrivateRoutes.INICIO);
+        navigate(PrivateRoutes.WALLET);
     }
 
     const procJGE = (decoded, token) => {
