@@ -83,6 +83,9 @@ export default function Login() {
             case "ROLE_JGE":
                 cargarListaJGE(token);
                 break;
+            case 'ROLE_SOCIO':
+                cargarListaAdmin(token);
+                break;
         }
     }
 

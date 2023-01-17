@@ -8,10 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionGetAllInscripciones } from "../../../redux/states/inscripciones";
 import { useCookies } from "react-cookie";
 import { renderStateInscripcion } from "../utils";
+import { actionGetAllElecciones } from "../../../redux/states/elecciones";
 
 
 export default function ViewSocio() {
 	const usuario = useSelector(store => store.usuario);
+	const eleccionesStore = useSelector(store => store.elecciones);
 	const inscripciones = useSelector(store => {
 		const inscripcionesBySocio = store.inscripciones.filter(item=>
 			item.idSocio === usuario.id
@@ -24,6 +26,7 @@ export default function ViewSocio() {
 					formulario: item.formulario,
 					declaracion: item.declaracion,
 					estado: renderStateInscripcion(item.estado),
+					eleccion: store.elecciones.find(a => a.id === item.idElecciones).nombre,
 				})
 			);
 		}else{
@@ -42,6 +45,7 @@ export default function ViewSocio() {
 
 	useEffect(()=>{
 		dispatch(actionGetAllInscripciones(cookies['access-token']));
+		dispatch(actionGetAllElecciones(cookies['access-token']));
 	},[dispatch]);
 
 	return (

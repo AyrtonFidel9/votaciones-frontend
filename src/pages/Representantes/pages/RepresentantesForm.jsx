@@ -144,7 +144,6 @@ export default function RepresentantesForm() {
 
 
    const saveRepresentante = async (data) => {
-      console.log(data);
       const representante = {
          principal: data.principal.codigo,
          psuplente: data.psuplente.codigo,
@@ -152,6 +151,7 @@ export default function RepresentantesForm() {
          idElecciones: data.idElecciones.id,
          idInscripcion: data.idInscripcion.id,
       }
+      console.log(representante);
       if(validarRepresentantes(representante)){
          const resp = dispatch(actionIngresarRepresentante(
             representante,

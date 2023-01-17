@@ -14,6 +14,7 @@ import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
 
 export default function Representantes (){
     const representantesLista = useSelector( store => store.representantes );
+    const inscripciones = useSelector(store=>store.inscripciones);
     const elecciones = useSelector( store => store.elecciones );
     const navigate = useNavigate();
     const [ cookies ] = useCookies(['access-token']);
@@ -77,7 +78,12 @@ export default function Representantes (){
                 return eleccion[0].nombre;
             }
         },
-        { field: 'idInscripcion', headerClassName: 'header-theme', headerName: 'Inscripcion', width: 200 },
+        { field: 'idInscripcion', headerClassName: 'header-theme', headerName: 'Inscripción', width: 300, 
+            renderCell: (params) => {
+                const ins= inscripciones.filter( r => r.id === params.row.idInscripcion);
+                return ins[0].nombre;
+            }
+        },
     ];
 
     return(

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertaCustom, Plantilla } from "../../../components";
-import { Box, Button, Stack, FormControl,  FormLabel } from "@mui/material";
-import { useForm } from 'react-hook-form';
+import Autocomplete from '@mui/material/Autocomplete';
+import { Box, Button, Stack, FormControl,  FormLabel, TextField } from "@mui/material";
+import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux";
 import FormHelperText from '@mui/material/FormHelperText';
 import { useNavigate } from "react-router-dom";
@@ -17,13 +18,16 @@ export default function LoadUsuarios(){
 
    const {
       handleSubmit,
+      control,
    } = useForm();
 
    const usuario = useSelector( store => store.usuario );
+   const eleccionesStore = useSelector(store => store.elecciones);
 
    const navigate = useNavigate();
    const [ formulario, setFormulario ] = useState(null);
    const [ declaracion, setDeclaracion ] = useState(null);
+   const [ elecciones, setElecciones ] = useState([]);
    const dispatch = useDispatch();
    const [cookies] = useCookies(['access-token']);
    const [alertMessage, setAlertMessage] = useState({
@@ -35,15 +39,25 @@ export default function LoadUsuarios(){
       variante: '',
    });
    
+   const cargarElecciones = (idAg) => {
+      const tmpElecciones = eleccionesStore.filter(f => 
+         f.idAgencia === idAg && f.estado === 'NO-INICIADO').map(r => ({
+         label: r.nombre,
+         id: r.id,
+      }));
+      setElecciones(tmpElecciones);
+   }
+
    const subirDatos = (data) => {
       if(formulario && declaracion){
          data.formulario = formulario;
          data.declaracion = declaracion;
          data.idSocio = usuario.id;
+         data.idElecciones = data.idElecciones.id;
+         console.log(data);
          const resp = dispatch(actionSetInscripcion(data, cookies['access-token']));
          resp.then( msg => {
             if(msg === true){
-               console.log("INGRESADDDO");
                setAlertMessage( prev => ({
                   isView: true,
                   titulo: "Proceso terminado satisfactoriamente",
@@ -64,6 +78,10 @@ export default function LoadUsuarios(){
             }});
       }
    }
+
+   useEffect(()=>{
+      cargarElecciones(usuario.idAgencia);
+   },[]);
 
    return (
       <Plantilla pagina="Inscripciones / Crear">
@@ -153,6 +171,35 @@ export default function LoadUsuarios(){
                            {declaracion === null ? 'Campo obligatorio' : declaracion.name}
                      </FormHelperText>
                   </FormControl>
+                  <Controller
+                     name="idElecciones"
+                     control={control}
+                     render={({
+                        field: { ref, ...field },
+                        fieldState: { error, invalid }
+                     }) => (
+                        <Autocomplete
+                           {...field}
+                           disablePortal
+                           id="id-elecciones"
+                           options={elecciones}
+                           value={field.value || null}
+                           getOptionLabel={option => option?.label || ''}
+                           renderInput={(params) => <TextField
+                              {...params}
+                              label="Elección"
+                              inputRef={ref}
+                              error={invalid}
+                              helperText={error?.message}
+                           />}
+                           onChange={(e, value) => field.onChange(value)}
+                           sx={{
+                              width: '50%',
+                              margin: '0 auto',
+                           }}
+                        />
+                     )}
+                  />
                </Box>
                <Stack
                   direction="row"

@@ -2,12 +2,12 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AlertaCustom, Plantilla } from '../../components';
-import { enviarToken, retornarBalance } from '../../services';
+import { enviarEther, enviarToken, retornarBalance } from '../../services';
 import { useCookies } from 'react-cookie';
 import { actionGetAllUsuariosCuenta } from '../../redux/states/usuariosCuenta';
 
 export default function Wallet(){
-
+   const fondosBasicos = 0.0008;
    const usuario = useSelector(store => store.usuario);
    const account = useSelector(store => store.account);
    const admins = useSelector(store => store.usuariosCuenta.filter(r => 
@@ -41,78 +41,152 @@ export default function Wallet(){
    },[cookies, usuario]);
 
    const recargarEther = async () => {
-      
-   }
 
-   const recargarToken = async () => {
-      let wallet = {};
       let sinFondos = 0;
-      let sinTokens = 0;
-      const fondosBasicos = 0.0008;
 
-      if(balance.BNE > 0){
+      if(balance.ethers > fondosBasicos){
          setAlertMessage({isView: true, 
-            titulo:"Error",
-            content: "En su cuenta, como máxmimo solo puede tener 1 TOKEN ",
+            titulo:"Atención",
+            content: "Los ethers asignados son suficientes",
             count: ++alertMessage.count,
-            tipo: 'error',
+            tipo: 'warning',
             variante: 'filled',
          });
          return;
       }
 
       for(let i = 0; i < admins.length; i++){
+
          const bal = await retornarBalance(
             admins[i].billeteraAddress, 
             cookies['access-token']);
-         const resp = await bal.json();
-         if(resp.ethers > fondosBasicos){
-            if(resp.BNE > 0){
+
+         if(bal.ok){
+            const resp = await bal.json();
+            if(resp.ethers > fondosBasicos){
                const body = {
                   addressOwner: admins[i].billeteraAddress,
                   addressSocio: usuario.billeteraAddress,
                }
-               const send = await enviarToken(body, cookies['access-token']);
+               console.log(body);
+               const send = await enviarEther(body, cookies['access-token']);
                if(send.ok){
                   setAlertMessage({isView: true, 
                      titulo:"Proceso exitoso",
-                     content: "El token se ha enviado a su billetera",
+                     content: "Se han agregado ethers a su billetera",
                      count: ++alertMessage.count,
                      tipo: 'success',
+                     variante: 'filled',
+                  });
+               }else{
+                  const msg = await send.json();
+                  setAlertMessage({isView: true, 
+                     titulo:"Error",
+                     content: msg.message,
+                     count: ++alertMessage.count,
+                     tipo: 'error',
                      variante: 'filled',
                   });
                }
                //mirar si se crea una tabla con todas las transacciones historicas
                i = admins.length;
             }else{
-               sinTokens++;
+               sinFondos++;
             }
-         }else{
-            sinFondos++;
          }
       }
 
       if(sinFondos === admins.length){
          setAlertMessage({isView: true, 
-            titulo:"Error",
+            titulo:"Atención",
             content: "Las cuentas de los administradores están sin fondos",
             count: ++alertMessage.count,
-            tipo: 'error',
+            tipo: 'warning',
+            variante: 'filled',
+         });
+      }
+
+   }
+
+   const recargarToken = async () => {
+      let sinFondos = 0;
+      let sinTokens = 0;
+
+      if(balance.BNE > 0){
+         setAlertMessage({isView: true, 
+            titulo:"Atención",
+            content: "En su cuenta, como máxmimo solo puede tener 1 TOKEN ",
+            count: ++alertMessage.count,
+            tipo: 'warning',
+            variante: 'filled',
+         });
+         return;
+      }
+
+      for(let i = 0; i < admins.length; i++){
+         console.log(admins[i].billeteraAddress);
+         const bal = await retornarBalance(
+            admins[i].billeteraAddress, 
+            cookies['access-token']);
+
+         if(bal.ok){
+            const resp = await bal.json();
+            if(resp.ethers > fondosBasicos){
+               if(resp.BNE > 0){
+                  const body = {
+                     addressOwner: admins[i].billeteraAddress,
+                     addressSocio: usuario.billeteraAddress,
+                  }
+                  console.log(body);
+                  const send = await enviarToken(body, cookies['access-token']);
+                  if(send.ok){
+                     setAlertMessage({isView: true, 
+                        titulo:"Proceso exitoso",
+                        content: "El token se ha enviado a su billetera",
+                        count: ++alertMessage.count,
+                        tipo: 'success',
+                        variante: 'filled',
+                     });
+                  }else{
+                     const msg = await send.json();
+                     setAlertMessage({isView: true, 
+                        titulo:"Error",
+                        content: msg.message,
+                        count: ++alertMessage.count,
+                        tipo: 'error',
+                        variante: 'filled',
+                     });
+                  }
+                  //mirar si se crea una tabla con todas las transacciones historicas
+                  i = admins.length;
+               }else{
+                  sinTokens++;
+               }
+            }else{
+               sinFondos++;
+            }
+         }
+      }
+
+      if(sinFondos === admins.length){
+         setAlertMessage({isView: true, 
+            titulo:"Atención",
+            content: "Las cuentas de los administradores están sin fondos",
+            count: ++alertMessage.count,
+            tipo: 'warning',
             variante: 'filled',
          });
       }
 
       if(sinTokens === admins.length){
          setAlertMessage({isView: true, 
-            titulo:"Error",
+            titulo:"Atención",
             content: "Las cuentas de los administradores están sin token",
             count: ++alertMessage.count,
-            tipo: 'error',
+            tipo: 'warning',
             variante: 'filled',
          });
       }
-
-
    }
 
    return (

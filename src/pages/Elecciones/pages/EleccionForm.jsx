@@ -56,6 +56,7 @@ export default function EleccionesForm() {
 
    const navigate = useNavigate();
    const agencias = useSelector(store => store.listas.agencias);
+   const usuario = useSelector(store => store.usuario);
    const [titlePage, setTitlePage] = useState('Ingresar');
    const [cookies] = useCookies(['access-token']);
    const [time, setTime] = useState('');
@@ -120,7 +121,8 @@ export default function EleccionesForm() {
       const body = {
          ...form,
          hora,
-         idAgencia
+         idAgencia,
+         wallet: usuario.billeteraAddress,
       };
 
       const resp = dispatch(actionUpdateElecciones(

@@ -1,8 +1,11 @@
 import { Grid } from "@mui/material";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Plantilla } from "../../components";
 import { CardCounter, CardPastelChart } from "./components";
 import { CardBarChart } from "./components";
+import { actionGetAllUsuariosCuenta } from '../../redux/states/usuariosCuenta';
+import { useCookies } from 'react-cookie';
 
 const data = [
     {
@@ -41,9 +44,13 @@ const data2 = [
 
 
 export default function Inicio(){
+
+    const dispatch = useDispatch();
+    const [cookies] = useCookies(['access-token']);
+
     useEffect(()=>{
-        //console.log("render Inicio");
-    }, []);
+        dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
+    }, [dispatch]);
     const Contenido = () => (
         <Grid container spacing={2} sx={{
             height: '180vh'
