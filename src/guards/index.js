@@ -4,3 +4,4 @@ export { default as RecoveryGuard } from './recovery.guard';
 export { default as SocioGuard } from './socio.guard';
 export { default as JGEGuard } from './jge.guard';
 export { default as AdminJgeGuard } from './adminjge.guard';
+export { default as VotarGuard } from './votar.guard';

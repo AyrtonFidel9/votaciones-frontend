@@ -8,7 +8,7 @@ import { PrivateRoutes } from './routes';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Suspense, lazy } from 'react';
 import { Loading } from './components';
-import { AuthGuard, RecoveryGuard, AdminGuard, JGEGuard, SocioGuard, AdminJgeGuard } from './guards';
+import { AuthGuard, RecoveryGuard, AdminGuard, JGEGuard, SocioGuard, AdminJgeGuard, VotarGuard } from './guards';
 
 const Login = lazy(() => import('./pages/Login'));
 const Inicio = lazy(() => import('./pages/Inicio'));
@@ -79,7 +79,9 @@ function App() {
                     <Route path={PrivateRoutes.INSCRIPCIONES} element={<InscripcionesList/>}/>
                     <Route path={PrivateRoutes.INSCRIPCIONES_VISTA_SOCIO} element={<InscripcionesSocioLista/>}/>
                     <Route path={PrivateRoutes.INSCRIPCIONES_CREAR} element={<IncripcionesFormCrear/>}/>
-                    <Route path={PrivateRoutes.VOTACIONES_SUFRAGAR} element={<Sufragar/>}/>
+                    <Route element={<VotarGuard/>}>
+                      <Route path={PrivateRoutes.VOTACIONES_SUFRAGAR} element={<Sufragar/>}/>
+                    </Route>
                   </Route>
                   <Route element={<AdminJgeGuard/>}>
                     <Route path={PrivateRoutes.INICIO} element={<Inicio/>}/>

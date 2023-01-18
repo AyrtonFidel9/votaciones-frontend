@@ -47,9 +47,22 @@ const enviarEther = (body, token) => {
     });
 }
 
+const validarSufragio = (body, token) => {
+    return fetch(`${baseUrl}/validar-sufragio`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(body)
+    });
+}
+
 export { 
     enviarVoto,
     retornarBalance,
     enviarToken,
     enviarEther,
+    validarSufragio,
 };

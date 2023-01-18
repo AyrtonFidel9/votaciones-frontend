@@ -1,12 +1,13 @@
 import { Button, Stack } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
-import { CarruselContent, Plantilla } from "../../../components";
+import React, { useState } from 'react';
+import { AlertaCustom, CarruselContent, Plantilla } from "../../../components";
 import { Papeleta } from '../components';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
+import { enviarVoto } from '../../../services';
 
 export default function Sufragar (){
 
@@ -15,7 +16,14 @@ export default function Sufragar (){
         handleSubmit,
         setValue
     } = useForm();
-
+    const [alertMessage, setAlertMessage] = useState({
+        isView: false,
+        titulo: '',
+        content: '',
+        count: 0,
+        tipo: 'error',
+        variante: '',
+    });
     const usuario = useSelector( store => store.usuario);
     const usuarios = useSelector( store => store.usuariosList.filter(us =>
         us.idAgencia === usuario.idAgencia    
@@ -39,13 +47,23 @@ export default function Sufragar (){
         return usuarios.filter( us => us.codigo === user[tipo])[0];
     }
 
-    const sendVoto = (data) => {
+    const sendVoto = async (data) => {
         if(data.representantes){
             const body = JSON.parse(data.representantes);
             body.walletSocio = usuario.billeteraAddress;
-            console.log(body);
+            const votar = await enviarVoto(body, cookies['access-token']);
+            if(votar.ok){
+                const resp = await votar.json();
+                console.log(resp);
+            }
         }else{
-            console.error("NO SE HA SELECCIONADO A NNINGUN CANDIDATO")
+            setAlertMessage({isView: true, 
+                titulo:"Atención",
+                content: "NO SE HA SELECCIONADO A NNINGUN CANDIDATO",
+                count: ++alertMessage.count,
+                tipo: 'warning',
+                variante: 'filled',
+            });
         }
     }
 
@@ -96,6 +114,7 @@ export default function Sufragar (){
                 </Stack>
                 <CarruselContent Content={Listas}/>
             </form>
+            <AlertaCustom alerta={alertMessage}/>
         </Plantilla>
     );
 }
