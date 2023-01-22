@@ -36,7 +36,12 @@ export default function Agencias (){
     });
 
     const handleOpen = () => {
-        dialogRef.current.openDialog();
+        if(dialogRef.current !== null){
+            dialogRef.current.openDialog();
+
+        }else{
+            window.location.reload(false);
+        }
     };
     
     const deleteAgencia = async (idAgencia, token = cookies['access-token']) => {
@@ -65,36 +70,32 @@ export default function Agencias (){
         }
     }
 
-    const Contenido = () => (
-        <Grid container>
-            <Stack direction='row' justifyContent='flex-end' sx={{
-                width: '100%',
-                marginBottom: 5,
-                marginTop: 4,
-            }}>
-                <Button
-                    variant='contained'
-                    endIcon={<AddIcon/>}
-                    onClick={()=>navigate(PrivateRoutes.AGENCIA_INGRESAR)}
-                >Agregar Agencia</Button>
-            </Stack>
-            <DataGridTable
-                rows={agencias}
-                columns={columnsAgencias}
-                activeCheck={false}
-                eliminarDato={deleteAgencia}
-                mensaje={'¿Esta seguro/a de eliminar la agencia?'}
-                dialogRef={dialogRef}
-                handleOpen={handleOpen}
-                updateProcRoute={PrivateRoutes.AGENCIA_MODIFICAR}
-            />
-        </Grid>
-    );
-
     return (
         <Plantilla pagina="Agencias">
             <AlertaCustom alerta={alertMessage}/>
-            <Contenido/>
+            <Grid container>
+                <Stack direction='row' justifyContent='flex-end' sx={{
+                    width: '100%',
+                    marginBottom: 5,
+                    marginTop: 4,
+                }}>
+                    <Button
+                        variant='contained'
+                        endIcon={<AddIcon/>}
+                        onClick={()=>navigate(PrivateRoutes.AGENCIA_INGRESAR)}
+                    >Agregar Agencia</Button>
+                </Stack>
+                <DataGridTable
+                    rows={agencias}
+                    columns={columnsAgencias}
+                    activeCheck={false}
+                    eliminarDato={deleteAgencia}
+                    mensaje={'¿Esta seguro/a de eliminar la agencia?'}
+                    dialogRef={dialogRef}
+                    handleOpen={handleOpen}
+                    updateProcRoute={PrivateRoutes.AGENCIA_MODIFICAR}
+                />
+            </Grid>
         </Plantilla>
     );
 }

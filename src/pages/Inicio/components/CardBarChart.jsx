@@ -8,7 +8,11 @@ import { Legend } from "recharts";
 import { Bar } from "recharts";
 import { Tooltip } from "recharts";
 
-export default function CardBarChart ({ data, titulo, ancho, alto }){
+const generarColor = () => {
+    return Math.floor(Math.random()*16777215).toString(16);
+}
+
+export default function CardBarChart ({ data, titulo, ancho, alto, label }){
     return (
         <Card elevation={4} sx={{
             width: `${ancho*1.10}px`
@@ -26,11 +30,11 @@ export default function CardBarChart ({ data, titulo, ancho, alto }){
                         style={{ placeSelf: 'center',fontFamily: 'Roboto' }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name"/>
+                        <XAxis dataKey={label}/>
                         <YAxis/>
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="candidatos" fill="#5F34E0" />
+                        <Bar dataKey={label} fill={`#${generarColor()}`} />
                     </BarChart>
                 </Stack>
             </CardContent>

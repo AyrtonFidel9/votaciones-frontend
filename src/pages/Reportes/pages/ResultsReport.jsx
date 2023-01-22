@@ -9,42 +9,51 @@ export default function ResultsReport ({informacion, pastel}) {
       return capitalized;
    });
 
-   
-
    const styles = StyleSheet.create({
       table: { 
          display: "table", 
-         width: "100vw", 
          borderStyle: "solid", 
          borderWidth: 1, 
          borderRightWidth: 0, 
          borderBottomWidth: 0,
-         margin: 5,
+         margin: '0 auto',
       },  
       tableRow: { 
-         margin: "auto", 
-         flexDirection: "row" 
+         flexDirection: "row",
+         width: '100%'  
       }, 
       tableCol: { 
-         width: "15%", 
+         width: "20%", 
          borderStyle: "solid", 
          borderWidth: 1, 
          borderLeftWidth: 0, 
-         borderTopWidth: 0 
+         borderTopWidth: 0,
       }, 
       tableCell: { 
-         margin: "auto", 
-         marginTop: 5, 
-         fontSize: 10
+         fontSize: 10,
+         textAlign: 'center',
+         display:'flex',
+         padding: '5px',
       },
       bold: {
          fontWeight: 'bold'
+      },
+      header: {
+         textAlign: 'center',
+         margin: '12px',
+      },
+      body:{
+         margin: '10px',
       }
    });
 
    return (
       <Document>
          <Page style={styles.body}>
+            <View style={styles.header}>
+               <Text>Cooperativa de Ahorro y Crédito Nueva Esperanza</Text>
+               <Text>Reporte detelecciones</Text>
+            </View>
             <View style={styles.table}>
                <View style={styles.tableRow}>
                   {headers.map((header) => (
@@ -65,7 +74,7 @@ export default function ResultsReport ({informacion, pastel}) {
                })}
             </View>
          </Page>
-         <Page>
+         <Page style={styles.body}>
             <Image src={pastel}/>
          </Page>
       </Document>
