@@ -58,7 +58,7 @@ export default function IngresarNumero () {
                 dispatch(createRecovery({
                     habilitado: resp.message.existe,
                     numero: data.numero,
-                    idUsuario: resp.message.idUsuario
+                    idUsuario: resp.message.idSocio
                 }));
             }
         }
