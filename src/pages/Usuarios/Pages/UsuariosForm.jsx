@@ -92,17 +92,24 @@ export default function UsuariosForm () {
     },[]);
 
     useEffect(()=>{
-        setWatchImagen(getValues('imagen') ?? '');
         setTitlePage(data.state ? 'Modificar':'Ingresar');
-    },[watch()]);
+        const subscription = watch((data) => {
+            setWatchImagen(data.imagen[0].name ?? '');
+        });
+        return () => subscription.unsubscribe();
+    }, [watch])
 
 
     const saveUsuario = async (data) => {
         data.imagen = data.imagen[0];
         data.idAgencia = data.agencia;
         const ingresar = await ingresarUsuario(data, cookies['access-token']);
+        console.log(ingresar);
         if(ingresar.ok){
-            setAlertMessage({isView: true, 
+            const resp = await ingresar.json();
+            console.log(resp);
+            setAlertMessage({
+                isView: true, 
                 titulo:"Proceso exitoso",
                 content: "Usuario ingresado con exito",
                 count: ++alertMessage.count,
@@ -111,7 +118,9 @@ export default function UsuariosForm () {
             });
         }else{
             const resp = await ingresar.json();
-            setAlertMessage({isView: true, 
+            console.log(resp);
+            setAlertMessage({
+                isView: true, 
                 titulo:"Error",
                 content: resp.message,
                 count: ++alertMessage.count,
@@ -131,6 +140,7 @@ export default function UsuariosForm () {
         );
         if(actualizar.ok){
             const resp = await actualizar.json();
+            console.log(resp);
             setAlertMessage({isView: true, 
                 titulo:"Proceso exitoso",
                 content: resp.message,
@@ -140,6 +150,7 @@ export default function UsuariosForm () {
             });
         }else{
             const resp = await actualizar.json();
+            console.log(resp);
             setAlertMessage({isView: true, 
                 titulo:"Error",
                 content: resp.message,
@@ -219,12 +230,10 @@ export default function UsuariosForm () {
                                     hidden 
                                     accept="image/*" 
                                     type="file"
-                                    defaultValue=''  
                                 />
                             </Button>
                             <FormHelperText error={errors.imagen?.message && true} id="imagen">
                                 {errors.imagen?.message || 
-                                watchImagen[0]?.name || 
                                 watchImagen ||
                                 "Seleccionar imagen"
                             }</FormHelperText>

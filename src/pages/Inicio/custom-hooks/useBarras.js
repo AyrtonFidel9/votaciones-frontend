@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createListas } from "../../../redux/states/listas";
 import { getAllAgencias } from "../../../services";
 import { actionGetAllRepresentantes } from "../../../redux/states/representantes";
+import { actionGetAllElecciones } from "../../../redux/states/elecciones";
 
 export const useBarras = () => {
     const [cookies] = useCookies(['access-token']);
@@ -31,11 +32,13 @@ export const useBarras = () => {
     
         agencias.forEach( item => {
             const election = elecciones.filter(r => r.idAgencia === item.id);
-            const elec = election.pop();
-            const repres = representantes.filter(r => r.idElecciones === elec.id);
-            setBarras2( prev => [ ...prev,
-                {name: item.nombre, candidatos: repres.length}]
-            );
+            if(election.length > 0){
+                const elec = election.slice(-1).pop();
+                const repres = representantes.filter(r => r.idElecciones === elec.id);
+                setBarras2( prev => [ ...prev,
+                    {name: item.nombre, candidatos: repres.length}]
+                );
+            }
         });
     }
 
@@ -49,6 +52,7 @@ export const useBarras = () => {
 
     useEffect(()=> {
         dispatch(actionGetAllRepresentantes(cookies['access-token']));
+        dispatch(actionGetAllElecciones(cookies['access-token']));
         load();
         setBarras([]);
         setBarras2([]);

@@ -36,7 +36,7 @@ export default function Agencias (){
     });
 
     const handleOpen = () => {
-        if(dialogRef.current !== null){
+        if(dialogRef.current !== null && dialogRef.current !== undefined){
             dialogRef.current.openDialog();
 
         }else{
@@ -46,9 +46,14 @@ export default function Agencias (){
     
     const deleteAgencia = async (idAgencia, token = cookies['access-token']) => {
         const borrar = await eliminarAgencia(idAgencia, token);
+        //arreglar bug
+        setAlertMessage({
+            isView: true, 
+        });
         if(borrar.ok){
             const datoEliminado = await borrar.json();
-            setAlertMessage({isView: true, 
+            await setAlertMessage({
+                isView: true, 
                 titulo:"Tarea completada satisfactoriamente",
                 content: datoEliminado.message,
                 count: ++alertMessage.count,

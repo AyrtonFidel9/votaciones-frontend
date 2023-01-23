@@ -54,22 +54,26 @@ export default function AgenciaForm (){
     });
 
     const saveAgencia = async (data) => {
-        console.log(data);
         const agencia = await ingresarAgencia(data, cookies['access-token']);
+        //arreglar bug
+        setAlertMessage({
+            isView: true, 
+        });
         if(agencia.ok){
             const resp = await agencia.json();
-            setAlertMessage({isView: true, 
+            setAlertMessage({
+                isView: true, 
                 titulo:"Proceso completado satisfactoriamente",
-                content: "Agencia ingresado con exito",
+                content: resp.message,
                 count: ++alertMessage.count,
                 tipo: 'success',
                 variante: 'filled',
             });
-            
             dispatch(updateListas({agencias: agencias.concat(resp.datos)}));
         }else{
             const resp = await agencia.json();
-            setAlertMessage({isView: true, 
+            setAlertMessage({
+                isView: true, 
                 titulo:"Error",
                 content: resp.message,
                 count: ++alertMessage.count,
@@ -87,7 +91,8 @@ export default function AgenciaForm (){
         );
         if(updated.ok){
             const resp = await updated.json();
-            setAlertMessage({isView: true, 
+            setAlertMessage({
+                isView: true, 
                 titulo: resp.message[0] === 1 ? "Tarea completada exitosamente" : 'Error',
                 content: resp.message[0] === 1 ? `Datos de la agencia actualizados` : 'Error al actualizar los datos',
                 count: ++alertMessage.count,
@@ -114,6 +119,7 @@ export default function AgenciaForm (){
 
     return (
         <Plantilla pagina={`Agencias / Ingresar`}>
+            <AlertaCustom alerta={alertMessage}/>
             <Box
                 component='form'
                 sx={{
@@ -183,7 +189,6 @@ export default function AgenciaForm (){
                     >Regresar</Button>
                 </Stack>
             </Box>
-            <AlertaCustom alerta={alertMessage}/>
         </Plantilla>
     );
 }
