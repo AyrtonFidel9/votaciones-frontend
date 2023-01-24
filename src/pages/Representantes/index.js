@@ -13,13 +13,19 @@ import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
 
 
 export default function Representantes (){
-    const representantesLista = useSelector( store => store.representantes );
+    const dispatch = useDispatch();
+    const [ cookies ] = useCookies(['access-token']);
+
+    
     const inscripciones = useSelector(store=>store.inscripciones);
     const elecciones = useSelector( store => store.elecciones );
+    const representantes = useSelector( store => { 
+        return store.representantes
+    });
+    const [ representantesLista, setRepresentantesLista] = useState([]);
+
     const navigate = useNavigate();
-    const [ cookies ] = useCookies(['access-token']);
     const dialogRef = useRef();
-    const dispatch = useDispatch();
     const [alertMessage, setAlertMessage] = useState({
         isView: false,
         titulo: '',
@@ -29,16 +35,33 @@ export default function Representantes (){
         variante: '',
     });
 
+    const cargarRepresentantes = () => {
+        setRepresentantesLista(representantes.map(item=>{
+            const ins = inscripciones.find( r => r.id === item.idInscripcion);
+            const eleccion = elecciones.filter( r => r.id === item.idElecciones)[0];
+            return ({
+                id: item.id,
+                principal: item.principal,
+                psuplente: item.psuplente,
+                ssuplente: item.ssuplente,
+                idElecciones: item.idElecciones,
+                eleccion: eleccion.nombre,
+                idInscripcion: item.idInscripcion,
+                inscripcion: ins.nombre,
+            });
+        }));
+    }
     const handleOpen = () => {
         dialogRef.current.openDialog();
     };
-
+    
     useEffect(()=>{
+        dispatch(actionGetAllInscripciones(cookies['access-token']));
         dispatch(actionGetAllElecciones(cookies['access-token']));
         dispatch(actionGetAllRepresentantes(cookies['access-token']));
         dispatch(actionGetAllUsuariosCuenta(cookies['access-token']));
-        dispatch(actionGetAllInscripciones(cookies['access-token']));
-    },[dispatch, cookies]);
+        cargarRepresentantes();
+    },[dispatch]);
 
     const eliminarRepresentante = (idRepresentante, token = cookies['access-token']) => {
         const resp = dispatch(actionDeleteRepresentante(idRepresentante, token));
@@ -72,18 +95,20 @@ export default function Representantes (){
         { field: 'principal', headerClassName: 'header-theme', headerName: 'Principal', width: 150 },
         { field: 'psuplente', headerClassName: 'header-theme', headerName: '1er Suplente', width: 200 },
         { field: 'ssuplente', headerClassName: 'header-theme', headerName: '2do Suplente', width: 200 },
-        { field: 'idElecciones', headerClassName: 'header-theme', headerName: 'Elección', width: 200,
-            renderCell: (params) => {
-                const eleccion = elecciones.filter( r => r.id === params.row.idElecciones);
-                return eleccion[0].nombre;
-            }
-        },
-        { field: 'idInscripcion', headerClassName: 'header-theme', headerName: 'Inscripción', width: 300, 
-            renderCell: (params) => {
-                const ins= inscripciones.filter( r => r.id === params.row.idInscripcion);
-                return ins[0].nombre;
-            }
-        },
+        // { field: 'idElecciones', headerClassName: 'header-theme', headerName: 'Elección', width: 200,
+        //     renderCell: (params) => {
+        //         const eleccion = elecciones.filter( r => r.id === params.row.idElecciones);
+        //         return eleccion[0].nombre;
+        //     }
+        // },
+        { field: 'eleccion', headerClassName: 'header-theme', headerName: 'Elección', width: 200,},
+        { field: 'inscripcion', headerClassName: 'header-theme', headerName: 'Inscripción', width: 200,},
+        // { field: 'idInscripcion', headerClassName: 'header-theme', headerName: 'Inscripción', width: 300, 
+        //     renderCell: (params) => {
+        //         const ins= inscripciones.filter( r => r.id === params.row.idInscripcion);
+        //         return ins[0].nombre;
+        //     }
+        // },
     ];
 
     return(

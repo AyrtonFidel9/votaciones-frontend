@@ -45,6 +45,7 @@ export default function LoadUsuarios(){
          label: r.nombre,
          id: r.id,
       }));
+      console.log(eleccionesStore);
       setElecciones(tmpElecciones);
    }
 

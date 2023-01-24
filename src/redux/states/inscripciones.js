@@ -7,7 +7,8 @@ export const inscripcionesSlice = createSlice({
    name: 'Inscripciones',
    initialState: EmptyInscripcionesState,
    reducers: {
-      createInscripciones: (state, action) => action.payload,
+      createInscripciones: (state, action) => {
+         return action.payload},
       addInscripciones: (state, action) => [...state, action.payload],
       removeInscripcion: (state, action) => state.filter( i => i.id !== action.payload),
       resetInscripciones: () => EmptyInscripcionesState,
@@ -18,6 +19,7 @@ export const { createInscripciones, addInscripciones, removeInscripcion, resetIn
 
 
 export const actionGetAllInscripciones = (token) => async (dispatch) => {
+   console.log("llamado");
    const inscripciones = await getAllInscripciones(token).then( resp => resp.json());
    dispatch(createInscripciones(inscripciones.message));
 }

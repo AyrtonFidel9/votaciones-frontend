@@ -13,6 +13,9 @@ const generarColor = () => {
 }
 
 export default function CardBarChart ({ data, titulo, ancho, alto, label }){
+
+    console.log(data);
+    
     return (
         <Card elevation={4} sx={{
             width: `${ancho*1.10}px`
@@ -30,7 +33,7 @@ export default function CardBarChart ({ data, titulo, ancho, alto, label }){
                         style={{ placeSelf: 'center',fontFamily: 'Roboto' }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey={label}/>
+                        <XAxis dataKey='name'/>
                         <YAxis/>
                         <Tooltip />
                         <Legend />

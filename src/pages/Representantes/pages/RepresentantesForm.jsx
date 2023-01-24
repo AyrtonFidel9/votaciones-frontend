@@ -80,7 +80,7 @@ export default function RepresentantesForm() {
    }
 
    const getInscripciones = (id) => {
-      const tmpIns = inscripciones.filter(r => r.id === id);
+      const tmpIns = inscripcionesStore.filter(r => r.id === id);
       return ({
          label: tmpIns[0].nombre,
          id: tmpIns[0].id,
@@ -188,7 +188,7 @@ export default function RepresentantesForm() {
          psuplente: bodyRep.psuplente.codigo,
          ssuplente: bodyRep.ssuplente.codigo,
          idElecciones: bodyRep.idElecciones.id,
-         idInscripcion: 1,
+         idInscripcion: bodyRep.idInscripcion.id,
       }
       if(validarRepresentantes(representante)){
          const resp = dispatch(actionUpdateRepresentante(
@@ -282,7 +282,9 @@ export default function RepresentantesForm() {
 
       return () => subscription.unsubscribe();
 
-   }, [watch])
+   }, [watch]);
+
+   console.log(watch());
 
    return (
       <Plantilla pagina={`Representantes / ${titlePage}`}>

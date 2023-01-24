@@ -6,6 +6,7 @@ import { CardCounter, CardPastelChart } from "./components";
 import { CardBarChart } from "./components";
 import { useCookies } from 'react-cookie';
 import { actionGetAllElecciones } from "../../redux/states/elecciones";
+import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
 import { validarSufragio } from "../../services";
 import { useSocios, useAgencias, useBarras } from "./custom-hooks";
 
@@ -58,6 +59,7 @@ export default function Inicio(){
 
     useEffect(()=>{
         dispatch(actionGetAllElecciones(cookies['access-token']));
+        //dispatch(actionGetAllInscripciones(cookies['access-token']));
         getVotantes();
     }, []);
 
