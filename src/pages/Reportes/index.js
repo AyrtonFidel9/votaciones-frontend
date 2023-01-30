@@ -6,7 +6,8 @@ import { Box,
    InputLabel,
    Select,
    MenuItem,
-   Autocomplete
+   Autocomplete,
+   colors
 } from "@mui/material";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import React, { useEffect, useRef, useState } from 'react';
@@ -111,7 +112,8 @@ export default function Reportes (){
       setEleccion(elec);
       setDescargar(false);
       const _repres = repres.filter( dat => dat.idElecciones === elec.id);
-      const result = _repres.map(async (item) => {
+
+      _repres.forEach(async (item) => {
          const principal = usuarios.find( us => us.codigo === item.principal);
          const psuplente = usuarios.find( us => us.codigo === item.psuplente);
          const ssuplente = usuarios.find( us => us.codigo === item.ssuplente);
@@ -124,15 +126,13 @@ export default function Reportes (){
             value: parseInt(votos.BNE)
          }]);
 
-         return ({
+         setRepresentantes(old => [ ...old, {
             Principal: `${principal.nombres} ${principal.apellidos}`,
             "Primer Suplente": `${psuplente.nombres} ${psuplente.apellidos}`,
             "Segundo Suplente": `${ssuplente.nombres} ${ssuplente.apellidos}`,
             votos: parseInt(votos.BNE),
-         });
+         }]);
       });
-      const results = await Promise.all(result);
-      setRepresentantes(results);
       getVotantes(elec.id);
    } 
 
@@ -148,6 +148,7 @@ export default function Reportes (){
    
 
    const DescargarReporte = () => {
+      console.log(representantes)
       switch(reporte){
          case 1:
             return <PDFDownloadLink document={<ResultsReport 

@@ -2,7 +2,7 @@ import { Document, Page, View, StyleSheet, Text, Image } from "@react-pdf/render
 import React from "react";
 
 export default function ResultsReport ({informacion, pastel}) {
-
+   console.log(informacion);
    const rawHeaders = Object.keys(informacion[0]);
    const headers = rawHeaders.map(letter => {
       const capitalized = letter.replace(/^./, letter[0].toUpperCase());
@@ -52,7 +52,7 @@ export default function ResultsReport ({informacion, pastel}) {
          <Page style={styles.body}>
             <View style={styles.header}>
                <Text>Cooperativa de Ahorro y Crédito Nueva Esperanza</Text>
-               <Text>Reporte detelecciones</Text>
+               <Text>Reporte de elecciones</Text>
             </View>
             <View style={styles.table}>
                <View style={styles.tableRow}>

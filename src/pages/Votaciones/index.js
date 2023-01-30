@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,6 @@ import { actionGetAllUsuariosList } from '../../redux/states/usuariosList';
 import { validarSufragio } from "../../services";
 
 
-// hacer un GUARD para reenviar a votaciones si existe una eleccion dispónible o si ya voto
 
 export default function Votaciones() {
 
@@ -22,14 +21,37 @@ export default function Votaciones() {
             item.estado === 'EN-CURSO' && item.idAgencia === usuario.idAgencia
         );
     });
+
+    const eleccionesCompletadas = useSelector( store => {
+        return store.elecciones.filter( item => 
+            item.estado !== 'EN-CURSO' && item.estado !== 'NO-INICIADO' && item.idAgencia === usuario.idAgencia
+        );
+    });
+
+    
+
     const agencia = useSelector( store => store.agencia );
     const [yaVoto, setYaVoto] = useState(false);
 
     const dispatch = useDispatch();
 
     const verificarSufragio = async (token) => {
+        if(elecciones.length <= 0) return;
         const body = {
             idEleccion: elecciones[0].id, 
+            wallet: usuario.billeteraAddress,
+        }
+        const voto = await validarSufragio(body,token);
+        if(voto.ok){
+            const resp = await voto.json();
+            setYaVoto(resp.yaVoto);
+        }
+    }
+
+    const verificarJustificacion = async (token) => {
+        if(eleccionesCompletadas.length <= 0) return;
+        const body = {
+            idEleccion: eleccionesCompletadas[0].id, 
             wallet: usuario.billeteraAddress,
         }
         const voto = await validarSufragio(body,token);
@@ -44,29 +66,43 @@ export default function Votaciones() {
         dispatch(actionGetAllRepresentantes(cookies['access-token']));
         dispatch(actionGetAgenciaById( usuario.idAgencia, cookies['access-token']));
         dispatch(actionGetAllUsuariosList(cookies['access-token']));
-        verificarSufragio(cookies['access-token']);
+        
     },[dispatch]);
+
+    useEffect(()=>{
+        verificarSufragio(cookies['access-token']);
+        verificarJustificacion(cookies['access-token']);
+    },[elecciones]);
 
     const VotacionesPendientes = () => (
         <VotePendiente agencia={agencia.nombre}/>);
+    
+    const votacionesResultados = () => (
+            <>
+            {
+                eleccionesCompletadas.map(item=>{
 
-    const VotacionesCompletadas = () => (
-        <>
-        <VoteCompletado agencia="Alausí" />
-        <VoteCompletado agencia="Alausí" />
-        <VoteCompletado agencia="Alausí" />
-        <VoteCompletado agencia="Alausí" />
-        <VoteCompletado agencia="Alausí" />
-        </>
-    );
+                    if(item.idAgencia === agencia.id)
+                        return <VoteCompletado agencia={agencia.nombre} 
+                            idEleccion={item.id}
+                            dia={item.dia}
+                            eleccion={item.nombre}
+                        /> 
+                })
+            }
+            </>
+    )
 
     const VotacionesNoCompletadas = () => (
         <>
-        <VoteJustificar agencia="San Andrés" />
-        <VoteJustificar agencia="San Andrés" />
-        <VoteJustificar agencia="San Andrés" />
-        <VoteJustificar agencia="San Andrés" />
-        <VoteJustificar agencia="San Andrés" />
+        {
+            eleccionesCompletadas.map(item=>{
+                if(item.idAgencia === agencia.id)
+                    return <VoteJustificar agencia={agencia.nombre} 
+                        idEleccion={item.id}
+                    /> 
+            })
+        }
         </>
     );
 
@@ -80,14 +116,44 @@ export default function Votaciones() {
                 <CarruselContent Content={VotacionesPendientes}/>
             </>
         }
-        <Typography variant="h6" sx={{ marginBottom: 3, marginTop: 3 }}>
-            Votaciones completadas
-        </Typography>
-        <CarruselContent Content={VotacionesCompletadas} />
-        <Typography variant="h6" sx={{ marginBottom: 3, marginTop: 3 }}>
-            Votaciones no completadas
-        </Typography>
-        <CarruselContent Content={VotacionesNoCompletadas} />
+        {eleccionesCompletadas.length > 0 && yaVoto && 
+            <>
+            <Typography variant="h6" sx={{ marginBottom: 3, marginTop: 3 }}>
+                    Votaciones completadas
+                </Typography>
+                <CarruselContent Content={votacionesResultados} />
+            </>
+        }
+        {eleccionesCompletadas.length > 0 && !yaVoto && 
+            <>
+                <Typography variant="h6" sx={{ marginBottom: 3, marginTop: 3 }}>
+                    Votaciones no completadas
+                </Typography>
+                <CarruselContent Content={VotacionesNoCompletadas} />
+            </>
+        }
+        {
+            yaVoto && 
+            <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                    paddingTop: 10,
+                }}
+                gap={4}>
+                <img 
+                    src={require("./assets/tarea-completada.png")} 
+                    alt="Tareas completadas"
+                    width='200' 
+                    />
+                <Typography variant="h5">
+                    Actualmente no tiene procesos electorales pendientes
+                </Typography>
+            </Box>
+        }
+        
         <div style={{ height: "60px" }}></div>
     </Plantilla>
     );

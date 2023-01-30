@@ -55,6 +55,21 @@ export default function Sufragar (){
             if(votar.ok){
                 const resp = await votar.json();
                 console.log(resp);
+                setAlertMessage({isView: true, 
+                    titulo:"Proceso realizado con éxito",
+                    content: "Voto enviado con éxito",
+                    count: ++alertMessage.count,
+                    tipo: 'success',
+                    variante: 'filled',
+                });
+            }else{
+                setAlertMessage({isView: true, 
+                    titulo:"Error",
+                    content: "Ha ocurrido un error al enviar el voto",
+                    count: ++alertMessage.count,
+                    tipo: 'error',
+                    variante: 'filled',
+                });
             }
         }else{
             setAlertMessage({isView: true, 

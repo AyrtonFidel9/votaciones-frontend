@@ -6,10 +6,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from "react-router-dom";
+import { PrivateRoutes } from "../../../routes";
 
-export default function VoteCompletado({agencia}){
+export default function VoteCompletado({agencia, idEleccion, dia, eleccion}){
+
+    const navigate = useNavigate();
+
     return(
-        <Card sx={{ minWidth: 320, position: 'relative', marginRight: 5 }}>
+        <Card sx={{ minWidth: 320, maxHeight: 250, position: 'relative', marginRight: 5 }}>
             <CardContent sx={{
                 position: 'absolute',
                 color: '#ffffff',
@@ -43,6 +48,9 @@ export default function VoteCompletado({agencia}){
                     color="warning" 
                     variant="contained" 
                     endIcon={<VisibilityIcon/>}
+                    onClick={()=>navigate(PrivateRoutes.SOCIOS_VER_RESULTADOS, { state: {
+                        agencia, idEleccion, dia, eleccion
+                    }})}
                     >
                     Ver resultados
                 </Button>

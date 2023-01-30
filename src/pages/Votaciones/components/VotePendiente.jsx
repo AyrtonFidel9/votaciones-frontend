@@ -14,7 +14,7 @@ export default function VotePendiente({agencia}){
     const navigate = useNavigate();
 
     return(
-        <Card sx={{ maxWidth: 330, position: 'relative', marginRight: 5, }}>
+        <Card sx={{ maxWidth: 320, position: 'relative', marginRight: 5, }}>
             <CardContent sx={{
                 position: 'absolute',
                 color: '#ffffff',

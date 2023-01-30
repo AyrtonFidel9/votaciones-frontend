@@ -9,3 +9,4 @@ export { default as usuariosCuenta } from './usuariosCuenta';
 export { default as usuariosList } from './usuariosList';
 export { default as agencia } from './agencia';
 export { default as inscripciones } from './inscripciones';
+export { default as justificaciones } from './justificaciones';

@@ -12,6 +12,7 @@ import usuariosListSliceReducer from './states/usuariosList';
 import usuariosCuentaSliceReducer from './states/usuariosCuenta';
 import agenciaSliceReducer from './states/agencia';
 import inscripcionesSliceReducer from './states/inscripciones';
+import justificacionesSliceReducer from './states/justificaciones';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
@@ -31,6 +32,7 @@ const persistConfig = {
         'usuariosCuenta',
         'agencia',
         'inscripciones',
+        'justificaciones',
     ],
     blacklist: [
         'recovery',
@@ -50,6 +52,7 @@ const rootReducer = combineReducers({
     usuariosCuenta: usuariosCuentaSliceReducer,
     agencia: agenciaSliceReducer,
     inscripciones: inscripcionesSliceReducer,
+    justificaciones: justificacionesSliceReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -73,6 +76,7 @@ export const AppStore = PropTypes.shape({
     usuariosList: [],
     usuariosCuenta: [],
     agencia: Agencia,
+    justificaciones: [],
 });
 
 export const store = configureStore({

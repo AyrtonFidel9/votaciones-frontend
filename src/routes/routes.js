@@ -31,4 +31,6 @@ export const PrivateRoutes = {
     MODIFICAR_CUENTA: '/usuarios/cuenta',
     AGENCIA_INGRESAR: '/agencia/ingresar',
     AGENCIA_MODIFICAR: '/agencia/modificar',
+    SOCIOS_VER_RESULTADOS: '/votaciones/resultados',
+    VOTACIONES_JUSTIFICAR: '/votaciones/justificar',
 }
