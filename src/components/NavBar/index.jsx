@@ -19,7 +19,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../routes";
-
+import DescriptionIcon from '@mui/icons-material/Description';
 
 
 const opcionesAdmin = [
@@ -40,6 +40,7 @@ const opcionesJGE = [
     {opcion: 'Inscripciones', icon: UploadFileIcon},
     {opcion: 'Representantes', icon: RecentActorsIcon},
     {opcion: 'Billetera', icon: AccountBalanceWalletIcon},
+    {opcion: 'Justificaciones', icon: DescriptionIcon},
     {opcion: 'Perfil', icon: SettingsIcon},
 ];
 
@@ -118,6 +119,8 @@ function NavBar(props){
             case 'Billetera':
                 navigate(PrivateRoutes.WALLET);
                 break;
+            case 'Justificaciones':
+                navigate(PrivateRoutes.JUSTIFICACIONES_INDEX);
             default:
                 break;
         }

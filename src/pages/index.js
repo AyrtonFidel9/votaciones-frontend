@@ -12,3 +12,4 @@ export { default as Login } from './Login';
 export { default as NoDisponible } from './NoDisponible';
 export { default as SociosForm } from './Socios/Pages';
 export { default as Wallet } from './Wallet'; 
+export { default as Justificaciones } from './Justificaciones';

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { actualizarJustificacion, getAllJustificaciones } from "../../services/justificaciones.service";
 
 export const EmptyJustificacionesState = [];
 
@@ -18,9 +19,8 @@ export const { createJustificaciones, addJustificaciones, removeJustificacion, r
 
 
 export const actionGetAllJustificaciones = (token) => async (dispatch) => {
-    // console.log("llamado");
-    // const justificaciones = await getAllJustificaciones(token).then( resp => resp.json());
-    // dispatch(createJustificaciones(justificaciones.message));
+    const justificaciones = await getAllJustificaciones(token).then( resp => resp.json());
+    dispatch(createJustificaciones(justificaciones.message));
 }
 
 
@@ -37,16 +37,16 @@ export const actionSetJustificacion = (body, token) => async (dispatch) => {
 }
 
 export const actionUpdateJustificacion = (id, body, token) => async (dispatch) => {
-    // const updated = await actualizarJustificacion(id, body, token);
-    // if(updated.ok){
-    //     dispatch(removeJustificacion(id));
-    //     const dataUpdated = { ...body, id: id };
-    //     dispatch(addJustificaciones(dataUpdated));
-    //     return true;
-    // }else{
-    //     const resp = await updated.json();
-    //     return resp.message;
-    // }
+    const updated = await actualizarJustificacion(id, body, token);
+    if(updated.ok){
+        dispatch(removeJustificacion(id));
+        const dataUpdated = { ...body, id: id };
+        dispatch(addJustificaciones(dataUpdated));
+        return true;
+    }else{
+        const resp = await updated.json();
+        return resp.message;
+    }
 }
 
 export default justificacionesSlice.reducer;

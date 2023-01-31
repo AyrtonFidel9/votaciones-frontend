@@ -10,11 +10,10 @@ import { VoteCompletado, VoteJustificar, VotePendiente } from "./components";
 import { actionGetAllUsuariosList } from '../../redux/states/usuariosList';
 import { validarSufragio } from "../../services";
 
-
-
 export default function Votaciones() {
 
     const [cookies] = useCookies(['access-token']);
+    const [usJustificaciones, setUsJustificaciones] = useState([]);
     const usuario = useSelector( store => store.usuario);
     const elecciones = useSelector( store => {
         return store.elecciones.filter( item => 
@@ -81,7 +80,6 @@ export default function Votaciones() {
             <>
             {
                 eleccionesCompletadas.map(item=>{
-
                     if(item.idAgencia === agencia.id)
                         return <VoteCompletado agencia={agencia.nombre} 
                             idEleccion={item.id}
@@ -134,6 +132,29 @@ export default function Votaciones() {
         }
         {
             yaVoto && 
+            <Box 
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                    paddingTop: 10,
+                }}
+                gap={4}
+            >
+                <img 
+                    src={require("./assets/tarea-completada.png")} 
+                    alt="Tareas completadas"
+                    width='200' 
+                    />
+                <Typography variant="h5">
+                    Actualmente no tiene procesos electorales pendientes
+                </Typography>
+            </Box>
+        }
+        {
+            elecciones.length <= 0 && 
             <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -153,7 +174,6 @@ export default function Votaciones() {
                 </Typography>
             </Box>
         }
-        
         <div style={{ height: "60px" }}></div>
     </Plantilla>
     );

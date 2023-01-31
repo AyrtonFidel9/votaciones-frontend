@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AlertaCustom, Plantilla } from "../../../components";
-import { Box, Button, Stack, FormControl,  FormLabel, TextField } from "@mui/material";
-import { Controller, useForm } from 'react-hook-form';
+import { Box, Button, Stack, FormControl,  FormLabel } from "@mui/material";
+import { useForm } from 'react-hook-form';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useLocation, useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
 import { FileUploader } from "react-drag-drop-files";
 import SaveIcon from '@mui/icons-material/Save';
 import { useCookies } from 'react-cookie';
-import { useDispatch, useSelector } from "react-redux";
-import Autocomplete from '@mui/material/Autocomplete';
+import { useSelector } from "react-redux";
+import { actualizarJustificacion, ingresarJustificacion } from "../../../services/justificaciones.service";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 const fileTypes = ["PDF"];
@@ -31,53 +33,83 @@ export default function Justificaciones() {
         tipo: 'error',
         variante: '',
     });
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const data = useLocation();
     console.log(data.state);
     const usuario = useSelector( store => store.usuario );
 
-    const [ elecciones, setElecciones ] = useState([]);
 
-
-
-
-
-
-    const subirDatos = (data) => {
-        console.log(data);
+    const subirDatos = async (datos) => {
         if(documento){
-            data.documento = documento;
-            //data.idSocio = usuario.id;
-            data.idElecciones = data.idElecciones.id;
-            console.log(data);
-            // const resp = dispatch(actionSetInscripcion(data, cookies['access-token']));
-            // resp.then( msg => {
-            //     if(msg === true){
-            //         setAlertMessage( prev => ({
-            //         isView: true,
-            //         titulo: "Proceso terminado satisfactoriamente",
-            //         content: "Inscripción creada con exito",
-            //         count: ++prev.count,
-            //         tipo: 'success',
-            //         variante: 'filled',
-            //         }));
-            //     }else{
-            //         setAlertMessage && setAlertMessage(prev => ({
-            //         isView: true,
-            //         titulo: "Error",
-            //         content: msg,
-            //         count: ++prev.count,
-            //         tipo: 'error',
-            //         variante: 'filled',
-            //         }));
-            //     }});
+            datos.documento = documento;
+            datos.idSocio = usuario.id;
+            datos.idEleccion = data.state.idEleccion;
+            const send = await ingresarJustificacion(datos, cookies['access-token']);
+            if(send.ok){
+                setAlertMessage( prev => ({
+                    isView: true,
+                    titulo: "Proceso terminado satisfactoriamente",
+                    content: "Justificación generada con exito",
+                    count: ++prev.count,
+                    tipo: 'success',
+                    variante: 'filled',
+                    }));
+            }else{
+                const msg = await send.json();
+                setAlertMessage(prev => ({
+                    isView: true,
+                    titulo: "Error",
+                    content: msg.message,
+                    count: ++prev.count,
+                    tipo: 'error',
+                    variante: 'filled',
+                    }));
+            }
+        }   
+    }
+
+    const actualizar = async (datos) =>{
+        if(documento){
+            datos.documento = documento;
+            datos.idSocio = usuario.id;
+            datos.idEleccion = data.state.idEleccion;
+            const send = await actualizarJustificacion(
+                data.state.justificacion.id,
+                datos, 
+                cookies['access-token']
+            );
+            if(send.ok){
+                setAlertMessage( prev => ({
+                    isView: true,
+                    titulo: "Proceso terminado satisfactoriamente",
+                    content: "Justificación actualizada con exito",
+                    count: ++prev.count,
+                    tipo: 'success',
+                    variante: 'filled',
+                    }));
+            }else{
+                const msg = await send.json();
+                setAlertMessage(prev => ({
+                    isView: true,
+                    titulo: "Error",
+                    content: msg.message,
+                    count: ++prev.count,
+                    tipo: 'error',
+                    variante: 'filled',
+                    }));
+            }
         }   
     }
 
     return (
     <Plantilla pagina="Votaciones / Justificar">
-        <AlertaCustom alerta={alertMessage} />
+        <AlertaCustom alerta={alertMessage}/>
+        {data.state.justificacion && <Alert severity="info" sx={{
+            margin: '5px auto', width: '60%', textAlign: 'left'
+        }}>
+            <AlertTitle>Estado de revisión</AlertTitle>
+            El estado de su justificación es: <strong>{data.state.justificacion.estado}</strong>
+        </Alert>}
         <Box
         component="form"
         sx={{
@@ -91,7 +123,7 @@ export default function Justificaciones() {
         noValidate={false}
         autoComplete="off"
         gap={2}
-        onSubmit={handleSubmit(subirDatos)}
+        onSubmit={data.state.justificacion ? handleSubmit(actualizar) : handleSubmit(subirDatos)}
         >
             <Box
                 sx={{
@@ -117,7 +149,9 @@ export default function Justificaciones() {
                         marginBottom: 1,
                         }}
                     >
-                        Ingrese el documento de justificacion
+                        {data.state.justificacion ? 
+                            "Ingrese un nuevo documento de justificación"   : 
+                            "Ingrese el documento de justificacion"}
                     </FormLabel>
                     <FileUploader
                         multiple={false}
@@ -147,9 +181,11 @@ export default function Justificaciones() {
                 spacing={2}
                 mt={3}
             >
-                <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
-                Guardar
-                </Button>
+                {data.state.justificacion.estado !== 'aprobado' && 
+                    <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
+                        {data.state.justificacion ? 'Actualizar' : 'Guardar'}
+                    </Button>
+                }
                 <Button
                 variant="text"
                 onClick={() => navigate(PrivateRoutes.VOTACIONES)}
@@ -160,4 +196,4 @@ export default function Justificaciones() {
         </Box>
     </Plantilla>
     );
-    }
+}

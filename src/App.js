@@ -38,7 +38,8 @@ const AgenciaForm = lazy(()=>import('./pages/Agencias/pages/AgenciaForm'));
 const VerResultados = lazy(()=>import('./pages/Votaciones/VerResultados'));
 const JustificarForm = lazy(()=>import('./pages/Votaciones/Justificaciones'));
 const Wallet = lazy(()=>import('./pages/Wallet'));
-
+const Justificaciones = lazy(()=>import('./pages/Justificaciones'));
+const JustificacionesReview = lazy(()=>import('./pages/Justificaciones/pages/JustificacionReview'));
 
 function App() {
   return (
@@ -75,6 +76,8 @@ function App() {
                     <Route path={PrivateRoutes.REPRESENTANTES} element={<Representantes/>}/>
                     <Route path={PrivateRoutes.REPRESENTANTES_INGRESAR} element={<RepresentantesForm/>}/>
                     <Route path={PrivateRoutes.REPRESENTANTES_MODIFICAR} element={<RepresentantesForm/>}/>
+                    <Route path={PrivateRoutes.JUSTIFICACIONES_INDEX} element={<Justificaciones/>}/>
+                    <Route path={PrivateRoutes.JUSTIFICACIONES_REVIEW} element={<JustificacionesReview/>}/>
                   </Route>  
                   <Route element={<SocioGuard/>}>
                     <Route path={PrivateRoutes.VOTACIONES} element={<Votaciones/>}/>

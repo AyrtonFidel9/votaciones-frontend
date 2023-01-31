@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
@@ -8,11 +8,36 @@ import CardContent from '@mui/material/CardContent';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { PrivateRoutes } from "../../../routes";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { getAllJustificaciones } from "../../../services/justificaciones.service";
+import { useSelector } from "react-redux";
+
 
 export default function VoteJustificar({agencia, idEleccion}){
 
     const [enable, setEnable] = useState(false);
+    const [justificacion, setJustificacion] = useState({});
     const navigate = useNavigate();
+    const [cookies] = useCookies(['access-token']);
+    const usuario = useSelector(store => store.usuario);
+
+    const cargarJustificaciones = async () => {
+        const justificaciones = await getAllJustificaciones(cookies['access-token']);
+        if(justificaciones.ok){
+            const resp = await justificaciones.json();
+            const data = resp.message.find( item => {
+                return item.idSocio === usuario.id && item.idEleccion === idEleccion;
+            });
+            if(data) {
+                setEnable(true);
+                setJustificacion(data);
+            }
+        }
+    }
+
+    useEffect(()=>{
+        cargarJustificaciones();
+    },[]);
 
     
     return(
@@ -64,6 +89,10 @@ export default function VoteJustificar({agencia, idEleccion}){
                     color="secondary" 
                     variant="contained" 
                     endIcon={<ReceiptIcon/>}
+                    onClick={()=>navigate(PrivateRoutes.VOTACIONES_JUSTIFICAR, {state: {
+                        idEleccion, 
+                        justificacion,                        
+                    }})}
                     >
                     Revisar Justificación
                 </Button>
