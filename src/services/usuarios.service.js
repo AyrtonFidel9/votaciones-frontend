@@ -1,5 +1,21 @@
 const baseUrl = 'http://localhost:8080/api/v1/socios';
 
+const cargaMasiva = (body, token) => {
+    const formData = new FormData();
+
+    for(const name in body) {
+        formData.append(name, body[name]);
+    }
+    
+    return fetch(`${baseUrl}/carga-masiva`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        body: formData
+    });
+}
+
 const existUsuarioByPhone = (number) => {
     return fetch(`${baseUrl}/existbyPhone/${number}`, {
         method: 'GET',
@@ -94,4 +110,5 @@ export {
     ingresarUsuario,
     actualizarUsuario,
     getUsuariosCuenta,
+    cargaMasiva,
 };

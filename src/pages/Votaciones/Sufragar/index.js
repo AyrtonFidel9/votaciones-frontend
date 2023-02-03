@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import { enviarVoto } from '../../../services';
+import { useLocation } from 'react-router-dom';
 
 export default function Sufragar (){
 
+    const data = useLocation();
     const {
         register,
         handleSubmit,
-        setValue
+        setValue,
     } = useForm();
     const [alertMessage, setAlertMessage] = useState({
         isView: false,
@@ -30,7 +32,9 @@ export default function Sufragar (){
     ));
     const eleccion = useSelector( store => {
         return store.elecciones.filter( item => 
-            item.estado === 'EN-CURSO' && item.idAgencia === usuario.idAgencia
+            item.estado === 'EN-CURSO' && 
+            item.idAgencia === usuario.idAgencia && 
+            item.id === data.state.idEleccion
         );
     });
     const representantes = useSelector( store => store.representantes.filter( rep => 
@@ -47,6 +51,36 @@ export default function Sufragar (){
         return usuarios.filter( us => us.codigo === user[tipo])[0];
     }
 
+    const votarEnBlanco = async () =>{
+        const dummy = representantes.find( item => item.principal === 0);
+        const body = {
+            idEleccion: dummy.idElecciones,
+            walletRep: dummy.billeteraAddress,
+            walletSocio: usuario.billeteraAddress,
+        }
+        console.log(body);
+        const votar = await enviarVoto(body, cookies['access-token']);
+        if(votar.ok){
+            const resp = await votar.json();
+            console.log(resp);
+            setAlertMessage({isView: true, 
+                titulo:"Proceso realizado con éxito",
+                content: "Voto enviado con éxito",
+                count: ++alertMessage.count,
+                tipo: 'success',
+                variante: 'filled',
+            });
+        }else{
+            setAlertMessage({isView: true, 
+                titulo:"Error",
+                content: "Ha ocurrido un error al enviar el voto",
+                count: ++alertMessage.count,
+                tipo: 'error',
+                variante: 'filled',
+            });
+        }
+
+    }
     const sendVoto = async (data) => {
         if(data.representantes){
             const body = JSON.parse(data.representantes);
@@ -84,27 +118,29 @@ export default function Sufragar (){
 
     const Listas = () => (
         <>{representantes.map(item => {
-            const representante = getInfoUser(item, 'principal');
-            const psuplente = getInfoUser(item, 'psuplente');
-            const ssuplente = getInfoUser(item, 'ssuplente');
-            const imgRep = getNameImageUser(representante);
-            const imgPS = getNameImageUser(psuplente);
-            const imgSS = getNameImageUser(ssuplente);
+            if(item.principal !== 0){
+                const representante = getInfoUser(item, 'principal');
+                const psuplente = getInfoUser(item, 'psuplente');
+                const ssuplente = getInfoUser(item, 'ssuplente');
+                const imgRep = getNameImageUser(representante);
+                const imgPS = getNameImageUser(psuplente);
+                const imgSS = getNameImageUser(ssuplente);
 
-            return (<Papeleta
-                key={item.id} 
-                representante={`${representante.nombres} ${representante.apellidos}`}
-                psuplente={`${psuplente.nombres} ${psuplente.apellidos}`}
-                ssuplente={`${ssuplente.nombres} ${ssuplente.apellidos}`}
-                imgRep={imgRep}
-                imgPS={imgPS}
-                imgSS={imgSS}
-                idEleccion={item.idElecciones}
-                walletRep={item.billeteraAddress}
-                register={register}
-                idRepresentante={item.id}
-                setValue={setValue}
-            />);
+                return (<Papeleta
+                    key={item.id} 
+                    representante={`${representante.nombres} ${representante.apellidos}`}
+                    psuplente={`${psuplente.nombres} ${psuplente.apellidos}`}
+                    ssuplente={`${ssuplente.nombres} ${ssuplente.apellidos}`}
+                    imgRep={imgRep}
+                    imgPS={imgPS}
+                    imgSS={imgSS}
+                    idEleccion={item.idElecciones}
+                    walletRep={item.billeteraAddress}
+                    register={register}
+                    idRepresentante={item.id}
+                    setValue={setValue}
+                />);
+            }
         })}
         </>
     );
@@ -117,6 +153,7 @@ export default function Sufragar (){
                         variant='contained'
                         color='secondary' 
                         endIcon={<PanoramaFishEyeIcon/>}
+                        onClick={votarEnBlanco}
                     >
                     Votar en blanco</Button>
                     <Button 

@@ -21,6 +21,8 @@ export default function Votaciones() {
         );
     });
 
+    const [pendientes, setPendientes] = useState([]);
+
     const eleccionesCompletadas = useSelector( store => {
         return store.elecciones.filter( item => 
             item.estado !== 'EN-CURSO' && item.estado !== 'NO-INICIADO' && item.idAgencia === usuario.idAgencia
@@ -36,15 +38,25 @@ export default function Votaciones() {
 
     const verificarSufragio = async (token) => {
         if(elecciones.length <= 0) return;
-        const body = {
-            idEleccion: elecciones[0].id, 
-            wallet: usuario.billeteraAddress,
+        const _pendientes = []
+        for(let item of elecciones){
+            const body = {
+                idEleccion: item.id, 
+                wallet: usuario.billeteraAddress,
+            }
+            const voto = await validarSufragio(body,token);
+            if(voto.ok){
+                const resp = await voto.json();
+                setYaVoto(resp.yaVoto);
+                console.log(item, resp.yaVoto);
+                if(!resp.yaVoto){
+                    console.log("PENDIENTE")
+                    console.log(item);
+                    _pendientes.push(item);
+                }
+            }
         }
-        const voto = await validarSufragio(body,token);
-        if(voto.ok){
-            const resp = await voto.json();
-            setYaVoto(resp.yaVoto);
-        }
+        setPendientes(_pendientes);
     }
 
     const verificarJustificacion = async (token) => {
@@ -71,10 +83,18 @@ export default function Votaciones() {
     useEffect(()=>{
         verificarSufragio(cookies['access-token']);
         verificarJustificacion(cookies['access-token']);
-    },[elecciones]);
+    },[]);
 
-    const VotacionesPendientes = () => (
-        <VotePendiente agencia={agencia.nombre}/>);
+    const VotacionesPendientes = () => (<>
+        {
+            pendientes.map(item => {
+                return (
+                    <VotePendiente agencia={agencia.nombre} idEleccion={item.id}/>
+                );
+            })
+        }
+    </>
+    );
     
     const votacionesResultados = () => (
             <>
@@ -106,7 +126,7 @@ export default function Votaciones() {
 
     return (
     <Plantilla pagina="Votaciones">
-        {elecciones.length > 0 && !yaVoto &&
+        {pendientes.length > 0 &&
             <>
                 <Typography variant="h6" sx={{ marginBottom: 3, marginTop: 3 }}>
                     Votaciones pendientes

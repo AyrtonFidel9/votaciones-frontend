@@ -30,7 +30,8 @@ export default function DataGridTable(props) {
         mensaje,
         dialogRef,
         handleOpen,
-        updateProcRoute
+        updateProcRoute,
+        habilitarOpciones,
     } = props;
 
     const [search, setSearch] = useState('');

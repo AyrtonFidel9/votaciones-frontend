@@ -64,6 +64,7 @@ export default function EleccionesForm() {
    const [estado, setEstado] = useState('');
    const [agencia, setAgencia] = useState(0);
    const dispatch = useDispatch();
+   const [habBtn, setHabBtn] = useState(true);
    const [alertMessage, setAlertMessage] = useState({
       isView: false,
       titulo: '',
@@ -86,6 +87,7 @@ export default function EleccionesForm() {
    }
 
    const saveEleccion = async (form) => {
+      setHabBtn(false)
       form.idAgencia = form.agencia;
       form.hora = form.hora.toLocaleTimeString();
       const resp = dispatch(actionIngresarEleccion(form, cookies['access-token']));
@@ -99,6 +101,7 @@ export default function EleccionesForm() {
                tipo: 'success',
                variante: 'filled',
             }));
+            setHabBtn(true);
          }else{
             setAlertMessage && setAlertMessage(prev => ({
                isView: true,
@@ -108,6 +111,7 @@ export default function EleccionesForm() {
                tipo: 'error',
                variante: 'filled',
             }));
+            setHabBtn(true);
          }
       });
       
@@ -300,9 +304,11 @@ export default function EleccionesForm() {
                spacing={2}
                mt={3}
             >
+            {habBtn && 
                <Button type='submit' variant="contained"
                   endIcon={<SaveIcon />}
                >Guardar</Button>
+            }
                <Button variant="text"
                   onClick={() => navigate(PrivateRoutes.ELECCIONES)}
                >Regresar</Button>

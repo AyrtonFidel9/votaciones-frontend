@@ -9,7 +9,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../../routes";
 
-export default function VotePendiente({agencia}){
+export default function VotePendiente({agencia, idEleccion}){
 
     const navigate = useNavigate();
 
@@ -52,7 +52,9 @@ export default function VotePendiente({agencia}){
                         width: 160
                     }}
                     type='button'
-                    onClick={()=>navigate(PrivateRoutes.VOTACIONES_SUFRAGAR)}
+                    onClick={()=>navigate(PrivateRoutes.VOTACIONES_SUFRAGAR, {state: {
+                        idEleccion
+                    } })}
                     >
                     Sufragar
                 </Button>

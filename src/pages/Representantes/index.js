@@ -10,7 +10,9 @@ import { actionDeleteRepresentante, actionGetAllRepresentantes } from "../../red
 import { actionGetAllElecciones } from "../../redux/states/elecciones";
 import { actionGetAllUsuariosCuenta } from "../../redux/states/usuariosCuenta";
 import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
-
+import EditBtn from "../../components/DataGridTable/EditBtn";
+import DeleteBtn from "../../components/DataGridTable/DeleteBtn";
+import { createConfirmDeleted } from "../../redux/states/confirmDelete";
 
 export default function Representantes (){
     const dispatch = useDispatch();
@@ -47,7 +49,7 @@ export default function Representantes (){
                 idElecciones: item.idElecciones,
                 eleccion: eleccion.nombre,
                 idInscripcion: item.idInscripcion,
-                inscripcion: ins.nombre,
+                inscripcion: ins?.nombre,
             });
         }));
     }
@@ -109,6 +111,30 @@ export default function Representantes (){
         //         return ins[0].nombre;
         //     }
         // },
+        {
+            field: 'opciones',
+            type: 'actions',
+            headerClassName: 'header-theme',
+            headerName: 'Opciones',
+            width: 200,
+            renderCell: (params) => {
+                if(params.row.principal !== 0)
+                    return [
+                    <DeleteBtn
+                        key={params.row.id*(Math.floor(Math.random() * (49-1)+1))}
+                        onClick={() =>{
+                            handleOpen();
+                            dispatch(createConfirmDeleted({idDelete: params.row.id}));
+                        }}
+                    />,
+                    <EditBtn
+                        key={params.row.id*(Math.floor(Math.random() * (223-50)+50))}
+                        row={params.row}
+                        ruta={PrivateRoutes.REPRESENTANTES_MODIFICAR}
+                    />
+                ];
+            }
+        }
     ];
 
     return(
