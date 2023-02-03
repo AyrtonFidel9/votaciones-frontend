@@ -1,4 +1,6 @@
-const baseUrl = 'http://localhost:8080/api/v1/justificacion';
+import { urlService } from "./config";
+
+const baseUrl = `${urlService}/api/v1/justificacion`;
 
 
 const getAllJustificaciones= (token) => {

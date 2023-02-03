@@ -1,5 +1,6 @@
-const baseUrl = 'http://localhost:8080/api/v1/elecciones';
+import { urlService } from "./config";
 
+const baseUrl = `${urlService}/api/v1/elecciones`;
 
 const ingresarElecccion = (body, token) => {
    return fetch(`${baseUrl}/registrar`, {

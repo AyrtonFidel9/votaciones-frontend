@@ -1,0 +1,1 @@
+export const urlService = 'http://54.164.124.87:8080';

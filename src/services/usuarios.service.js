@@ -1,4 +1,6 @@
-const baseUrl = 'http://localhost:8080/api/v1/socios';
+import { urlService } from "./config";
+
+const baseUrl = `${urlService}/api/v1/socios`;
 
 const cargaMasiva = (body, token) => {
     const formData = new FormData();

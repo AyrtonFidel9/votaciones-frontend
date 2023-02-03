@@ -1,5 +1,6 @@
-const baseUrl = 'http://localhost:8080/api/v1/inscripciones';
+import { urlService } from "./config";
 
+const baseUrl = `${urlService}/api/v1/inscripciones`;
 
 const getAllInscripciones = (token) => {
     return fetch(`${baseUrl}`, {
