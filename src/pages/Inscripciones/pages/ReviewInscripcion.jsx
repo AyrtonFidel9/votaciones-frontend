@@ -11,6 +11,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { actionUpdateInscripcion } from "../../../redux/states/inscripciones";
+import { urlService } from "../../../services/config";
 
 const schema = yup.object({
     id: yup.number().required('Campo obligatorio'),
@@ -117,7 +118,7 @@ export default function ReviewInscripcion(){
                         width: '60%',
                         margin: '0 auto',
                     }}
-                    href={`http://localhost:8080/files/${data.state.formulario}`}
+                    href={`${urlService}/files/${data.state.formulario}`}
                     target="_blank"
                     size='large'
                 >Abrir formulario</Button>
@@ -129,7 +130,7 @@ export default function ReviewInscripcion(){
                         width: '60%',
                         margin: '0 auto',
                     }}
-                    href={`http://localhost:8080/files/${data.state.declaracion}`}
+                    href={`${urlService}/files/${data.state.declaracion}`}
                     target="_blank"
                     size='large'
                 >Abrir declaración</Button>

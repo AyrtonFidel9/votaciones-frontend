@@ -12,6 +12,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useCookies } from 'react-cookie';
 import { actualizarUsuario, getUsuarioById } from "../../services";
 import { updateUsuario } from "../../redux/states/usuario";
+import { urlService } from "../../services/config";
 
 const schema = yup.object({
     nombres: yup.string().required('Campo obligatorio'),
@@ -149,7 +150,7 @@ export default function Perfil (){
                     flexDirection: 'column',
                 }}
                 >
-                    <img src={usuario.imagen ? `http://localhost:8080/images/${img}` : require("../../assets/user.png")} height={300} alt="Imagen usuario"/>
+                    <img src={usuario.imagen ? `${urlService}/images/${img}` : require("../../assets/user.png")} height={300} alt="Imagen usuario"/>
                     <Stack direction='row' spacing={2} sx={{marginTop:2,}}>
                         {disableInput && <Button 
                             variant='contained' 

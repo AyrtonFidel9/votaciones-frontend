@@ -11,6 +11,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { actionUpdateJustificacion } from "../../../redux/states/justificaciones";
+import { urlService } from "../../../services/config";
 
 const schema = yup.object({
     id: yup.number().required('Campo obligatorio'),
@@ -119,7 +120,7 @@ export default function ReviewInscripcion(){
                         width: '60%',
                         margin: '0 auto',
                     }}
-                    href={`http://localhost:8080/justificacion/${data.state.documento}`}
+                    href={`${urlService}/justificacion/${data.state.documento}`}
                     target="_blank"
                     size='large'
                 >Abrir documento</Button>

@@ -1,6 +1,6 @@
 import { urlService } from "./config";
 
-const baseUrl = `${urlService}/api/v1/socios`;
+const baseUrl = `${urlService}/api/v1/votaciones`;
 
 const enviarVoto = (body, token) => {
     return fetch(`${baseUrl}/enviar-voto`, {

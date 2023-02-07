@@ -4,6 +4,7 @@ import PerfilPapeleta from './PerfilPapeleta';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import { AnularBtn, SeleccionarBtn, InputRadio } from '../styled-components';
+import { urlService } from '../../../services/config';
 
 export default function Papeleta ({
     representante,
@@ -41,7 +42,7 @@ export default function Papeleta ({
                 <CardMedia
                     component='img'
                     height='100'
-                    image = {`http://localhost:8080/images/${imgRep}`}
+                    image = {`${urlService}/images/${imgRep}`}
                     sx={{
                         width: 100,
                         margin: '10px auto 0px',
@@ -56,9 +57,9 @@ export default function Papeleta ({
                         paddingBottom: 2,
                     }}>{representante}</Typography>
                     <Typography variant='body1' sx={{fontWeight: 'bold'}} align='left'>Primer Suplente</Typography>
-                    <PerfilPapeleta img={`http://localhost:8080/images/${imgPS}`} nombreCompleto={psuplente}/>
+                    <PerfilPapeleta img={`${urlService}/images/${imgPS}`} nombreCompleto={psuplente}/>
                     <Typography variant='body1' sx={{fontWeight: 'bold'}} align='left'>Segundo Suplente</Typography>
-                    <PerfilPapeleta img={`http://localhost:8080/images/${imgSS}`} nombreCompleto={ssuplente}/>
+                    <PerfilPapeleta img={`${urlService}/images/${imgSS}`} nombreCompleto={ssuplente}/>
                 </CardContent>
                 <CardActions sx={{
                     marginBottom: 1,

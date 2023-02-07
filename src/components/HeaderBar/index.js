@@ -5,6 +5,7 @@ import NotificationsBtn from './NotificationsBtn';
 import AvatarAppBar from './AvatarAppBar';
 import Stack from '@mui/material/Stack';
 import { useSelector } from 'react-redux';
+import { urlService } from '../../services/config';
 
 
 export default function HeaderBar(props){
@@ -45,7 +46,7 @@ export default function HeaderBar(props){
                 paddingRight: '36px',
             }}>
                 <NotificationsBtn/>
-                <AvatarAppBar src={usuario.imagen ? `http://localhost:8080/images/${img}` : require("../../assets/user.png")}/>
+                <AvatarAppBar src={usuario.imagen ? `${urlService}/images/${img}` : require("../../assets/user.png")}/>
             </Stack>
         </AppBar>
     );
