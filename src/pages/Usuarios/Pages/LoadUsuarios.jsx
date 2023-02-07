@@ -21,7 +21,7 @@ const schema = yup.object({
 }).required();
 
 export default function LoadUsuarios(){
-
+    const [habBtn, setHabBtn] = useState(true);
     const {
         register,
         formState: { errors },
@@ -46,6 +46,7 @@ export default function LoadUsuarios(){
 
     const subirDatos = async (data) => {
         if(file){
+            setHabBtn(false);
             data.datos = file;
             console.log(data);
             const resp = await cargaMasiva(data, cookies['access-token']);
@@ -59,6 +60,8 @@ export default function LoadUsuarios(){
                     tipo: 'success',
                     variante: 'filled',
                 });
+                setHabBtn(true);
+
             }else{
                 const dat = await resp.json();
                 console.log(dat);
@@ -70,6 +73,8 @@ export default function LoadUsuarios(){
                     tipo: 'error',
                     variante: 'filled',
                 });
+                setHabBtn(true);
+
             }
         }
     }
@@ -161,7 +166,10 @@ export default function LoadUsuarios(){
                     spacing={2}
                     mt={3}
                 >
-                    <Button type='submit' variant="contained">Guardar</Button>
+                    {
+                        habBtn && 
+                        <Button type='submit' variant="contained">Guardar</Button>                        
+                    }
                     <Button variant="text" 
                         onClick={()=>navigate(PrivateRoutes.USUARIOS)}
                     >Regresar</Button>

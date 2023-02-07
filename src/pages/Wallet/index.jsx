@@ -24,6 +24,8 @@ export default function Wallet(){
       variante: '',
    });
 
+   const [habBtn, setHabBtn] = useState(true);
+   const [habBtnToken, setHabBtnToken] = useState(true);
 
    const getBalance = async (billetera) => {
       const bal = await retornarBalance(billetera, cookies['access-token']);
@@ -52,8 +54,11 @@ export default function Wallet(){
             tipo: 'warning',
             variante: 'filled',
          });
+
          return;
       }
+
+      setHabBtn(false);
 
       for(let i = 0; i < admins.length; i++){
 
@@ -78,6 +83,8 @@ export default function Wallet(){
                      tipo: 'success',
                      variante: 'filled',
                   });
+                  setHabBtn(true);
+
                }else{
                   const msg = await send.json();
                   setAlertMessage({isView: true, 
@@ -87,6 +94,8 @@ export default function Wallet(){
                      tipo: 'error',
                      variante: 'filled',
                   });
+                  setHabBtn(true);
+
                }
                //mirar si se crea una tabla con todas las transacciones historicas
                i = admins.length;
@@ -122,6 +131,7 @@ export default function Wallet(){
          });
          return;
       }
+      setHabBtnToken(false);
 
       for(let i = 0; i < admins.length; i++){
          console.log(admins[i].billeteraAddress);
@@ -132,6 +142,8 @@ export default function Wallet(){
          if(bal.ok){
             const resp = await bal.json();
             if(resp.ethers > fondosBasicos){
+               setHabBtnToken(false);
+
                if(resp.BNE > 0){
                   const body = {
                      addressOwner: admins[i].billeteraAddress,
@@ -147,6 +159,8 @@ export default function Wallet(){
                         tipo: 'success',
                         variante: 'filled',
                      });
+                     setHabBtnToken(true);
+
                   }else{
                      const msg = await send.json();
                      setAlertMessage({isView: true, 
@@ -156,6 +170,8 @@ export default function Wallet(){
                         tipo: 'error',
                         variante: 'filled',
                      });
+                     setHabBtnToken(true);
+
                   }
                   //mirar si se crea una tabla con todas las transacciones historicas
                   i = admins.length;

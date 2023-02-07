@@ -34,6 +34,7 @@ export default function RepresentantesForm() {
    const [socios, setSocios] = useState([]);
    const [inscripciones, setInscripciones] = useState([]);
    const [agencia, setAgencia] = useState(0);
+   const [habBtn, setHabBtn] = useState(true);
    const [elecciones, setElecciones] = useState([]);
    const dispatch = useDispatch();
    const [titlePage, setTitlePage] = useState('Ingresar');
@@ -153,12 +154,13 @@ export default function RepresentantesForm() {
       }
       console.log(representante);
       if(validarRepresentantes(representante)){
+         setHabBtn(false);
          const resp = dispatch(actionIngresarRepresentante(
             representante,
             cookies['access-token'],
          ));
          resp.then(msg=>{
-            if(msg === true)
+            if(msg === true){
                setAlertMessage( prev => ({
                   isView: true,
                   titulo: "Proceso terminado satisfactoriamente",
@@ -167,6 +169,8 @@ export default function RepresentantesForm() {
                   tipo: 'success',
                   variante: 'filled',
                }));
+               setHabBtn(true);
+            }
             else{
                setAlertMessage(prev => ({
                   isView: true,
@@ -176,6 +180,8 @@ export default function RepresentantesForm() {
                   tipo: 'error',
                   variante: 'filled',
                }));
+               setHabBtn(true);
+
             }
          })
       }      
@@ -479,9 +485,12 @@ export default function RepresentantesForm() {
                spacing={2}
                mt={3}
             >
+            {
+               habBtn &&
                <Button type='submit' variant="contained"
                   endIcon={<SaveIcon />}
                >Guardar</Button>
+            }
                <Button variant="text"
                   onClick={() => navigate(PrivateRoutes.REPRESENTANTES)}
                >Regresar</Button>

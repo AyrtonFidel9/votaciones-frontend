@@ -37,10 +37,12 @@ export default function Justificaciones() {
     const data = useLocation();
     console.log(data.state);
     const usuario = useSelector( store => store.usuario );
+    const [habBtn, setHabBtn] = useState(true);
 
 
     const subirDatos = async (datos) => {
         if(documento){
+            setHabBtn(false);
             datos.documento = documento;
             datos.idSocio = usuario.id;
             datos.idEleccion = data.state.idEleccion;
@@ -54,6 +56,8 @@ export default function Justificaciones() {
                     tipo: 'success',
                     variante: 'filled',
                     }));
+                setHabBtn(true);
+
             }else{
                 const msg = await send.json();
                 setAlertMessage(prev => ({
@@ -64,6 +68,7 @@ export default function Justificaciones() {
                     tipo: 'error',
                     variante: 'filled',
                     }));
+                setHabBtn(true);
             }
         }   
     }
@@ -182,9 +187,13 @@ export default function Justificaciones() {
                 mt={3}
             >
                 {data.state.justificacion.estado !== 'aprobado' && 
-                    <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
-                        {data.state.justificacion ? 'Actualizar' : 'Guardar'}
-                    </Button>
+                    <>
+                        {habBtn &&    
+                            <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
+                                {data.state.justificacion ? 'Actualizar' : 'Guardar'}
+                            </Button>
+                        }
+                    </>
                 }
                 <Button
                 variant="text"

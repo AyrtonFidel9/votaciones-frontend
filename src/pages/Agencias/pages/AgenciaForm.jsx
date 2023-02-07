@@ -35,6 +35,7 @@ export default function AgenciaForm (){
         tipo: 'error',
         variante: '',
     });
+    const [habBtn, setHabBtn] = useState(true);
 
     const {
         register,
@@ -54,6 +55,7 @@ export default function AgenciaForm (){
     });
 
     const saveAgencia = async (data) => {
+        setHabBtn(false);
         const agencia = await ingresarAgencia(data, cookies['access-token']);
         //arreglar bug
         setAlertMessage({
@@ -69,6 +71,7 @@ export default function AgenciaForm (){
                 tipo: 'success',
                 variante: 'filled',
             });
+            setHabBtn(true);
             dispatch(updateListas({agencias: agencias.concat(resp.datos)}));
         }else{
             const resp = await agencia.json();
@@ -80,6 +83,7 @@ export default function AgenciaForm (){
                 tipo: 'error',
                 variante: 'filled',
             });
+            setHabBtn(true);
         }
     }
 
@@ -181,9 +185,11 @@ export default function AgenciaForm (){
                     spacing={2}
                     mt={3}
                 >
+                {habBtn && 
                     <Button type='submit' variant="contained"
                         endIcon={<SaveIcon/>}
                     >Guardar</Button>
+                }
                     <Button variant="text" 
                         onClick={()=>navigate(PrivateRoutes.AGENCIAS)}
                     >Regresar</Button>

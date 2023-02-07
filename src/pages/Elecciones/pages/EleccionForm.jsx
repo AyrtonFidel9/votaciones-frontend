@@ -87,7 +87,7 @@ export default function EleccionesForm() {
    }
 
    const saveEleccion = async (form) => {
-      setHabBtn(false)
+      setHabBtn(false);
       form.idAgencia = form.agencia;
       form.hora = form.hora.toLocaleTimeString();
       const resp = dispatch(actionIngresarEleccion(form, cookies['access-token']));

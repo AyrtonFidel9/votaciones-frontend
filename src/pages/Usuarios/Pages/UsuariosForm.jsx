@@ -41,7 +41,7 @@ const schema = yup.object({
 export default function UsuariosForm () {
     const data = useLocation();
     let img = '';
-
+    const [habBtn, setHabBtn] = useState(true);
     if(data.state){
         if(data.state.imagen === null){
             img = 'imagen';
@@ -105,6 +105,7 @@ export default function UsuariosForm () {
         data.idAgencia = data.agencia;
         const ingresar = await ingresarUsuario(data, cookies['access-token']);
         console.log(ingresar);
+        setHabBtn(false);
         if(ingresar.ok){
             const resp = await ingresar.json();
             console.log(resp);
@@ -116,6 +117,8 @@ export default function UsuariosForm () {
                 tipo: 'success',
                 variante: 'filled',
             });
+            setHabBtn(true);
+
         }else{
             const resp = await ingresar.json();
             console.log(resp);
@@ -127,6 +130,8 @@ export default function UsuariosForm () {
                 tipo: 'error',
                 variante: 'filled',
             });
+            setHabBtn(true);
+
         }
     }
 

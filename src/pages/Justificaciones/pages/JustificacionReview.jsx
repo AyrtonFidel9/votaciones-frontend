@@ -23,6 +23,7 @@ const schema = yup.object({
 export default function ReviewInscripcion(){
 
     const data = useLocation();
+    const [habBtn, setHabBtn] = useState(true);
 
     const {
         handleSubmit,
@@ -57,6 +58,7 @@ export default function ReviewInscripcion(){
     const [estado, setEstado] = useState(data.state.estado);
 
     const actualizarDatos = (form) => {
+        setHabBtn(false);
         const resp = dispatch(actionUpdateJustificacion(
             data.state.id,
             form, 
@@ -73,6 +75,8 @@ export default function ReviewInscripcion(){
                     tipo: 'success',
                     variante: 'filled',
                 }));
+                setHabBtn(true);
+
             }else{
                 setAlertMessage && setAlertMessage(prev => ({
                     isView: true,
@@ -82,6 +86,7 @@ export default function ReviewInscripcion(){
                     tipo: 'error',
                     variante: 'filled',
                 }));
+                setHabBtn(true);
             }}
         );
     }
@@ -160,9 +165,11 @@ export default function ReviewInscripcion(){
                 spacing={2}
                 mt={3}
             >
+            {habBtn && 
                 <Button type='submit' variant="contained"
                     endIcon={<SaveIcon/>}
                 >Guardar</Button>
+            }
                 <Button variant="text" 
                     onClick={()=>{navigate(PrivateRoutes.JUSTIFICACIONES_INDEX)}}
                 >Regresar</Button>

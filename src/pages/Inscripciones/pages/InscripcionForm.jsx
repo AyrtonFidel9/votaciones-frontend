@@ -23,7 +23,7 @@ export default function LoadUsuarios(){
 
    const usuario = useSelector( store => store.usuario );
    const eleccionesStore = useSelector(store => store.elecciones);
-
+   const [habBtn, setHabBtn] = useState(true);
    const navigate = useNavigate();
    const [ formulario, setFormulario ] = useState(null);
    const [ declaracion, setDeclaracion ] = useState(null);
@@ -51,6 +51,7 @@ export default function LoadUsuarios(){
 
    const subirDatos = (data) => {
       if(formulario && declaracion){
+         setHabBtn(false);
          data.formulario = formulario;
          data.declaracion = declaracion;
          data.idSocio = usuario.id;
@@ -67,6 +68,7 @@ export default function LoadUsuarios(){
                   tipo: 'success',
                   variante: 'filled',
                }));
+               setHabBtn(true);
             }else{
                setAlertMessage && setAlertMessage(prev => ({
                   isView: true,
@@ -76,6 +78,7 @@ export default function LoadUsuarios(){
                   tipo: 'error',
                   variante: 'filled',
                }));
+               setHabBtn(true);
             }});
       }
    }
@@ -209,9 +212,11 @@ export default function LoadUsuarios(){
                   spacing={2}
                   mt={3}
                >
+               {habBtn && 
                   <Button type='submit' variant="contained"
                      endIcon={<SaveIcon/>}
                   >Guardar</Button>
+               }
                   <Button variant="text" 
                      onClick={()=>navigate(PrivateRoutes.INSCRIPCIONES_VISTA_SOCIO)}
                   >Regresar</Button>

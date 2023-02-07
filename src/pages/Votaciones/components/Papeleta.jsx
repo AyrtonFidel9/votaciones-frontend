@@ -19,7 +19,7 @@ export default function Papeleta ({
     idRepresentante,
     setValue
 }){
-
+    const [habBtn, setHabBtn] = useState(true);
     const inputRadioRef = useRef();
     const { ref, ...rest } = register('representantes');
 

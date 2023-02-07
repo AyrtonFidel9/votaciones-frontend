@@ -43,7 +43,7 @@ export default function CuentaForm () {
         tipo: 'error',
         variante: '',
     });
-
+    const [habBtn, setHabBtn] = useState(true);
     const {
         register,
         formState: { errors },

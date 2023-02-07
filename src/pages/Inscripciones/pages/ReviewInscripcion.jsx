@@ -22,7 +22,7 @@ const schema = yup.object({
 export default function ReviewInscripcion(){
 
     const data = useLocation();
-
+    const [habBtn, setHabBtn] = useState(true);
     const {
         handleSubmit,
         register,

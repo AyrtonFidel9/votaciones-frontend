@@ -12,6 +12,8 @@ import { useLocation } from 'react-router-dom';
 
 export default function Sufragar (){
 
+    const [habBtn, setHabBtn] = useState(true);
+    const [habBtnVal, setHabBtnVal] = useState(true);
     const data = useLocation();
     const {
         register,
@@ -52,6 +54,7 @@ export default function Sufragar (){
     }
 
     const votarEnBlanco = async () =>{
+        setHabBtn(false);
         const dummy = representantes.find( item => item.principal === 0);
         const body = {
             idEleccion: dummy.idElecciones,
@@ -70,6 +73,8 @@ export default function Sufragar (){
                 tipo: 'success',
                 variante: 'filled',
             });
+            setHabBtn(true);
+
         }else{
             setAlertMessage({isView: true, 
                 titulo:"Error",
@@ -78,11 +83,14 @@ export default function Sufragar (){
                 tipo: 'error',
                 variante: 'filled',
             });
+            setHabBtn(true);
+
         }
 
     }
     const sendVoto = async (data) => {
         if(data.representantes){
+            setHabBtnVal(false);
             const body = JSON.parse(data.representantes);
             body.walletSocio = usuario.billeteraAddress;
             const votar = await enviarVoto(body, cookies['access-token']);
@@ -96,6 +104,8 @@ export default function Sufragar (){
                     tipo: 'success',
                     variante: 'filled',
                 });
+                setHabBtnVal(true);
+
             }else{
                 setAlertMessage({isView: true, 
                     titulo:"Error",
@@ -104,6 +114,8 @@ export default function Sufragar (){
                     tipo: 'error',
                     variante: 'filled',
                 });
+                setHabBtnVal(true);
+
             }
         }else{
             setAlertMessage({isView: true, 
@@ -113,6 +125,7 @@ export default function Sufragar (){
                 tipo: 'warning',
                 variante: 'filled',
             });
+            setHabBtnVal(true);
         }
     }
 
@@ -149,20 +162,26 @@ export default function Sufragar (){
         <Plantilla pagina="Votaciones/Sufragar">
             <form onSubmit={handleSubmit(sendVoto)}>
                 <Stack direction='row' spacing={2} justifyContent='flex-end' p={2}>
-                    <Button 
-                        variant='contained'
-                        color='secondary' 
-                        endIcon={<PanoramaFishEyeIcon/>}
-                        onClick={votarEnBlanco}
-                    >
-                    Votar en blanco</Button>
-                    <Button 
-                        color='success'
-                        variant='contained' 
-                        endIcon={<SendIcon/>}
-                        type='submit'
+                    {
+                        habBtn && 
+                        <Button 
+                            variant='contained'
+                            color='secondary' 
+                            endIcon={<PanoramaFishEyeIcon/>}
+                            onClick={votarEnBlanco}
                         >
-                    Enviar voto</Button>
+                        Votar en blanco</Button>
+                    }
+                    {
+                        habBtnVal &&
+                        <Button 
+                            color='success'
+                            variant='contained' 
+                            endIcon={<SendIcon/>}
+                            type='submit'
+                            >
+                        Enviar voto</Button>
+                    }
                 </Stack>
                 <CarruselContent Content={Listas}/>
             </form>
