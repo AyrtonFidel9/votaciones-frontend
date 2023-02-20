@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import ChipTable from "../../components/DataGridTable/ChipTable";
 import { PrivateRoutes } from "../../routes";
 import { useNavigate } from "react-router-dom";
+import { urlService } from "../../services/config";
 
 
 const renderStateUsuario = (params) => {
@@ -115,7 +116,7 @@ function Usuarios () {
             width: 70,
             renderCell: (params) =>{
                 const img = params.row.imagen && params.row.imagen.split('/');
-                const imagen = params.row.imagen ? 'http://localhost:8080/images/'+img[4] : '';
+                const imagen = params.row.imagen ? `${urlService}/images/`+img[4] : '';
                 return (
                     <Avatar alt={params.row.nombre+" "+params.row.apellido}
                         src={imagen}

@@ -17,9 +17,7 @@ export default function CardBarChart ({ data, titulo, ancho, alto, label }){
     console.log(data);
     
     return (
-        <Card elevation={4} sx={{
-            width: `${ancho*1.10}px`
-        }}>
+        <Card elevation={4}>
             <CardContent>
                 <Stack spacing={3}>
                     <Typography

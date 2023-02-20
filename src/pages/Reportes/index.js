@@ -114,24 +114,35 @@ export default function Reportes (){
       const _repres = repres.filter( dat => dat.idElecciones === elec.id);
 
       _repres.forEach(async (item) => {
-         const principal = usuarios.find( us => us.codigo === item.principal);
-         const psuplente = usuarios.find( us => us.codigo === item.psuplente);
-         const ssuplente = usuarios.find( us => us.codigo === item.ssuplente);
-         
-         const resp = await retornarBalance(item.billeteraAddress, cookies['access-token']);
-         const votos = await resp.json();
-
-         setResultados(old => [ ...old, {
-            name: `${principal.nombres} ${principal.apellidos}`,
-            value: parseInt(votos.BNE)
-         }]);
-
-         setRepresentantes(old => [ ...old, {
-            Principal: `${principal.nombres} ${principal.apellidos}`,
-            "Primer Suplente": `${psuplente.nombres} ${psuplente.apellidos}`,
-            "Segundo Suplente": `${ssuplente.nombres} ${ssuplente.apellidos}`,
-            votos: parseInt(votos.BNE),
-         }]);
+         if(item.principal !== 0){
+            const principal = usuarios.find( us => us.codigo === item.principal);
+            const psuplente = usuarios.find( us => us.codigo === item.psuplente);
+            const ssuplente = usuarios.find( us => us.codigo === item.ssuplente);
+            
+            const resp = await retornarBalance(item.billeteraAddress, cookies['access-token']);
+            const votos = await resp.json();
+   
+            setResultados(old => [ ...old, {
+               name: `${principal.nombres} ${principal.apellidos}`,
+               value: parseInt(votos.BNE)
+            }]);
+   
+            setRepresentantes(old => [ ...old, {
+               Principal: `${principal.nombres} ${principal.apellidos}`,
+               "Primer Suplente": `${psuplente.nombres} ${psuplente.apellidos}`,
+               "Segundo Suplente": `${ssuplente.nombres} ${ssuplente.apellidos}`,
+               votos: parseInt(votos.BNE),
+            }]);
+         }else{
+            const resp = await retornarBalance(item.billeteraAddress, cookies['access-token']);
+            const votos = await resp.json();
+            setRepresentantes(old => [ ...old, {
+               Principal: `Voto nulo`,
+               "Primer Suplente": `Voto nulo`,
+               "Segundo Suplente": `Voto nulo`,
+               votos: parseInt(votos.BNE),
+            }]);
+         }
       });
       getVotantes(elec.id);
    } 

@@ -13,6 +13,8 @@ import { PrivateRoutes } from "../../../routes";
 import { FileUploader } from "react-drag-drop-files";
 import { cargaMasiva } from "../../../services";
 import { useCookies } from "react-cookie";
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
 
 const fileTypes = ["CSV"];
 
@@ -21,7 +23,7 @@ const schema = yup.object({
 }).required();
 
 export default function LoadUsuarios(){
-    const [habBtn, setHabBtn] = useState(true);
+    const [habBtn, setHabBtn] = useState(false);
     const {
         register,
         formState: { errors },
@@ -46,7 +48,7 @@ export default function LoadUsuarios(){
 
     const subirDatos = async (data) => {
         if(file){
-            setHabBtn(false);
+            setHabBtn(true);
             data.datos = file;
             console.log(data);
             const resp = await cargaMasiva(data, cookies['access-token']);
@@ -60,7 +62,7 @@ export default function LoadUsuarios(){
                     tipo: 'success',
                     variante: 'filled',
                 });
-                setHabBtn(true);
+                setHabBtn(false);
 
             }else{
                 const dat = await resp.json();
@@ -73,7 +75,7 @@ export default function LoadUsuarios(){
                     tipo: 'error',
                     variante: 'filled',
                 });
-                setHabBtn(true);
+                setHabBtn(false);
 
             }
         }
@@ -166,11 +168,16 @@ export default function LoadUsuarios(){
                     spacing={2}
                     mt={3}
                 >
-                    {
-                        habBtn && 
-                        <Button type='submit' variant="contained">Guardar</Button>                        
-                    }
-                    <Button variant="text" 
+                    <LoadingButton 
+                        type='submit' 
+                        variant="contained" 
+                        loading={habBtn}
+                        loadingPosition="end"
+                        endIcon={<SaveIcon/>}
+                        >
+                        <span>Guardar</span>
+                    </LoadingButton>                        
+                    <Button variant="text" disabled={habBtn}
                         onClick={()=>navigate(PrivateRoutes.USUARIOS)}
                     >Regresar</Button>
                 </Stack>

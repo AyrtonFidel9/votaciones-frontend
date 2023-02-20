@@ -41,7 +41,6 @@ export default function CardSemiCircleChart ({ porcentaje, titulo, ancho, estado
 
     return (
         <Card elevation={4} sx={{
-            width: `${ancho}px`,
             '.css-46bh2p-MuiCardContent-root:last-child':{
                 paddingBottom: 2
             }

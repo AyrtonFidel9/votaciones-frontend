@@ -1,4 +1,5 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AlertaCustom, Plantilla } from '../../components';
@@ -24,13 +25,14 @@ export default function Wallet(){
       variante: '',
    });
 
-   const [habBtn, setHabBtn] = useState(true);
-   const [habBtnToken, setHabBtnToken] = useState(true);
+   const [habBtn, setHabBtn] = useState(false);
+   const [habBtnToken, setHabBtnToken] = useState(false);
 
    const getBalance = async (billetera) => {
       const bal = await retornarBalance(billetera, cookies['access-token']);
       if(bal.ok){
          const resp = await bal.json();
+         console.log(resp);
          setBalance(resp);
       }
    }
@@ -58,7 +60,7 @@ export default function Wallet(){
          return;
       }
 
-      setHabBtn(false);
+      setHabBtn(true);
 
       for(let i = 0; i < admins.length; i++){
 
@@ -83,7 +85,7 @@ export default function Wallet(){
                      tipo: 'success',
                      variante: 'filled',
                   });
-                  setHabBtn(true);
+                  setHabBtn(false);
 
                }else{
                   const msg = await send.json();
@@ -94,7 +96,7 @@ export default function Wallet(){
                      tipo: 'error',
                      variante: 'filled',
                   });
-                  setHabBtn(true);
+                  setHabBtn(false);
 
                }
                //mirar si se crea una tabla con todas las transacciones historicas
@@ -113,6 +115,7 @@ export default function Wallet(){
             tipo: 'warning',
             variante: 'filled',
          });
+         setHabBtn(false);
       }
 
    }
@@ -131,7 +134,7 @@ export default function Wallet(){
          });
          return;
       }
-      setHabBtnToken(false);
+      setHabBtnToken(true);
 
       for(let i = 0; i < admins.length; i++){
          console.log(admins[i].billeteraAddress);
@@ -142,7 +145,7 @@ export default function Wallet(){
          if(bal.ok){
             const resp = await bal.json();
             if(resp.ethers > fondosBasicos){
-               setHabBtnToken(false);
+               setHabBtnToken(true);
 
                if(resp.BNE > 0){
                   const body = {
@@ -159,7 +162,7 @@ export default function Wallet(){
                         tipo: 'success',
                         variante: 'filled',
                      });
-                     setHabBtnToken(true);
+                     setHabBtnToken(false);
 
                   }else{
                      const msg = await send.json();
@@ -170,7 +173,7 @@ export default function Wallet(){
                         tipo: 'error',
                         variante: 'filled',
                      });
-                     setHabBtnToken(true);
+                     setHabBtnToken(false);
 
                   }
                   //mirar si se crea una tabla con todas las transacciones historicas
@@ -276,13 +279,15 @@ export default function Wallet(){
             spacing={3}>
                {
                   account.rol === 'ROLE_SOCIO' && <>
-                     <Button variant='contained' onClick={recargarToken}>Recargar token</Button>
-                     <Button variant='contained' onClick={recargarEther}>Recargar ETHER</Button>
+                     <LoadingButton loading={habBtnToken} variant='contained' onClick={recargarToken}>Recargar token</LoadingButton>
+                     <LoadingButton loading={habBtn} variant='contained' onClick={recargarEther}>Recargar ETHER</LoadingButton>
                   </>
                }
                {
                   account.rol === 'ROLE_JGE' &&
-                  <Button variant='contained' onClick={recargarEther}>Recargar ETHER</Button>
+                  <LoadingButton variant='contained' onClick={recargarEther} 
+                  loading={habBtn}
+                  >Recargar ETHER</LoadingButton>
                }
             </Stack>
          </Box>

@@ -16,6 +16,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import LoadingButton from '@mui/lab/LoadingButton';
 import dayjs from "dayjs";
 import { ingresarElecccion, updateEleccion } from "../../../services";
 import { actionGetAllElecciones, actionIngresarEleccion, actionUpdateElecciones } from "../../../redux/states/elecciones";
@@ -64,7 +65,7 @@ export default function EleccionesForm() {
    const [estado, setEstado] = useState('');
    const [agencia, setAgencia] = useState(0);
    const dispatch = useDispatch();
-   const [habBtn, setHabBtn] = useState(true);
+   const [habBtn, setHabBtn] = useState(false);
    const [alertMessage, setAlertMessage] = useState({
       isView: false,
       titulo: '',
@@ -87,7 +88,7 @@ export default function EleccionesForm() {
    }
 
    const saveEleccion = async (form) => {
-      setHabBtn(false);
+      setHabBtn(true);
       form.idAgencia = form.agencia;
       form.hora = form.hora.toLocaleTimeString();
       const resp = dispatch(actionIngresarEleccion(form, cookies['access-token']));
@@ -101,7 +102,7 @@ export default function EleccionesForm() {
                tipo: 'success',
                variante: 'filled',
             }));
-            setHabBtn(true);
+            setHabBtn(false);
          }else{
             setAlertMessage && setAlertMessage(prev => ({
                isView: true,
@@ -111,7 +112,7 @@ export default function EleccionesForm() {
                tipo: 'error',
                variante: 'filled',
             }));
-            setHabBtn(true);
+            setHabBtn(false);
          }
       });
       
@@ -135,6 +136,8 @@ export default function EleccionesForm() {
          cookies['access-token']
       ));
 
+      setHabBtn(true);
+
       resp.then( msg => {
          if(msg === true){
             dispatch(actionGetAllElecciones(cookies['access-token']));
@@ -146,6 +149,7 @@ export default function EleccionesForm() {
                tipo: 'success',
                variante: 'filled',
             }));
+            setHabBtn(false);
          }
          else{
             setAlertMessage(prev => ({
@@ -156,6 +160,7 @@ export default function EleccionesForm() {
                tipo: 'error',
                variante: 'filled',
             }));
+            setHabBtn(false);
          }
       });
 
@@ -304,11 +309,13 @@ export default function EleccionesForm() {
                spacing={2}
                mt={3}
             >
-            {habBtn && 
-               <Button type='submit' variant="contained"
+               <LoadingButton 
+                  type='submit' 
+                  variant="contained"
+                  loading={habBtn}
                   endIcon={<SaveIcon />}
-               >Guardar</Button>
-            }
+               >Guardar</LoadingButton>
+            
                <Button variant="text"
                   onClick={() => navigate(PrivateRoutes.ELECCIONES)}
                >Regresar</Button>

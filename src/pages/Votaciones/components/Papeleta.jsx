@@ -1,5 +1,5 @@
 import { Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PerfilPapeleta from './PerfilPapeleta';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
