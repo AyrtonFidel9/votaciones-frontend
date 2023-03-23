@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 import { actionGetAllUsuariosCuenta } from '../../redux/states/usuariosCuenta';
 
 export default function Wallet(){
-   const fondosBasicos = 0.0008;
+   const fondosBasicos = 0.03;
    const usuario = useSelector(store => store.usuario);
    const account = useSelector(store => store.account);
    const admins = useSelector(store => store.usuariosCuenta.filter(r => 
@@ -34,6 +34,9 @@ export default function Wallet(){
          const resp = await bal.json();
          console.log(resp);
          setBalance(resp);
+      }else{
+         console.log(bal);
+         console.log("No carga");
       }
    }
 

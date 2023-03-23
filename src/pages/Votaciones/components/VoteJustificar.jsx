@@ -23,11 +23,16 @@ export default function VoteJustificar({agencia, idEleccion}){
 
     const cargarJustificaciones = async () => {
         const justificaciones = await getAllJustificaciones(cookies['access-token']);
+        console.log(justificaciones);
         if(justificaciones.ok){
             const resp = await justificaciones.json();
+            console.log(usuario);
+            console.log(resp.message);
             const data = resp.message.find( item => {
                 return item.idSocio === usuario.id && item.idEleccion === idEleccion;
             });
+            console.log("JUSTIFICAR------------")
+            console.log(data);
             if(data) {
                 setEnable(true);
                 setJustificacion(data);

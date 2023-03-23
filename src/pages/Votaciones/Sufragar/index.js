@@ -55,6 +55,7 @@ export default function Sufragar (){
 
     const votarEnBlanco = async () =>{
         setHabBtn(false);
+        console.log(representantes);
         const dummy = representantes.find( item => item.principal === 0);
         const body = {
             idEleccion: dummy.idElecciones,

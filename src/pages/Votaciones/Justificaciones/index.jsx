@@ -45,7 +45,7 @@ export default function Justificaciones() {
             setHabBtn(false);
             datos.documento = documento;
             datos.idSocio = usuario.id;
-            datos.idEleccion = data.state.idEleccion;
+            datos.idElecciones = data.state.idEleccion;
             const send = await ingresarJustificacion(datos, cookies['access-token']);
             if(send.ok){
                 setAlertMessage( prev => ({
@@ -79,7 +79,7 @@ export default function Justificaciones() {
             datos.idSocio = usuario.id;
             datos.idEleccion = data.state.idEleccion;
             const send = await actualizarJustificacion(
-                data.state.justificacion.id,
+                data.state.justificacion?.id,
                 datos, 
                 cookies['access-token']
             );
@@ -109,11 +109,11 @@ export default function Justificaciones() {
     return (
     <Plantilla pagina="Votaciones / Justificar">
         <AlertaCustom alerta={alertMessage}/>
-        {data.state.justificacion && <Alert severity="info" sx={{
+        {data.state.justificacion?.id && <Alert severity="info" sx={{
             margin: '5px auto', width: '60%', textAlign: 'left'
         }}>
             <AlertTitle>Estado de revisión</AlertTitle>
-            El estado de su justificación es: <strong>{data.state.justificacion.estado}</strong>
+            El estado de su justificación es: <strong>{data.state.justificacion?.estado}</strong>
         </Alert>}
         <Box
         component="form"
@@ -128,7 +128,7 @@ export default function Justificaciones() {
         noValidate={false}
         autoComplete="off"
         gap={2}
-        onSubmit={data.state.justificacion ? handleSubmit(actualizar) : handleSubmit(subirDatos)}
+        onSubmit={data.state.justificacion?.id ? handleSubmit(actualizar) : handleSubmit(subirDatos)}
         >
             <Box
                 sx={{
@@ -154,7 +154,7 @@ export default function Justificaciones() {
                         marginBottom: 1,
                         }}
                     >
-                        {data.state.justificacion ? 
+                        {data.state.justificacion?.length !== 0  ? 
                             "Ingrese un nuevo documento de justificación"   : 
                             "Ingrese el documento de justificacion"}
                     </FormLabel>
@@ -186,11 +186,11 @@ export default function Justificaciones() {
                 spacing={2}
                 mt={3}
             >
-                {data.state.justificacion.estado !== 'aprobado' && 
+                {data.state.justificacion?.estado !== 'aprobado' && 
                     <>
                         {habBtn &&    
                             <Button type="submit" variant="contained" endIcon={<SaveIcon />}>
-                                {data.state.justificacion ? 'Actualizar' : 'Guardar'}
+                                {data.state.justificacion?.length !== 0  ? 'Actualizar' : 'Guardar'}
                             </Button>
                         }
                     </>
