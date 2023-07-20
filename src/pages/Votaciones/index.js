@@ -12,7 +12,6 @@ import { validarSufragio } from "../../services";
 
 export default function Votaciones() {
   const [cookies] = useCookies(["access-token"]);
-  const [usJustificaciones, setUsJustificaciones] = useState([]);
   const usuario = useSelector((store) => store.usuario);
   const elecciones = useSelector((store) => {
     return store.elecciones.filter(

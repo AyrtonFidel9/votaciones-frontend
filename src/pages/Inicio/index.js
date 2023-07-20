@@ -6,7 +6,6 @@ import { CardCounter, CardPastelChart } from "./components";
 import { CardBarChart } from "./components";
 import { useCookies } from "react-cookie";
 import { actionGetAllElecciones } from "../../redux/states/elecciones";
-import { actionGetAllInscripciones } from "../../redux/states/inscripciones";
 import { validarSufragio } from "../../services";
 import { useSocios, useAgencias, useBarras } from "./custom-hooks";
 
@@ -22,22 +21,16 @@ export default function Inicio() {
   const elecciones = useSelector((store) => store.elecciones);
 
   const [pastelVot, setPastelVot] = useState([]);
+  const [eleccion, setEleccion] = useState({});
+  const [agencia, setAgencia] = useState("");
 
-  const getVotantes = () => {
-    const ag = agencias.slice(-1).pop();
-    const election = elecciones.filter((r) => r.idAgencia === ag.id);
-    const elec = election.pop();
-
-    const users = usuarios.filter((dat) => dat.idAgencia === ag.id);
-
+  const contarVotos = async (users, elecS) => {
     let votaron = 0;
     let noVotaron = 0;
-
-    users.forEach(async (item) => {
-      // cambiar cuando las billeteras dejen de ser null
+    for (let item of users) {
       if (item.id) {
         const body = {
-          idEleccion: elec.id,
+          idEleccion: elecS.id,
           idSocio: item.id,
         };
 
@@ -49,11 +42,38 @@ export default function Inicio() {
           noVotaron++;
         }
       }
-    });
-    setPastelVot([
-      { name: "Cantidad de votantes", value: votaron },
-      { name: "Cantidad de no votantes", value: noVotaron },
-    ]);
+    }
+    return { votaron, noVotaron };
+  };
+
+  const getVotantes = async () => {
+    try {
+      const election = elecciones.filter(
+        (r) => r.estado !== "EN-CURSO" || r.estado !== "NO-INICIADO"
+      );
+      const elecS = election.pop();
+
+      setEleccion(elecS);
+
+      const ag = agencias.find((r) => r.id === elecS.idAgencia);
+      setAgencia(ag.nombre);
+
+      const users = usuarios.filter((dat) => dat.idAgencia === ag.id);
+
+      const cVotos = await contarVotos(users, elecS);
+
+      setPastelVot([
+        { name: "Cantidad de votantes", value: cVotos.votaron },
+        { name: "Cantidad de no votantes", value: cVotos.noVotaron },
+      ]);
+    } catch (ex) {
+      setPastelVot([
+        { name: "Cantidad de votantes", value: 1 },
+        { name: "Cantidad de no votantes", value: 1 },
+      ]);
+      setEleccion({ nombre: "", dia: "" });
+      console.log(ex);
+    }
   };
 
   useEffect(() => {
@@ -110,9 +130,9 @@ export default function Inicio() {
           <CardPastelChart
             data={pastelVot}
             titulo="Resultados de la eleccion mas reciente"
-            nombre="Eleccion A"
-            agencia="Matriz"
-            fecha="22/08/2021"
+            nombre={eleccion.nombre}
+            agencia={agencia}
+            fecha={eleccion.dia}
             altura={210}
           />
         </Grid>
